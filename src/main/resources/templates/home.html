@@ -14,7 +14,8 @@
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/templatemo-style.css" rel="stylesheet">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
-
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 
 <body>
@@ -32,11 +33,11 @@
                 </div>
                 <nav class="tm-nav">
                     <ul>
-                        <li><a href="index.html">Home</a></li>
-                        <li><a href="today-special.html">Today Special</a></li>
-                        <li><a href="menu.html">Menu</a></li>
-                        <li><a href="contact.html">Contact</a></li>
-                        <li><a href="contact.html">Register</a></li>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Today Special</a></li>
+                        <li><a href="#">Menu</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Register</a></li>
                         <li><a href="/login">Login</a></li>
                     </ul>
                 </nav>
@@ -51,7 +52,7 @@
                                                                               class="tm-header-line">&nbsp;Welcome To&nbsp;&nbsp;<img
                     src="img/header-line.png" alt="Line"
                     class="tm-header-line"></h2>
-            <h2 class="gold-text tm-welcome-header-2">Coffee Shophhh</h2>
+            <h2 class="gold-text tm-welcome-header-2">Coffee Shop</h2>
         </div>
         <img src="img/table-set.png" alt="Table Set" class="tm-table-set img-responsive">
     </div>
@@ -82,55 +83,30 @@
         <section class="tm-section tm-section-margin-bottom-0 row">
             <div class="col-lg-12 tm-section-header-container">
                 <h2 class="tm-section-header gold-text tm-handwriting-font"><img src="img/logo.png" alt="Logo"
-                                                                                 class="tm-site-logo"> Popular Items
+                                                                                 class="tm-site-logo"> Lastest Items
                 </h2>
                 <div class="tm-hr-container">
                     <hr class="tm-hr">
                 </div>
             </div>
             <div class="col-lg-12 tm-popular-items-container">
-                <div class="tm-popular-item">
-                    <img src="img/popular-1.jpg" alt="Popular" class="tm-popular-item-img">
-                    <div class="tm-popular-item-description">
-                        <h3 class="tm-handwriting-font tm-popular-item-title"><span
-                                class="tm-handwriting-font bigger-first-letter">a</span>mericano</h3>
-                        <hr class="tm-popular-item-hr">
-                        <p>Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing
-                            sem
-                            neque. sed ipsum.</p>
-                        <div class="order-now-container">
-                            <a href="#" class="order-now-link tm-handwriting-font">Order Now</a>
+                <th:block th:each="product : ${products}">
+                    <div class="tm-popular-item">
+                        <img th:src="${product.image}" alt="Popular" class="tm-popular-item-img">
+                        <div class="tm-popular-item-description">
+                            <h3 class="tm-handwriting-font tm-popular-item-title">
+                                <span class="tm-handwriting-font bigger-first-letter"
+                                      th:text="${#strings.substring(product.pname, 0, 1)}"></span>
+                                <span th:text="${product.pname}"></span>
+                            </h3>
+                            <hr class="tm-popular-item-hr">
+                            <p class="description" th:text="${product.description}"></p>
+                            <div class="order-now-container">
+                                <a href="#" class="order-now-link tm-handwriting-font">Order Now</a>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="tm-popular-item">
-                    <img src="img/popular-2.jpg" alt="Popular" class="tm-popular-item-img">
-                    <div class="tm-popular-item-description">
-                        <h3 class="tm-handwriting-font tm-popular-item-title"><span
-                                class="tm-handwriting-font bigger-first-letter">c</span>appuccino</h3>
-                        <hr class="tm-popular-item-hr">
-                        <p>Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing
-                            sem
-                            neque. sed ipsum.</p>
-                        <div class="order-now-container">
-                            <a href="#" class="order-now-link tm-handwriting-font">Order Now</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="tm-popular-item">
-                    <img src="img/popular-3.jpg" alt="Popular" class="tm-popular-item-img">
-                    <div class="tm-popular-item-description">
-                        <h3 class="tm-handwriting-font tm-popular-item-title"><span
-                                class="tm-handwriting-font bigger-first-letter">m</span>ocha</h3>
-                        <hr class="tm-popular-item-hr">
-                        <p>Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing
-                            sem
-                            neque. sed ipsum.</p>
-                        <div class="order-now-container">
-                            <a href="#" class="order-now-link tm-handwriting-font">Order Now</a>
-                        </div>
-                    </div>
-                </div>
+                </th:block>
             </div>
         </section>
         <section class="tm-section">
@@ -156,32 +132,7 @@
                             hương vị đậm đà và đậm đà của cà phê truyền thống Việt Nam đến các loại trà trái cây tươi
                             mát và sáng
                             tạo, thực đơn của chúng tôi được thiết kế để làm hài lòng quý khách. </p>
-                        <ol class="margin-top-30">
-                            <li>Cà phê highligt: Những loại cà phê hảo hạng, nổi bật với hương vị đậm đà và phong phú
-                                của cà phê
-                                Việt Nam.
-                            </li>
-                            <li>Cà phê Việt Nam: Cà phê truyền thống Việt Nam, nổi tiếng với hương vị mạnh mẽ và đậm
-                                đà.
-                            </li>
-                            <li>Cà phê máy: Các loại đồ uống từ espresso với một chút biến tấu hiện đại, hoàn hảo cho
-                                những người
-                                yêu thích cà phê.
-                            </li>
-                            <li>Cold brew: Cà phê pha lạnh mịn màng và sảng khoái với hương vị dịu nhẹ, đặc biệt.</li>
-                            <li>Trà trái cây: Các loại trà trái cây tươi mát, mang đến sự cân bằng tuyệt vời giữa vị
-                                ngọt và chua.
-                            </li>
-                            <li>Hi-tea: Các loại trà sáng tạo, kết hợp những nguyên liệu tốt nhất cho trải nghiệm tươi
-                                mới.
-                            </li>
-                            <li>Trà xanh tây bắc: Trà xanh Tây Bắc chính gốc, nổi bật với hương vị đất và chút đắng
-                                nhẹ.
-                            </li>
-                            <li>Chocolate: Các loại đồ uống chocolate đậm đà và mịn màng, hoàn hảo để thưởng thức như
-                                một món ngọt.
-                            </li>
-                        </ol>
+
                     </div>
                 </div>
             </div>
@@ -196,32 +147,20 @@
                     <h3 class="tm-footer-div-title">Main Menu</h3>
                     <ul>
                         <li><a href="#">Home</a></li>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Directory</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Our Services</a></li>
+                        <li><a href="#">Today Special</a></li>
+                        <li><a href="#">Menu</a></li>
+                        <li><a href="#">Contact</a></li>
                     </ul>
                 </nav>
                 <div class="col-lg-5 col-md-5 tm-footer-div">
                     <h3 class="tm-footer-div-title">About Us</h3>
-                    <p class="margin-top-15">Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
-                        Aliquam lorem
-                        ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius
-                        laoreet.</p>
-                    <p class="margin-top-15">Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas
-                        nec odio
-                        et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus.</p>
+                    <p class="margin-top-15">The Coffee Shop sẽ là nơi mọi người xích lại gần nhau, đề cao giá trị kết
+                        nối con người và sẻ chia thân tình bên những tách cà phê, ly trà đượm hương, truyền cảm hứng về
+                        lối sống hiện đại.</p>
                 </div>
                 <div class="col-lg-4 col-md-4 tm-footer-div">
-                    <h3 class="tm-footer-div-title">Get Social</h3>
-                    <p>Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante.</p>
-                    <div class="tm-social-icons-container">
-                        <a href="#" class="tm-social-icon"><i class="fa fa-facebook"></i></a>
-                        <a href="#" class="tm-social-icon"><i class="fa fa-twitter"></i></a>
-                        <a href="#" class="tm-social-icon"><i class="fa fa-linkedin"></i></a>
-                        <a href="#" class="tm-social-icon"><i class="fa fa-youtube"></i></a>
-                        <a href="#" class="tm-social-icon"><i class="fa fa-behance"></i></a>
-                    </div>
+                    <p><i class="bi bi-telephone"></i> Đặt hàng: 1800 6936</p>
+                    <p><i class="bi bi-envelope"></i> Liên hệ</p>
                 </div>
             </div>
         </div>

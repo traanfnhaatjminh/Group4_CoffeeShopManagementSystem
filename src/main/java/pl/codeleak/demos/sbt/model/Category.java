@@ -19,13 +19,16 @@ public class Category {
     private String groupName;
     @Column(name = "category_name")
     private String categoryName;
+    @Column(name = "describe")
+    private String describe;
 
     public Category() {
     }
 
-    public Category(int cid, String groupName, String categoryName) {
+    public Category(int cid, String groupName, String categoryName, String describe) {
         this.cid = cid;
         this.groupName = groupName;
         this.categoryName = categoryName;
+        this.describe = describe;
     }
 }

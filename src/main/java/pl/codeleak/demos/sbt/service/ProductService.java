@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.repository.ProductRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -26,5 +27,9 @@ public class ProductService {
 
     public void updateProduct(Product product) {
         productRepository.save(product);
+    }
+
+    public List<Product> getLastestProducts() {
+        return productRepository.getTop3Products();
     }
 }

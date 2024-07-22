@@ -13,6 +13,7 @@ import pl.codeleak.demos.sbt.repository.ProductRepository;
 import pl.codeleak.demos.sbt.service.CategoryService;
 import pl.codeleak.demos.sbt.service.ProductService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -43,6 +44,10 @@ public class ProductController {
 
     @GetMapping("/homepage")
     public String homepage(Model model) {
+        List<Product> listP = productService.getLastestProducts();
+        Iterable<Category> listC = categoryService.getAllCategories();
+        model.addAttribute("categories", listC);
+        model.addAttribute("products", listP);
         return "home";
     }
 
