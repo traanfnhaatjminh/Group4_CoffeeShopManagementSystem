@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<h1>User Profile</h1>
+<p>Full Name: <span th:text="${user.fullname}"></span></p>
+<p>Date of Birth: <span th:text="${user.dob}"></span></p>
+<p>Email: <span th:text="${user.email}"></span></p>
+<p>Phone: <span th:text="${user.phone}"></span></p>
+<p>Address: <span th:text="${user.address}"></span></p>
+<p>Username: <span th:text="${user.username}"></span></p>
+<p>Role: <span th:text="${user.role == 1 ? 'User' : 'Admin'}"></span></p>
+<div class="profile-avatar">
+    <img th:src="@{${user.avatar}}" alt="Avatar" class="img-thumbnail" style="width: 150px; height: 150px;" />
+</div>
+
+<!-- Add Edit Profile Button -->
+<p>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
+</p>
+
+<!-- Edit Profile Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm" th:action="@{/profile}" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="fullname">Full Name</label>
+                        <input type="text" id="fullname" name="fullname" class="form-control" th:value="${user.fullname}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="dob">Date of Birth</label>
+                        <input type="text" id="dob" name="dob" class="form-control" th:value="${user.dob}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone</label>
+                        <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address" class="form-control" th:value="${user.address}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Username</label>
+                        <input type="text" id="username" name="username" class="form-control" th:value="${user.username}" />
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">Avatar</label>
+                        <input type="file" id="avatar" name="avatar" class="form-control" />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#editProfileForm').on('submit', function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+            $.ajax({
+                url: $(this).attr('action'),
+                type: $(this).attr('method'),
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function(response) {
+                    if (response === 'success') {
+                        alert('Edit Successfully!');
+                        window.location.href = '/profile';
+                    } else {
+                        alert('Error editing profile');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' - ' + errorThrown);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>
