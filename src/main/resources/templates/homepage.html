@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product List</title>
+    <!-- Thêm liên kết CSS của Bootstrap từ CDN -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container">ABC
+    <h1 class="mt-5 mb-4">Product List</h1>
+    <select id="categorySelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
+        <option>Find Product By Category</option>
+        <option th:selected="${c.getCid() == selectedCategoryId}" th:each="c : ${categories}" th:value="${c.getCid()}"
+                th:text="${c.getCategoryName()}"></option>
+    </select>
+    <table class="table table-striped">
+        <thead class="thead-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Unit</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Category ID</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Sử dụng Thymeleaf để lặp qua danh sách sản phẩm -->
+        <tr th:each="product : ${products}">
+            <td th:text="${product.getPid()}"></td>
+            <td th:text="${product.getPname()}"></td>
+            <td th:text="${product.getDescription()}"></td>
+            <td th:text="${product.getUnit()}"></td>
+            <td th:text="${product.getQuantity()}"></td>
+            <td th:text="${product.getPrice()}"></td>
+            <td><img th:src="${product.getImage()}" alt="Product Image" width="100" height="100"/></td>
+            <td th:text="${product.getCategoryId()}"></td>
+            <td>
+                <button><a th:href="@{/products/update/{id}(id=${product.getPid()})}">UPDATE</a></button>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    document.getElementById('categorySelect').addEventListener('change', function () {
+        var selectedCategoryId = this.value;
+        if (selectedCategoryId) {
+            window.location.href = '/products/' + selectedCategoryId;
+        }
+    });
+</script>
+</body>
+</html>

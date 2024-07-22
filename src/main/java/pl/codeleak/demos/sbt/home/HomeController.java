@@ -9,13 +9,13 @@ import java.time.LocalDateTime;
 
 @Controller
 class HomeController {
-
-
-    @GetMapping("/")
-    String index(Model model) {
-        model.addAttribute("now", LocalDateTime.now());
-        return "index";
-    }
+//
+//
+//    @GetMapping("/")
+//    String index(Model model) {
+//        model.addAttribute("now", LocalDateTime.now());
+//        return "index";
+//    }
 
     @GetMapping("properties")
     @ResponseBody
