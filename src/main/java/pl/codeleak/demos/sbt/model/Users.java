@@ -42,10 +42,8 @@ public class Users {
     @Column(name="pass")
     private String pass;
 
-    @Column(name="role")
+    @Column(name="role_id")
     private int role;
-
-
 
     public Users() {
 
