@@ -133,8 +133,8 @@
                             mát và sáng
                             tạo, thực đơn của chúng tôi được thiết kế để làm hài lòng quý khách. </p>
                         <ol class="margin-top-30">
-                            <th:block th:each="item : ${menuItems}">
-                                <li th:text="${item.name}"></li>
+                            <th:block th:each="item : ${categories}">
+                                <li th:text="${item.getCategoryName()}+': '+${item.getDescribe()}"></li>
                             </th:block>
                         </ol>
                     </div>
