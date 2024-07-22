@@ -12,7 +12,15 @@ public class UserService {
     private UserRepository userRepository;
 
     public void saveUser(Users user) {
-        user.setRole(1); // Gán vai trò mặc định (1: USER)
-        userRepository.save(user);
+        user.setRole(1);
+        user.setAvatar("abc");
+
+      
+        if (user.getUsername() == null || user.getPass() == null || user.getEmail() == null) {
+            throw new IllegalArgumentException("Username, password, and email cannot be null");
+        }
+
+        userRepository.insertUser(user.getFullname(), user.getDob(), user.getEmail(), user.getPhone(),
+                user.getAddress(), user.getAvatar(), user.getUsername(), user.getPass(), user.getRole());
     }
 }
