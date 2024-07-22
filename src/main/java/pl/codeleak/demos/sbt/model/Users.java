@@ -34,7 +34,7 @@ public class Users {
 
 
     @Column(name="avatar")
-    private String avatar = "abc";
+    private String avatar;
 
     @Column(name="username")
     private String username;
