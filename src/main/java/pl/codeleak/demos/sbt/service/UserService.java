@@ -22,25 +22,19 @@ public class UserService {
     private UserRepository userRepository;
 
     public void saveUser(Users user) {
-        user.setRole(1);
+        user.setRole_id(1);
         user.setAvatar("abc");
 
 
-        if (user.getUsername() == null || user.getPassword() == null || user.getEmail() == null) {
+        if (user.getUsername() == null || user.getPass() == null || user.getEmail() == null) {
             throw new IllegalArgumentException("Username, password, and email cannot be null");
         }
 
         userRepository.insertUser(user.getFullname(), user.getDob(), user.getEmail(), user.getPhone(),
-                user.getAddress(), user.getAvatar(), user.getUsername(), user.getPassword(), user.getRole());
+                user.getAddress(), user.getAvatar(), user.getUsername(), user.getPass(), user.getRole_id());
     }
 
-    public boolean existsByUsername(String username) {
-        return userRepository.findByUsername(username) != null;
-    }
 
-    public boolean existsByEmail(String email) {
-        return userRepository.findByEmail(email) != null;
-    }
 
     //profile of each account
     public Users getLoggedInUser() {

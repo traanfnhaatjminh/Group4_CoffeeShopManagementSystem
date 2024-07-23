@@ -38,15 +38,15 @@ public class Users {
     @Column(name="username")
     private String username;
 
-    @Column(name="password")
-    private String password;
+    @Column(name="pass")
+    private String pass;
 
     @Column(name="role_id")
-    private int role;
+    private int role_id;
 
     public Users() {}
 
-    public Users(Long uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String password, int role) {
+    public Users(Long uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String pass, int role_id) {
         this.uid = uid;
         this.fullname = fullname;
         this.dob = dob;
@@ -55,7 +55,7 @@ public class Users {
         this.address = address;
         this.avatar = avatar;
         this.username = username;
-        this.password = password;
-        this.role = role;
+        this.pass = pass;
+        this.role_id = role_id;
     }
 }
