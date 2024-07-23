@@ -24,7 +24,7 @@ public class RegisterController {
     @PostMapping
     public String registerUser(Users user, RedirectAttributes redirectAttributes) {
 
-        user.setRole(1);
+        user.setRole_id(1);
         user.setAvatar("abc");
 
         if (user.getUsername() == null || user.getPass() == null || user.getEmail() == null) {
@@ -42,3 +42,5 @@ public class RegisterController {
         return "redirect:/login";
     }
 }
+
+

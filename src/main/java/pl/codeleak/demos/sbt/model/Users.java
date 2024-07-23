@@ -32,9 +32,8 @@ public class Users {
     @Column(name="address")
     private String address;
 
-
     @Column(name="avatar")
-    private String avatar = "abc";
+    private String avatar;
 
     @Column(name="username")
     private String username;
@@ -43,13 +42,15 @@ public class Users {
     private String pass;
 
     @Column(name="role_id")
-    private int role;
 
-    public Users() {
+    private int role_id;
 
-    }
+    public Users() {}
+
+
 
     public Users(Long uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String pass, int role) {
+
         this.uid = uid;
         this.fullname = fullname;
         this.dob = dob;
@@ -59,7 +60,6 @@ public class Users {
         this.avatar = avatar;
         this.username = username;
         this.pass = pass;
-        this.role = role;
+        this.role_id = role_id;
     }
-
 }
