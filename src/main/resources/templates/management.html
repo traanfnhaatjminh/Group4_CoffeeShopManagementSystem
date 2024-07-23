@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Template</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            background-color: rgb(198, 198, 198);
+        }
+
+        .product-img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .nav a {
+            margin: 20px 0;
+            background-color: gray;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .nav a:hover {
+            color: blue;
+        }
+
+        .product-list {
+            background-color: rgb(244, 243, 243);
+        }
+    </style>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1 sidebar">
+            <nav class="nav flex-column">
+                <a href="#">Home</a>
+                <a href="#">Warehouse</a>
+                <a href="#">Product</a>
+                <a href="#">All Bill</a>
+                <a href="#">Statistic</a>
+                <a href="#">Setting</a>
+            </nav>
+        </div>
+        <div class="col-md-6 offset-md-1 product-list">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="my-4">Menu</h1>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="btn-group" role="group" aria-label="Category">
+                        <button type="button" class="btn btn-outline-secondary">Category 1</button>
+                        <button type="button" class="btn btn-outline-secondary">Category 2</button>
+                        <button type="button" class="btn btn-outline-secondary">Category 3</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <!-- Product example -->
+                <div class="col-md-4 mb-4" *ngFor="let product of products">
+                    <div class="card">
+                        <img src="https://via.placeholder.com/150" class="card-img-top product-img"
+                             alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">Product Name</h5>
+                            <p class="card-text">$ Product Price</p>
+                            <button class="btn btn-primary">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <form id="cart-form">
+                <div class="row" style="border-bottom: 1px solid rgb(184, 184, 184);">
+                    <div class="col-6">
+                        fullname
+                    </div>
+                    <div class="col-6">
+                        <a href="#">Logout</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="my-4">Cart</h2>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <input type="text" class="form-control" placeholder="Customer Phone" required>
+                    </div>
+                    <div class="col-6">
+                        <input type="text" class="form-control" placeholder="Customer Name" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Example of cart item -->
+                            <tr *ngFor="let item of cartItems">
+                                <td>Product Name</td>
+                                <td>$ Product Price</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-secondary">-</button>
+                                    1
+                                    <button class="btn btn-sm btn-outline-secondary">+</button>
+                                </td>
+                                <td>$ Total Price</td>
+                            </tr>
+                            <!-- Add more cart items as needed -->
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="3">Total Price</th>
+                                <th>$ Total Price</th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <button type="submit" class="btn btn-success">Create Bill</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

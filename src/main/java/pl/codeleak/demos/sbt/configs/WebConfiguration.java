@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -30,7 +29,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/login", "/register", "/resources/**").permitAll()
+                .antMatchers("/","/homepage", "/login", "/register", "/resources/**", "/css/**", "/js/**", "/img/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -39,16 +38,18 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
                 .permitAll()
                 .and()
                 .logout()
-                .logoutUrl("/logout") // URL để xử lý logout
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
     }
+
     //upload file handle
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry){
         registry.addResourceHandler("/uploads/**")
                 .addResourceLocations("file:uploads/");
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();
