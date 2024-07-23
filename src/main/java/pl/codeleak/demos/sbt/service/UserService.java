@@ -15,7 +15,7 @@ public class UserService {
         user.setRole(1);
         user.setAvatar("abc");
 
-      
+
         if (user.getUsername() == null || user.getPass() == null || user.getEmail() == null) {
             throw new IllegalArgumentException("Username, password, and email cannot be null");
         }
