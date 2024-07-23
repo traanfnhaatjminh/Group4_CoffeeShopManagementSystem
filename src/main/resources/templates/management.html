@@ -58,15 +58,13 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-12">
-                    <div class="btn-group" role="group" aria-label="Category">
-                        <th:block th:each="category : ${categories}">
-                            <button type="button" class="btn btn-outline-secondary">
-                                <a th:href="@{#}" th:text="${category.getCategoryName()}"></a>
-                            </button>
-                        </th:block>
+                <th:block th:each="category : ${categories}">
+                    <div class="col-md-3 mb-3">
+                        <button type="button" class="btn btn-outline-secondary btn-block">
+                            <a style="color: black" th:href="@{#}" th:text="${category.getCategoryName()}"></a>
+                        </button>
                     </div>
-                </div>
+                </th:block>
             </div>
             <div class="row mt-4">
                 <!-- Product example -->
