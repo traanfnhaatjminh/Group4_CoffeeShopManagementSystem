@@ -61,24 +61,27 @@
                 <th:block th:each="category : ${categories}">
                     <div class="col-md-3 mb-3">
                         <button type="button" class="btn btn-outline-secondary btn-block">
-                            <a style="color: black" th:href="@{#}" th:text="${category.getCategoryName()}"></a>
+                            <a style="color: black" th:href="@{/management/products/category/{id}(id=${category.cid})}" th:text="${category.categoryName}"></a>
                         </button>
                     </div>
                 </th:block>
             </div>
             <div class="row mt-4">
                 <!-- Product example -->
-                <div class="col-md-4 mb-4" *ngFor="let product of products">
-                    <div class="card">
-                        <img src="https://via.placeholder.com/150" class="card-img-top product-img"
-                             alt="Product Image">
-                        <div class="card-body">
-                            <h5 class="card-title">Product Name</h5>
-                            <p class="card-text">$ Product Price</p>
-                            <button class="btn btn-primary">Add to Cart</button>
+                <th:block th:each="product : ${products}">
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img th:src="${product.getImage()}" class="card-img-top product-img"
+                                 alt="Product Image">
+                            <div class="card-body">
+                                <p class="card-title" th:text="${product.getPname()}"></p>
+                                <p class="card-text" th:text="${product.getPrice()+' VND'}"></p>
+                                <button class="btn btn-primary">Add to Cart</button>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </th:block>
+
             </div>
         </div>
         <div class="col-md-5">
