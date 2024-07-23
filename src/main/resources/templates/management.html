@@ -60,9 +60,11 @@
             <div class="row">
                 <div class="col-12">
                     <div class="btn-group" role="group" aria-label="Category">
-                        <button type="button" class="btn btn-outline-secondary">Category 1</button>
-                        <button type="button" class="btn btn-outline-secondary">Category 2</button>
-                        <button type="button" class="btn btn-outline-secondary">Category 3</button>
+                        <th:block th:each="category : ${categories}">
+                            <button type="button" class="btn btn-outline-secondary">
+                                <a th:href="@{#}" th:text="${category.getCategoryName()}"></a>
+                            </button>
+                        </th:block>
                     </div>
                 </div>
             </div>

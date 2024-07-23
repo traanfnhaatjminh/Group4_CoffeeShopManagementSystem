@@ -26,6 +26,6 @@ public class ManagementController {
         Iterable<Category> listC = categoryService.getAllCategories();
         model.addAttribute("categories", listC);
         model.addAttribute("products", listP);
-        return "home";
+        return "management";
     }
 }
