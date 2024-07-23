@@ -1,0 +1,9 @@
+.tm-popular-item-img {
+    max-width: 97%;
+    height: auto;
+    object-fit: cover; /* Đảm bảo hình ảnh bao phủ toàn bộ khung mà không bị biến dạng */
+}
+
+.description{
+    text-align: justify;
+}

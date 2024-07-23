@@ -5,10 +5,17 @@ import org.springframework.stereotype.Service;
 import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.repository.ProductRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+
+    public Optional<Product> getProductById(int id) {
+        return productRepository.findById(id);
+    }
 
     public Iterable<Product> getAllProducts() {
         return productRepository.findAll();
@@ -16,5 +23,13 @@ public class ProductService {
 
     public Iterable<Product> getProductsByCategory(int cid) {
         return productRepository.findByCategoryId(cid);
+    }
+
+    public void updateProduct(Product product) {
+        productRepository.save(product);
+    }
+
+    public List<Product> getLastestProducts() {
+        return productRepository.getTop3Products();
     }
 }

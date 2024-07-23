@@ -7,7 +7,7 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container">ABC
+<div class="container">
     <h1 class="mt-5 mb-4">Product List</h1>
     <select id="categorySelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
         <option>Find Product By Category</option>
@@ -22,6 +22,7 @@
             <th>Description</th>
             <th>Unit</th>
             <th>Quantity</th>
+            <th>Price</th>
             <th>Image</th>
             <th>Category ID</th>
             <th>Action</th>
@@ -35,9 +36,12 @@
             <td th:text="${product.getDescription()}"></td>
             <td th:text="${product.getUnit()}"></td>
             <td th:text="${product.getQuantity()}"></td>
+            <td th:text="${product.getPrice()}"></td>
             <td><img th:src="${product.getImage()}" alt="Product Image" width="100" height="100"/></td>
             <td th:text="${product.getCategoryId()}"></td>
-            <td>========</td>
+            <td>
+                <button><a th:href="@{/products/update/{id}(id=${product.getPid()})}">UPDATE</a></button>
+            </td>
         </tr>
         </tbody>
     </table>

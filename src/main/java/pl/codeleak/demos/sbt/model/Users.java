@@ -32,26 +32,21 @@ public class Users {
     @Column(name="address")
     private String address;
 
-
     @Column(name="avatar")
-    private String avatar = "abc";
+    private String avatar;
 
     @Column(name="username")
     private String username;
 
-    @Column(name="pass")
-    private String pass;
+    @Column(name="password")
+    private String password;
 
-    @Column(name="role")
+    @Column(name="role_id")
     private int role;
 
+    public Users() {}
 
-
-    public Users() {
-
-    }
-
-    public Users(Long uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String pass, int role) {
+    public Users(Long uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String password, int role) {
         this.uid = uid;
         this.fullname = fullname;
         this.dob = dob;
@@ -60,8 +55,7 @@ public class Users {
         this.address = address;
         this.avatar = avatar;
         this.username = username;
-        this.pass = pass;
+        this.password = password;
         this.role = role;
     }
-
 }
