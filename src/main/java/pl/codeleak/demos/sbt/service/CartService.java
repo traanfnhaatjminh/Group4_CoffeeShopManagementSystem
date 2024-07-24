@@ -25,4 +25,8 @@ public class CartService {
     public double getTotalPrice() {
         return cartItems.stream().mapToDouble(Product::getPrice).sum();
     }
+
+    public void setQuantity(Product product) {
+        product.setQuantity(1);
+    }
 }

@@ -25,17 +25,17 @@ public class Bill {
     @Column(name = "table_id")
     private int tableId;
     @Column(name = "user_id")
-    private int customerId;
+    private int userId;
 
     public Bill() {
     }
 
-    public Bill(Date createdTime, int numberOfGuest, float totalCost, int tableId, int customerId) {
+    public Bill(Date createdTime, int numberOfGuest, float totalCost, int tableId, int userId) {
         this.createdTime = createdTime;
         this.numberOfGuest = numberOfGuest;
         this.totalCost = totalCost;
         this.tableId = tableId;
-        this.customerId = customerId;
+        this.userId = userId;
     }
 
     public Bill(int billId) {

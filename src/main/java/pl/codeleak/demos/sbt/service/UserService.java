@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.model.Users;
 import pl.codeleak.demos.sbt.repository.UserRepository;
 
@@ -13,6 +14,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -20,6 +22,10 @@ public class UserService {
     private static final String UPLOAD_DIR = "uploads/";
     @Autowired
     private UserRepository userRepository;
+
+    public Optional<Users> getUserByUsername(String username) {
+        return Optional.ofNullable(userRepository.findByUsername(username));
+    }
 
     public void saveUser(Users user) {
         user.setRole_id(1);
