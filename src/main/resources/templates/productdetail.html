@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Product Detail - Cafe House</title>
+    <base href="/">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/templatemo-style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <style>
+        .product-detail-image img {
+            max-width: 300px;
+            max-height: 300px;
+            object-fit: cover;
+        }
+        .card-img-top {
+            max-width: 300px;
+            max-height: 300px;
+            margin-left: 100px;
+        }
+        .py-5 {
+            padding-top: 60px;
+            margin-right: 120px;
+        }
+
+        .shipping-now-button,
+        .back-to-menu-button {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            margin-right: 10px;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .shipping-now-button:hover,
+        .back-to-menu-button:hover {
+            background-color: #555;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-control button {
+            background-color: #333;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .quantity-control button:hover {
+            background-color: #555;
+        }
+        .quantity-control input {
+            text-align: center;
+            width: 50px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .back-to-menu-button .fa-arrow-left {
+            margin-right: 10px;
+        }
+        .back-to-menu-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<!-- Preloader -->
+<div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+</div>
+<!-- End Preloader -->
+<div class="tm-top-header">
+    <div class="container">
+        <div class="row">
+            <div class="tm-top-header-inner">
+                <div class="tm-logo-container">
+                    <img src="img/logo.png" alt="Logo" class="tm-site-logo">
+                    <h1 class="tm-site-name tm-handwriting-font">Cafe House</h1>
+                </div>
+                <div class="mobile-menu-icon">
+                    <i class="fa fa-bars"></i>
+                </div>
+                <nav class="tm-nav">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="today-special.html">Today Special</a></li>
+                        <li><a href="menu.html">Menu</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="py-5">
+    <div class="container">
+        <div class="back-to-menu-container">
+            <a href="/menu" class="back-to-menu-button">
+                <i class="fa fa-arrow-left"></i>
+                Back to Menu
+            </a>
+        </div>
+    </div>
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="row gx-4 gx-lg-5 align-items-center">
+            <div class="col-md-6">
+                <img class="card-img-top mb-5 mb-md-0 product-detail-image" th:src="@{${product.image}}" alt="Product Image" />
+            </div>
+            <div class="col-md-6">
+                <h1 class="display-5 fw-bolder" th:text="${product.pname}">Product Name</h1>
+                <div class="fs-5 mb-5">
+                    <span th:text="${product.price}">40.00</span> VND
+                </div>
+                <p class="lead" th:text="${product.description}">Description</p>
+                <div class="d-flex mb-3">
+                    <div class="quantity-control">
+                        <button type="button" id="decreaseQuantity">-</button>
+                        <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" />
+                        <button type="button" id="increaseQuantity">+</button>
+                    </div>
+                    <button class="shipping-now-button" type="button">
+                        <i class="bi-cart-fill me-1"></i>
+                        Shipping Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- JS -->
+<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script> <!-- jQuery -->
+<script type="text/javascript" src="js/templatemo-script.js"></script> <!-- Templatemo Script -->
+<script>
+    document.getElementById('increaseQuantity').addEventListener('click', function() {
+        var inputQuantity = document.getElementById('inputQuantity');
+        inputQuantity.value = parseInt(inputQuantity.value) + 1;
+    });
+
+    document.getElementById('decreaseQuantity').addEventListener('click', function() {
+        var inputQuantity = document.getElementById('inputQuantity');
+        if (parseInt(inputQuantity.value) > 1) {
+            inputQuantity.value = parseInt(inputQuantity.value) - 1;
+        }
+    });
+</script>
+</body>
+</html>

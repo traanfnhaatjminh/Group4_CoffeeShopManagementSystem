@@ -1,12 +1,10 @@
 package pl.codeleak.demos.sbt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.codeleak.demos.sbt.model.Category;
 import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.repository.ProductRepository;
@@ -82,5 +80,33 @@ public class ProductController {
             return "redirect:/products";
         }
     }
-
+    //show menu page
+    @GetMapping("/menu")
+    public String showMenu(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(required = false) Integer categoryId){
+        //   Page<Product> productPage = productService.getProducts(page, 5);
+        Page<Product> productPage;
+        if (categoryId != null){
+            productPage = productService.getProductByCategories(page, 5, categoryId);
+        }else{
+            productPage = productService.getProducts(page, 5);
+        }
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", productPage.getTotalPages());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("selectedCategoryId", categoryId);
+        //   Iterable<Product> products = productRepository.findAll();
+        //  model.addAttribute("products", products);
+        return "menu";
+    }
+    //Product Detail
+    @GetMapping("/product/{pid}")
+    public String viewProductDetails(@PathVariable("pid") Integer pid, Model model) {
+        Product product = productService.getProductByPid(pid);
+        if (product == null) {
+            return "error/404";
+        }
+        model.addAttribute("product", product);
+        return "productdetail";
+    }
 }
