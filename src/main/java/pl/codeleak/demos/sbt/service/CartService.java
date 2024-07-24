@@ -22,8 +22,8 @@ public class CartService {
         cartItems.clear();
     }
 
-    public double getTotalPrice() {
-        return cartItems.stream().mapToDouble(Product::getPrice).sum();
+    public float getTotalPrice() {
+        return (float) cartItems.stream().mapToDouble(Product::getPrice).sum();
     }
 
     public void setQuantity(Product product) {

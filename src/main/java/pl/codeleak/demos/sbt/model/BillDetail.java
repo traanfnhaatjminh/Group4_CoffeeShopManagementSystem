@@ -25,12 +25,12 @@ public class BillDetail {
     private int quantity;
 
     @Column(name = "price")
-    private int price;
+    private float price;
 
     public BillDetail() {
     }
 
-    public BillDetail(int billId, int pid, int quantity, int price) {
+    public BillDetail(int billId, int pid, int quantity, float price) {
         this.billId = billId;
         this.pid = pid;
         this.quantity = quantity;

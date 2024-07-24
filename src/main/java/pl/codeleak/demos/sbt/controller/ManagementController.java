@@ -9,7 +9,6 @@ import pl.codeleak.demos.sbt.model.BillDetail;
 import pl.codeleak.demos.sbt.model.Category;
 import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.service.*;
-
 import java.security.Principal;
 import java.util.Date;
 import java.util.Optional;
@@ -77,9 +76,10 @@ public class ManagementController {
                              @RequestParam("tableId") int tableId,
                              Principal principal,
                              Model model) {
+
         // Get the logged-in user's ID
         String username = principal.getName();
-        int userId = userService.findByUsername(username).getId();
+        int userId = userService.getUserByUsername(username).get().getUid();
 
         // Create a new Bill
         Bill bill = new Bill(new Date(), numberOfGuest, cartService.getTotalPrice(), tableId, userId);

@@ -15,7 +15,7 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name= "uid")
-    private Long uid;
+    private int uid;
 
     @Column(name="fullname")
     private String fullname;
@@ -49,7 +49,7 @@ public class Users {
 
 
 
-    public Users(Long uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String pass, int role) {
+    public Users(int uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String pass, int role) {
 
         this.uid = uid;
         this.fullname = fullname;
@@ -60,6 +60,6 @@ public class Users {
         this.avatar = avatar;
         this.username = username;
         this.pass = pass;
-        this.role_id = role_id;
+        this.role_id = role;
     }
 }
