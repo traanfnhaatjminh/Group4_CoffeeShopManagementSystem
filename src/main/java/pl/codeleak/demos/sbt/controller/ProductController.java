@@ -106,7 +106,10 @@ public class ProductController {
         if (product == null) {
             return "error/404";
         }
+        Category category = categoryService.getCategoryById(product.getCategoryId());
+        String categoryName = (category != null) ? category.getCategoryName() : "Unknown";
         model.addAttribute("product", product);
+        model.addAttribute("categoryName", categoryName);
         return "productdetail";
     }
 }
