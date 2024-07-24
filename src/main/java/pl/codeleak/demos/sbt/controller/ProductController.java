@@ -154,6 +154,7 @@ public class ProductController {
         Iterable<Category> listC = categoryService.getAllCategories();
         model.addAttribute("products", listP);
         model.addAttribute("categories", listC);
+        model.addAttribute("selectedCategoryId", cid);
         return "homepage";
     }
 

@@ -73,9 +73,10 @@
         <a class="btn btn-success" th:href="@{/products/add}">Add Product</a>
     </div>
     <select id="categorySelect" class="form-select form-select-lg mb-3" aria-label=".form-select-lg example">
-        <option>Find Product By Category</option>
-        <option th:selected="${c.getCid() == selectedCategoryId}" th:each="c : ${categories}" th:value="${c.getCid()}"
-                th:text="${c.getCategoryName()}"></option>
+        <option th:text="'Find Product By Category'" th:if="${selectedCategoryId == null}"></option>
+        <option th:each="c : ${categories}" th:value="${c.getCid()}"
+                th:text="${c.getCategoryName()}"
+                th:selected="${c.getCid()} == ${selectedCategoryId}"></option>
     </select>
     <table class="table table-striped">
         <thead class="thead-dark">
