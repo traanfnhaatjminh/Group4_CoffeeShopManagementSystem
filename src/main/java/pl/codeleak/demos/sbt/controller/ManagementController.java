@@ -69,13 +69,11 @@ public class ManagementController {
         return "redirect:/management";
     }
 
-
     @PostMapping("/createBill")
     public String createBill(@RequestParam("customerPhone") String customerPhone,
                              @RequestParam("customerName") String customerName,
                              @RequestParam("numberOfGuest") int numberOfGuest,
                              @RequestParam("tableId") int tableId,
-                             @RequestParam("quantities") List<Integer> quantities,
                              Principal principal,
                              Model model) {
 
@@ -90,8 +88,9 @@ public class ManagementController {
         float totalCost = 0;
         for (int i = 0; i < cartItems.size(); i++) {
             CartItem item = cartItems.get(i);
-            int quantity = quantities.get(i); // Correctly get quantity
-            totalCost += item.getProduct().getPrice() * quantity;
+//            int quantity = quantities.get(i); // Correctly get quantity
+//            item.setQuantity(quantity); // Update quantity in cart item
+            totalCost += item.getProduct().getPrice() * item.getQuantity();
         }
 
         // Create a new Bill
@@ -102,10 +101,10 @@ public class ManagementController {
         // Create BillDetail entries for each cart item
         for (int i = 0; i < cartItems.size(); i++) {
             CartItem item = cartItems.get(i);
-            int quantity = quantities.get(i); // Correctly get quantity
-            BillDetail billDetail = new BillDetail(bill.getBillId(), item.getProduct().getPid(), quantity, item.getProduct().getPrice());
+//            int quantity = quantities.get(i); // Correctly get quantity
+            BillDetail billDetail = new BillDetail(bill.getBillId(), item.getProduct().getPid(), item.getQuantity(), item.getProduct().getPrice());
             billDetailService.save(billDetail);
-            logger.info("BillDetail saved for billId: {}, productId: {}, quantity: {}, price: {}", bill.getBillId(), item.getProduct().getPid(), quantity, item.getProduct().getPrice());
+            logger.info("BillDetail saved for billId: {}, productId: {}, quantity: {}, price: {}", bill.getBillId(), item.getProduct().getPid(), item.getQuantity(), item.getProduct().getPrice());
         }
 
         // Clear the cart

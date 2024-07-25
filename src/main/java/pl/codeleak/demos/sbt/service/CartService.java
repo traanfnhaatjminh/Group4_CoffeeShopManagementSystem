@@ -39,7 +39,6 @@ public class CartService {
                 .sum();
     }
 
-
     public void setQuantity(Product product) {
         product.setQuantity(1);
     }

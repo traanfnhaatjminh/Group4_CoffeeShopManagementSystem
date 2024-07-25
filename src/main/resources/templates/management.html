@@ -140,7 +140,7 @@
                                     <td th:text="${item.product.price} + ' VND'"></td>
                                     <td>
                                         <label>
-                                            <input style="width: 30%" type="number" min="1" th:value="${item.quantity}" th:name="'quantities[' + ${iterStat.index} + ']'">
+                                            <input style="width: 30%" type="number" min="1" th:value="${item.quantity}" disabled>
                                         </label>
                                     </td>
                                     <td th:text="${item.product.price * item.quantity}"></td>
@@ -178,31 +178,31 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    function updateTotal() {
-        let table = document.querySelector('.table');
-        let rows = table.querySelectorAll('tbody tr');
-        let total = 0;
+<!--<script>-->
+<!--    function updateTotal() {-->
+<!--        let table = document.querySelector('.table');-->
+<!--        let rows = table.querySelectorAll('tbody tr');-->
+<!--        let total = 0;-->
 
-        rows.forEach(row => {
-            let price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace(' VND', ''));
-            let quantity = parseInt(row.querySelector('input[type="number"]').value);
-            let totalPrice = price * quantity;
-            row.querySelector('td:nth-child(4)').textContent = totalPrice + ' VND';
-            total += totalPrice;
-        });
+<!--        rows.forEach(row => {-->
+<!--            let price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace(' VND', ''));-->
+<!--            let quantity = parseInt(row.querySelector('input[type="number"]').value);-->
+<!--            let totalPrice = price * quantity;-->
+<!--            row.querySelector('td:nth-child(4)').textContent = totalPrice + ' VND';-->
+<!--            total += totalPrice;-->
+<!--        });-->
 
-        // Update total price in the footer
-        document.querySelector('tfoot th:nth-child(4)').textContent = total + ' VND';
-    }
+<!--        // Update total price in the footer-->
+<!--        document.querySelector('tfoot th:nth-child(4)').textContent = total + ' VND';-->
+<!--    }-->
 
-    document.querySelectorAll('input[type="number"]').forEach(input => {
-        input.addEventListener('input', updateTotal);
-    });
+<!--    document.querySelectorAll('input[type="number"]').forEach(input => {-->
+<!--        input.addEventListener('input', updateTotal);-->
+<!--    });-->
 
-    // Initialize total on page load
-    updateTotal();
-</script>
+<!--    // Initialize total on page load-->
+<!--    updateTotal();-->
+<!--</script>-->
 
 </body>
 </html>
