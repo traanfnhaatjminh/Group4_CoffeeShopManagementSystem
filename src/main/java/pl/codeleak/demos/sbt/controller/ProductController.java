@@ -115,7 +115,6 @@
 //}
 
 
-
 package pl.codeleak.demos.sbt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -224,6 +223,7 @@ public class ProductController {
         model.addAttribute("categoryName", product.getCategoryName());
         return "productdetail";
     }
+
     @GetMapping("/products/delete/{pid}")
     public String deleteProduct(@PathVariable int pid) {
         productService.deleteProductById(pid);
