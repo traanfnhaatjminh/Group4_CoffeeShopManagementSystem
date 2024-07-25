@@ -1,20 +1,22 @@
 package pl.codeleak.demos.sbt.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import pl.codeleak.demos.sbt.model.Bill;
-import pl.codeleak.demos.sbt.model.BillDetail;
-import pl.codeleak.demos.sbt.model.Category;
-import pl.codeleak.demos.sbt.model.Product;
+import pl.codeleak.demos.sbt.model.*;
 import pl.codeleak.demos.sbt.service.*;
 import java.security.Principal;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class ManagementController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ManagementController.class);
 
     @Autowired
     private ProductService productService;
@@ -57,44 +59,61 @@ public class ManagementController {
     }
 
     @GetMapping("/management/products/{pid}/addtocart")
-    public String addToCart(@PathVariable int pid, Model model) {
+    public String addToCart(@PathVariable int pid, @RequestParam(value = "quantity", defaultValue = "1") int quantity, Model model) {
         Optional<Product> productOptional = productService.getProductById(pid);
         if (productOptional.isPresent()) {
-            cartService.addToCart(productOptional.get());
-            cartService.setQuantity(productOptional.get());
+            cartService.addToCart(productOptional.get(), quantity);
         } else {
-            // Handle the case where the product is not found
             model.addAttribute("error", "Product not found");
         }
         return "redirect:/management";
     }
+
 
     @PostMapping("/createBill")
     public String createBill(@RequestParam("customerPhone") String customerPhone,
                              @RequestParam("customerName") String customerName,
                              @RequestParam("numberOfGuest") int numberOfGuest,
                              @RequestParam("tableId") int tableId,
+                             @RequestParam("quantities") List<Integer> quantities,
                              Principal principal,
                              Model model) {
+
+        logger.info("createBill called with customerPhone: {}, customerName: {}, numberOfGuest: {}, tableId: {}", customerPhone, customerName, numberOfGuest, tableId);
 
         // Get the logged-in user's ID
         String username = principal.getName();
         int userId = userService.getUserByUsername(username).get().getUid();
 
+        // Get cart items and calculate total cost
+        List<CartItem> cartItems = cartService.getCartItems();
+        float totalCost = 0;
+        for (int i = 0; i < cartItems.size(); i++) {
+            CartItem item = cartItems.get(i);
+            int quantity = quantities.get(i); // Correctly get quantity
+            totalCost += item.getProduct().getPrice() * quantity;
+        }
+
         // Create a new Bill
-        Bill bill = new Bill(new Date(), numberOfGuest, cartService.getTotalPrice(), tableId, userId);
+        Bill bill = new Bill(new Date(), numberOfGuest, totalCost, tableId, userId);
         billService.save(bill);
+        logger.info("Bill saved with ID: {}", bill.getBillId());
 
         // Create BillDetail entries for each cart item
-        cartService.getCartItems().forEach(item -> {
-            BillDetail billDetail = new BillDetail(bill.getBillId(), item.getPid(), item.getQuantity(), item.getPrice());
+        for (int i = 0; i < cartItems.size(); i++) {
+            CartItem item = cartItems.get(i);
+            int quantity = quantities.get(i); // Correctly get quantity
+            BillDetail billDetail = new BillDetail(bill.getBillId(), item.getProduct().getPid(), quantity, item.getProduct().getPrice());
             billDetailService.save(billDetail);
-        });
+            logger.info("BillDetail saved for billId: {}, productId: {}, quantity: {}, price: {}", bill.getBillId(), item.getProduct().getPid(), quantity, item.getProduct().getPrice());
+        }
 
         // Clear the cart
         cartService.clearCart();
+        logger.info("Cart cleared");
 
         model.addAttribute("successMessage", "Bill created successfully!");
         return "redirect:/management";
     }
+
 }

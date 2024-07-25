@@ -94,7 +94,7 @@
                     <a href="/login">Logout</a>
                 </div>
             </div>
-            <form id="cart-form" th:action="@{/#}" method="POST">
+            <form id="cart-form" th:action="@{/createBill}" method="POST">
                 <div class="row">
                     <div class="col-12">
                         <h2 class="my-4">Cart</h2>
@@ -103,22 +103,22 @@
                 <div class="row mb-3">
                     <div class="col-6">
                         <label>
-                            <input type="text" class="form-control" placeholder="Customer Phone" required>
+                            <input type="text" class="form-control" placeholder="Customer Phone" name="customerPhone" required>
                         </label>
                     </div>
                     <div class="col-6">
                         <label>
-                            <input type="text" class="form-control" placeholder="Customer Name" required>
+                            <input type="text" class="form-control" placeholder="Customer Name" name="customerName" required>
                         </label>
                     </div>
                     <div class="col-6">
                         <label>
-                            <input type="number" class="form-control" placeholder="Number of guest" required>
+                            <input type="number" class="form-control" placeholder="Number of guests" name="numberOfGuest" required>
                         </label>
                     </div>
                     <div class="col-6">
                         <label>
-                            <input type="number" class="form-control" placeholder="Table ID" required>
+                            <input type="number" class="form-control" placeholder="Table ID" name="tableId" required>
                         </label>
                     </div>
                 </div>
@@ -134,17 +134,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <th:block th:each="item : ${cartItems}">
+                            <th:block th:each="item, iterStat : ${cartItems}">
                                 <tr>
-                                    <td th:text="${item.pname}"></td>
-                                    <td th:text="${item.price} + ' VND'"></td>
+                                    <td th:text="${item.product.pname}"></td>
+                                    <td th:text="${item.product.price} + ' VND'"></td>
                                     <td>
                                         <label>
-                                            <input style="width: 30%" type="number" min="1" value="1"
-                                                   onchange="updateQuantityInput(this)">
+                                            <input style="width: 30%" type="number" min="1" th:value="${item.quantity}" th:name="'quantities[' + ${iterStat.index} + ']'">
                                         </label>
                                     </td>
-                                    <td th:text="${item.price * item.quantity}"></td>
+                                    <td th:text="${item.product.price * item.quantity}"></td>
                                 </tr>
                             </th:block>
                             </tbody>
@@ -162,7 +161,15 @@
                         <button type="submit" class="btn btn-success">Create Bill</button>
                     </div>
                 </div>
+                <div class="row mt-3" th:if="${successMessage}">
+                    <div class="col-12">
+                        <div class="alert alert-success" role="alert">
+                            <p th:text="${successMessage}"></p>
+                        </div>
+                    </div>
+                </div>
             </form>
+
         </div>
     </div>
 </div>
@@ -172,36 +179,30 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    function updateQuantityInput(input) {
-        var row = input.closest('tr');
-        var quantity = parseInt(input.value);
-        var priceElem = row.querySelector('td:nth-child(2)');
-        var totalElem = row.querySelector('td:nth-child(4)');
-        var price = parseFloat(priceElem.innerText.replace(' VND', ''));
+    function updateTotal() {
+        let table = document.querySelector('.table');
+        let rows = table.querySelectorAll('tbody tr');
+        let total = 0;
 
-        if (quantity < 1) {
-            row.remove(); // Remove the row if quantity is less than 1
-            updateTotalPrice(); // Update the total price after removing the row
-        } else {
-            totalElem.innerText = (price * quantity) + ' VND';
-            updateTotalPrice(); // Update the total price after changing the quantity
-        }
-    }
-
-    function updateTotalPrice() {
-        var totalPriceElem = document.querySelector('tfoot th:nth-child(2)');
-        var totalElems = document.querySelectorAll('tbody td:nth-child(4)');
-        var totalPrice = 0;
-
-        totalElems.forEach(function(totalElem) {
-            var totalText = totalElem.innerText.replace(' VND', '');
-            if (!isNaN(totalText) && totalText.trim() !== '') {
-                totalPrice += parseFloat(totalText);
-            }
+        rows.forEach(row => {
+            let price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace(' VND', ''));
+            let quantity = parseInt(row.querySelector('input[type="number"]').value);
+            let totalPrice = price * quantity;
+            row.querySelector('td:nth-child(4)').textContent = totalPrice + ' VND';
+            total += totalPrice;
         });
-        totalPriceElem.innerText = totalPrice + ' VND';
+
+        // Update total price in the footer
+        document.querySelector('tfoot th:nth-child(4)').textContent = total + ' VND';
     }
 
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('input', updateTotal);
+    });
+
+    // Initialize total on page load
+    updateTotal();
 </script>
+
 </body>
 </html>
