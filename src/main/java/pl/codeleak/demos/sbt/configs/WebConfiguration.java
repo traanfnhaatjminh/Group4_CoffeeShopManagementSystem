@@ -34,7 +34,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/homepage", true)
+                .defaultSuccessUrl("/management", true)
                 .permitAll()
                 .and()
                 .logout()

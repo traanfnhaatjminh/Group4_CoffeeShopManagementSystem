@@ -47,10 +47,7 @@ public class Users {
 
     public Users() {}
 
-
-
     public Users(int uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String pass, int role) {
-
         this.uid = uid;
         this.fullname = fullname;
         this.dob = dob;

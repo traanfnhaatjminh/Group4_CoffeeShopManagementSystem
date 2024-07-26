@@ -1395,3 +1395,64 @@ com.microsoft.sqlserver.jdbc.SQLServerException: Invalid object name 'bill_detai
 2024-07-25 15:31:04.784  INFO 11232 --- [RMI TCP Connection(3)-192.168.130.251] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
 2024-07-25 15:31:04.784  INFO 11232 --- [RMI TCP Connection(3)-192.168.130.251] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2024-07-25 15:31:04.785  INFO 11232 --- [RMI TCP Connection(3)-192.168.130.251] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2024-07-25 16:41:41.767  INFO 1680 --- [restartedMain] pl.codeleak.demos.sbt.Application        : Starting Application using Java 17.0.10 on LENOVOTHINKPAD with PID 1680 (D:\IntelliJ IDEA\Coffee_Shop_Project\Group4_CoffeeShopManagementSystem\target\classes started by minh1 in D:\IntelliJ IDEA\Coffee_Shop_Project\Group4_CoffeeShopManagementSystem)
+2024-07-25 16:41:41.767  INFO 1680 --- [restartedMain] pl.codeleak.demos.sbt.Application        : No active profile set, falling back to default profiles: default
+2024-07-25 16:41:41.913  INFO 1680 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-07-25 16:41:41.913  INFO 1680 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-07-25 16:41:42.723  INFO 1680 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-25 16:41:42.771  INFO 1680 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 46 ms. Found 6 JPA repository interfaces.
+2024-07-25 16:41:43.388  INFO 1680 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2024-07-25 16:41:43.393  INFO 1680 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-25 16:41:43.393  INFO 1680 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.45]
+2024-07-25 16:41:43.450  INFO 1680 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-25 16:41:43.450  INFO 1680 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1537 ms
+2024-07-25 16:41:43.666  INFO 1680 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-25 16:41:43.935  INFO 1680 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-25 16:41:43.982  INFO 1680 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-25 16:41:44.029  INFO 1680 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2024-07-25 16:41:44.139  INFO 1680 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-07-25 16:41:44.251  INFO 1680 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.SQLServer2012Dialect
+2024-07-25 16:41:44.755  INFO 1680 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-25 16:41:44.772  INFO 1680 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-25 16:41:44.818  WARN 1680 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-25 16:41:45.290  INFO 1680 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@39fd3e0f, org.springframework.security.web.context.SecurityContextPersistenceFilter@2be78614, org.springframework.security.web.header.HeaderWriterFilter@f67f332, org.springframework.security.web.csrf.CsrfFilter@34d992a4, org.springframework.security.web.authentication.logout.LogoutFilter@7ce76d92, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@59a02c64, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@24128394, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@3b7237cc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@174c4454, org.springframework.security.web.session.SessionManagementFilter@15dd5590, org.springframework.security.web.access.ExceptionTranslationFilter@4bdd016a, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@4143a0d9]
+2024-07-25 16:41:45.369  INFO 1680 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2024-07-25 16:41:45.432  INFO 1680 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-07-25 16:41:45.907  INFO 1680 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-25 16:41:45.907  INFO 1680 --- [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 14 endpoint(s) beneath base path ''
+2024-07-25 16:41:45.954  INFO 1680 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-25 16:41:45.970  INFO 1680 --- [restartedMain] pl.codeleak.demos.sbt.Application        : Started Application in 4.489 seconds (JVM running for 5.256)
+2024-07-25 16:42:05.138  INFO 1680 --- [http-nio-8080-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-25 16:42:05.138  INFO 1680 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-25 16:42:05.152  INFO 1680 --- [http-nio-8080-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 14 ms
+2024-07-25 21:58:36.343  INFO 13460 --- [restartedMain] pl.codeleak.demos.sbt.Application        : Starting Application using Java 17.0.10 on LENOVOTHINKPAD with PID 13460 (D:\IntelliJ IDEA\Coffee_Shop_Project\Group4_CoffeeShopManagementSystem\target\classes started by minh1 in D:\IntelliJ IDEA\Coffee_Shop_Project\Group4_CoffeeShopManagementSystem)
+2024-07-25 21:58:36.445  INFO 13460 --- [restartedMain] pl.codeleak.demos.sbt.Application        : No active profile set, falling back to default profiles: default
+2024-07-25 21:58:37.060  INFO 13460 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2024-07-25 21:58:37.061  INFO 13460 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2024-07-25 21:58:38.837  INFO 13460 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2024-07-25 21:58:38.923  INFO 13460 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 76 ms. Found 6 JPA repository interfaces.
+2024-07-25 21:58:39.780  INFO 13460 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2024-07-25 21:58:39.796  INFO 13460 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-07-25 21:58:39.797  INFO 13460 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.45]
+2024-07-25 21:58:39.998  INFO 13460 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-07-25 21:58:39.998  INFO 13460 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2937 ms
+2024-07-25 21:58:40.485  INFO 13460 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2024-07-25 21:58:40.996  INFO 13460 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2024-07-25 21:58:41.079  INFO 13460 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2024-07-25 21:58:41.180  INFO 13460 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.30.Final
+2024-07-25 21:58:41.475  INFO 13460 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2024-07-25 21:58:41.653  INFO 13460 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.SQLServer2012Dialect
+2024-07-25 21:58:42.604  INFO 13460 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2024-07-25 21:58:42.618  INFO 13460 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2024-07-25 21:58:42.698  WARN 13460 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2024-07-25 21:58:43.769  INFO 13460 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@7237d594, org.springframework.security.web.context.SecurityContextPersistenceFilter@23234656, org.springframework.security.web.header.HeaderWriterFilter@6f7f60cc, org.springframework.security.web.csrf.CsrfFilter@72f8f14d, org.springframework.security.web.authentication.logout.LogoutFilter@79448472, org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter@6312259b, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4d82947a, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@540a15fa, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@34fc0f7a, org.springframework.security.web.session.SessionManagementFilter@45840d1, org.springframework.security.web.access.ExceptionTranslationFilter@54c95322, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@681ef785]
+2024-07-25 21:58:44.007  INFO 13460 --- [restartedMain] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2024-07-25 21:58:44.136  INFO 13460 --- [restartedMain] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page template: index
+2024-07-25 21:58:45.133  INFO 13460 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2024-07-25 21:58:45.160  INFO 13460 --- [restartedMain] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 14 endpoint(s) beneath base path ''
+2024-07-25 21:58:45.325  INFO 13460 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2024-07-25 21:58:45.382  INFO 13460 --- [restartedMain] pl.codeleak.demos.sbt.Application        : Started Application in 9.696 seconds (JVM running for 10.845)
+2024-07-25 21:58:45.855  INFO 13460 --- [RMI TCP Connection(5)-192.168.101.106] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2024-07-25 21:58:45.855  INFO 13460 --- [RMI TCP Connection(5)-192.168.101.106] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2024-07-25 21:58:45.859  INFO 13460 --- [RMI TCP Connection(5)-192.168.101.106] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2024-07-25 22:32:09.187  WARN 13460 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=2m57s699ms552µs300ns).
