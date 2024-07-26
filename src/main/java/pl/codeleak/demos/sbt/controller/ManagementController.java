@@ -3,6 +3,7 @@ package pl.codeleak.demos.sbt.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,8 @@ import java.security.Principal;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 public class ManagementController {
@@ -37,15 +40,30 @@ public class ManagementController {
     private UserService userService;
 
     @GetMapping("/management")
-    public String management(Model model) {
-        Iterable<Product> listP = productService.getAllProducts();
-        Iterable<Category> listC = categoryService.getAllCategories();
-        model.addAttribute("categories", listC);
-        model.addAttribute("products", listP);
+    public String management(@RequestParam("page") Optional<Integer> page,
+                             @RequestParam("size") Optional<Integer> size,
+                             Model model) {
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(6);
+
+        Page<Product> productPage = productService.getProducts(currentPage - 1, pageSize);
+
+        int totalPages = productPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("products", productPage.getContent());
         model.addAttribute("cartItems", cartService.getCartItems());
         model.addAttribute("totalPrice", cartService.getTotalPrice());
+        model.addAttribute("currentPage", currentPage);
         return "management";
     }
+
 
     @GetMapping("/management/products/{cid}")
     public String productByCategory(@PathVariable int cid, Model model) {
@@ -70,14 +88,12 @@ public class ManagementController {
     }
 
     @PostMapping("/createBill")
-    public String createBill(@RequestParam("customerPhone") String customerPhone,
-                             @RequestParam("customerName") String customerName,
-                             @RequestParam("numberOfGuest") int numberOfGuest,
+    public String createBill(@RequestParam("numberOfGuest") int numberOfGuest,
                              @RequestParam("tableId") int tableId,
                              Principal principal,
                              Model model) {
 
-        logger.info("createBill called with customerPhone: {}, customerName: {}, numberOfGuest: {}, tableId: {}", customerPhone, customerName, numberOfGuest, tableId);
+        logger.info("createBill called with numberOfGuest: {}, tableId: {}", numberOfGuest, tableId);
 
         // Get the logged-in user's ID
         String username = principal.getName();
@@ -88,8 +104,6 @@ public class ManagementController {
         float totalCost = 0;
         for (int i = 0; i < cartItems.size(); i++) {
             CartItem item = cartItems.get(i);
-//            int quantity = quantities.get(i); // Correctly get quantity
-//            item.setQuantity(quantity); // Update quantity in cart item
             totalCost += item.getProduct().getPrice() * item.getQuantity();
         }
 
@@ -101,7 +115,6 @@ public class ManagementController {
         // Create BillDetail entries for each cart item
         for (int i = 0; i < cartItems.size(); i++) {
             CartItem item = cartItems.get(i);
-//            int quantity = quantities.get(i); // Correctly get quantity
             BillDetail billDetail = new BillDetail(bill.getBillId(), item.getProduct().getPid(), item.getQuantity(), item.getProduct().getPrice());
             billDetailService.save(billDetail);
             logger.info("BillDetail saved for billId: {}, productId: {}, quantity: {}, price: {}", bill.getBillId(), item.getProduct().getPid(), item.getQuantity(), item.getProduct().getPrice());

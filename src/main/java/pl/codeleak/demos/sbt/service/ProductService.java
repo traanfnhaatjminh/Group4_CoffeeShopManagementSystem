@@ -140,4 +140,9 @@ public class ProductService {
             product.setCategoryName("Unknown");
         }
     }
+
+    public Page<Product> getProductsManagement(int page, int size) {
+        return productRepository.findAll(PageRequest.of(page, size));
+    }
+
 }
