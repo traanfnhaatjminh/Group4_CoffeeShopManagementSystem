@@ -1,21 +1,12 @@
 package pl.codeleak.demos.sbt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-import pl.codeleak.demos.sbt.model.Product;
+
 import pl.codeleak.demos.sbt.model.Users;
 import pl.codeleak.demos.sbt.repository.UserRepository;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -40,33 +31,15 @@ public class UserService {
                 user.getAddress(), user.getAvatar(), user.getUsername(), user.getPass(), user.getRole_id());
     }
 
-
-
-    //profile of each account
-    public Users getLoggedInUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+   public Users getUserById(int uid) {
+        return userRepository.findById(uid).orElse(null);
+    }
+    public Users findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-    //upload avatar file form local handle
-    public String saveAvatar(MultipartFile avatarFile) throws IOException {
-        String filename = UUID.randomUUID().toString() + "_" + avatarFile.getOriginalFilename();
-        Path uploadPath = Paths.get("uploads/avatars/");
-
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        try (InputStream inputStream = avatarFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new IOException("Could not save avatar file: " + filename, e);
-        }
-
-        // Return the relative path to the saved file
-        return "/uploads/avatars/" + filename;
+    public void updateUser(Users user) {
+        userRepository.save(user);
     }
-
 }
 
 

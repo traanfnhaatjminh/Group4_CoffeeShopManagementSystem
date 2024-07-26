@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.codeleak.demos.sbt.model.Users;
 
 @Repository
-public interface UserRepository extends JpaRepository<Users, Long> {
+public interface UserRepository extends JpaRepository<Users, Integer> {
     Users findByUsername(String username);
 
 
