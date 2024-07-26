@@ -3,15 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <title>User Profile</title>
+    <base href="/">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/templatemo-style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <style>
-    body {
-        margin-top: 20px;
-        background: #f5f5f5;
+    .tm-daily-menu-img {
+        max-width: 250px;
+        max-height: 250px;
     }
+    .button1{
+        background: #222222;
+    }
+    body {
+        background-color: #e4e4e4;
+    }
+
     .panel {
         box-shadow: none;
     }
@@ -25,12 +39,19 @@
         font-size: .75em;
         color: #999999;
     }
-    .panel-body *:first-child {
-        margin-top: 0;
+
+    .panel-body {
+        padding: 20px; /* Add padding inside the panel body for better spacing */
     }
-    .panel-footer {
-        border-top: 0;
+
+    .form-group label {
+        text-align: left; /* Align labels to the left for better readability */
     }
+
+    .form-control {
+        width: 100%; /* Ensure input fields take up full width */
+    }
+
     .panel-default > .panel-heading {
         color: #333333;
         background-color: transparent;
@@ -40,10 +61,7 @@
         color: #999999;
         font-weight: 400;
     }
-    .form-horizontal .form-group {
-        margin-left: -15px;
-        margin-right: -15px;
-    }
+
     @media (min-width: 768px) {
         .form-horizontal .control-label {
             text-align: right;
@@ -51,26 +69,93 @@
             padding-top: 7px;
         }
     }
-    .profile__contact-info-icon {
-        float: left;
-        font-size: 18px;
-        color: #999999;
-    }
-    .profile__contact-info-body {
-        overflow: hidden;
-        padding-left: 20px;
-        color: #999999;
-    }
     .profile-avatar {
-        width: 200px;
-        position: relative;
-        margin: 0px auto;
-        margin-top: 196px;
+        max-width: 180px;
+        max-height: 180px;
+        border-radius: 50%; /* Make the avatar round */
         border: 4px solid #f3f3f3;
+        margin: 0 auto;
+    }
+
+    .form-horizontal {
+        max-width: 800px; /* Increase the maximum width of the form */
+        margin: 0 auto; /* Center the form horizontally */
+    }
+    .profile-section {
+        margin-top: 20px; /* Add top margin to profile section */
+        margin-bottom: 90px;
+        padding: 30px; /* Add padding for better spacing */
+        background-color: #ffffff; /* Background color for better visibility */
+        border-radius: 10px; /* Rounded corners for the profile section */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+    .alert {
+        text-align: center; /* Center the success message */
+    }
+
+    .header-image {
+        background-image: url('img/cofe.jpg'); /* Replace with your image path */
+        background-size: cover; /* Ensures the image covers the container */
+        background-position: center; /* Centers the image */
+        background-repeat: no-repeat; /* Prevents repeating the image */
+        height: 500px; /* Adjust height as needed */
+        width: 100%; /* Full width */
     }
 </style>
 <body>
-<div class="container bootstrap snippets bootdeys">
+<div class="tm-top-header">
+    <div class="container">
+        <div class="row">
+            <div class="tm-top-header-inner">
+                <div class="tm-logo-container">
+                    <img src="img/logo.png" alt="Logo" class="tm-site-logo">
+                    <h1 class="tm-site-name tm-handwriting-font">Coffee Shop</h1>
+                </div>
+                <div class="mobile-menu-icon">
+                    <i class="fa fa-bars"></i>
+                </div>
+                <nav class="tm-nav">
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Today Special</a></li>
+                        <li><a href="/menu">Menu</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="/register">Register</a></li>
+                        <li><a href="/login">Login</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container tm-position-relative">
+    <div class="tm-lights-container">
+        <img src="img/light.png" alt="Light" class="light light-1">
+        <img src="img/light.png" alt="Light" class="light light-2">
+        <img src="img/light.png" alt="Light" class="light light-3">
+    </div>
+</div>
+
+<!-- Header Image Section -->
+<div class="header-image">
+    <!-- Optionally add some content or text here -->
+</div>
+<div class="container" id="main">
+    <section class="tm-section">
+        <div class="row">
+            <div class="col-lg-12 tm-section-header-container">
+                <h2 class="tm-section-header gold-text tm-handwriting-font"><img src="img/logo.png" alt="Logo"
+                                                                                 class="tm-site-logo"> Its Your Profile
+                </h2>
+                <div class="tm-hr-container">
+                    <hr class="tm-hr">
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+<div class="container bootstrap snippets bootdeys profile-section">
     <!-- Success Message -->
     <div th:if="${message}" class="alert alert-success alert-dismissible fade in" role="alert">
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -79,13 +164,12 @@
         <span th:text="${message}"></span>
     </div>
 
-    <h1>User Profile</h1>
     <div class="row">
         <div class="col-xs-12 col-sm-9">
             <form class="form-horizontal">
                 <div class="panel panel-default">
                     <div class="panel-body text-center">
-                        <img th:src="@{${user.avatar}}" class="img-circle profile-avatar" alt="User avatar">
+                        <img th:src="@{/img/coffee.png}" class="img-circle profile-avatar" alt="User avatar">
                     </div>
                 </div>
                 <div class="panel panel-default">
@@ -132,7 +216,7 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-10 col-sm-offset-2">
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
+                                <button type="button" class="btn btn-primary button1" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
                                 <button type="reset" class="btn btn-default">Change Password</button>
                             </div>
                         </div>
@@ -183,6 +267,41 @@
     </div>
 </div>
 
+<footer>
+    <div class="tm-black-bg">
+        <div class="container">
+            <div class="row margin-bottom-60">
+                <nav class="col-lg-3 col-md-3 tm-footer-nav tm-footer-div">
+                    <h3 class="tm-footer-div-title">Main Menu</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Today Special</a></li>
+                        <li><a href="/menu">Menu</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="col-lg-5 col-md-5 tm-footer-div">
+                    <h3 class="tm-footer-div-title">About Us</h3>
+                    <p class="margin-top-15">The Coffee Shop sẽ là nơi mọi người xích lại gần nhau, đề cao giá trị kết
+                        nối con người và sẻ chia thân tình bên những tách cà phê, ly trà đượm hương, truyền cảm hứng về
+                        lối sống hiện đại.</p>
+                </div>
+                <div class="col-lg-4 col-md-4 tm-footer-div">
+                    <p><i class="bi bi-telephone"></i> Đặt hàng: 1800 6936</p>
+                    <p><i class="bi bi-envelope"></i> Liên hệ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <div class="row tm-copyright">
+                <p class="col-lg-12 small copyright-text text-center">Copyright &copy; 2024 Coffee Shop</p>
+            </div>
+        </div>
+    </div>
+
+</footer> <!-- Footer content-->
 <!-- Include jQuery and Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
