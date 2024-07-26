@@ -31,14 +31,13 @@ public class UserService {
                 user.getAddress(), user.getAvatar(), user.getUsername(), user.getPass(), user.getRole_id());
     }
 
-   public Users getUserById(int uid) {
-        return userRepository.findById(uid).orElse(null);
-    }
+
     public Users findByUsername(String username) {
         return userRepository.findByUsername(username);
     }
-    public void updateUser(Users user) {
-        userRepository.save(user);
+
+    public Users save(Users user) {
+        return userRepository.save(user);
     }
 }
 
