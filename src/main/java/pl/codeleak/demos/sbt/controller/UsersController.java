@@ -59,11 +59,13 @@ public class UsersController {
         Users user = userService.findByUsername(username);
 
         // Update password
+
         user.setPass(newPassword);
         userService.save(user);
 
         redirectAttributes.addFlashAttribute("message", "Password changed successfully!");
         return "redirect:/profile";
     }
+
 }
 
