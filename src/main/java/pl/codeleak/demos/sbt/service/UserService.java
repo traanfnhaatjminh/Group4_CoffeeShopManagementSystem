@@ -61,29 +61,6 @@ public class UserService {
         return "/uploads/avatars/" + filename;
     }
     //profile of each account
-    public Users getLoggedInUser() {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return userRepository.findByUsername(username);
-    }
-    //upload avatar file form local handle
-    public String saveAvatar(MultipartFile avatarFile) throws IOException {
-        String filename = UUID.randomUUID().toString() + "_" + avatarFile.getOriginalFilename();
-        Path uploadPath = Paths.get("uploads/avatars/");
-
-        if (!Files.exists(uploadPath)) {
-            Files.createDirectories(uploadPath);
-        }
-
-        try (InputStream inputStream = avatarFile.getInputStream()) {
-            Path filePath = uploadPath.resolve(filename);
-            Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new IOException("Could not save avatar file: " + filename, e);
-        }
-
-        // Return the relative path to the saved file
-        return "/uploads/avatars/" + filename;
-    }
 }
 
 
