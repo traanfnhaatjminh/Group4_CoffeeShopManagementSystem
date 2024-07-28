@@ -13,4 +13,7 @@ public class CategoryService {
     public Iterable<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
+    public  Category getCategoryById(int cid){
+        return categoryRepository.findById(cid).orElse(null);
+    }
 }

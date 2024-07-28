@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Template</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            background-color: rgb(198, 198, 198);
+        }
+
+        .product-img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .nav a {
+            margin: 20px 0;
+            background-color: gray;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .nav a:hover {
+            color: blue;
+        }
+
+        .product-list {
+            background-color: rgb(244, 243, 243);
+        }
+    </style>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1 sidebar">
+            <nav class="nav flex-column">
+                <a href="#">Home</a>
+                <a href="#">Warehouse</a>
+                <a href="#">Product</a>
+                <a href="#">All Bill</a>
+                <a href="#">Statistic</a>
+                <a href="#">Setting</a>
+            </nav>
+        </div>
+        <div class="col-md-6 offset-md-1 product-list">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="my-4">Menu</h1>
+                </div>
+            </div>
+            <div class="row">
+                <th:block th:each="category : ${categories}">
+                    <div class="col-md-3 mb-3">
+                        <button type="button" class="btn btn-outline-secondary btn-block">
+                            <a style="color: black" th:href="@{/management/products/{id}(id=${category.cid})}"
+                               th:text="${category.categoryName}"></a>
+                        </button>
+                    </div>
+                </th:block>
+            </div>
+            <div class="row mt-4">
+                <!-- Product example -->
+                <th:block th:each="product : ${products}">
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img th:src="${product.getImage()}" class="card-img-top product-img"
+                                 alt="Product Image">
+                            <div class="card-body">
+                                <a class="card-title"
+                                   th:href="@{/management/products/{pid}/addtocart(pid=${product.pid})}"
+                                   th:text="${product.getPname()}"></a>
+                                <p class="card-text" th:text="${product.getPrice() + ' VND'}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="row" style="border-bottom: 1px solid rgb(184, 184, 184);">
+                <div class="col-6">
+                    fullname
+                </div>
+                <div class="col-6">
+                    <a href="/login">Logout</a>
+                </div>
+            </div>
+            <form id="cart-form" th:action="@{/createBill}" method="POST">
+                <div class="row">
+                    <div class="col-12">
+                        <h2 class="my-4">Cart</h2>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <label>
+                            <input type="text" class="form-control" placeholder="Customer Phone" name="customerPhone" required>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <label>
+                            <input type="text" class="form-control" placeholder="Customer Name" name="customerName" required>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <label>
+                            <input type="number" class="form-control" placeholder="Number of guests" name="numberOfGuest" required>
+                        </label>
+                    </div>
+                    <div class="col-6">
+                        <label>
+                            <input type="number" class="form-control" placeholder="Table ID" name="tableId" required>
+                        </label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">Product Name</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Total</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <th:block th:each="item, iterStat : ${cartItems}">
+                                <tr>
+                                    <td th:text="${item.product.pname}"></td>
+                                    <td th:text="${item.product.price} + ' VND'"></td>
+                                    <td>
+                                        <label>
+                                            <input style="width: 30%" type="number" min="1" th:value="${item.quantity}" disabled>
+                                        </label>
+                                    </td>
+                                    <td th:text="${item.product.price * item.quantity}"></td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <th colspan="3">Total Price</th>
+                                <th th:text="${totalPrice}"></th>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-right">
+                        <button type="submit" class="btn btn-success">Create Bill</button>
+                    </div>
+                </div>
+                <div class="row mt-3" th:if="${successMessage}">
+                    <div class="col-12">
+                        <div class="alert alert-success" role="alert">
+                            <p th:text="${successMessage}"></p>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!--<script>-->
+<!--    function updateTotal() {-->
+<!--        let table = document.querySelector('.table');-->
+<!--        let rows = table.querySelectorAll('tbody tr');-->
+<!--        let total = 0;-->
+
+<!--        rows.forEach(row => {-->
+<!--            let price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace(' VND', ''));-->
+<!--            let quantity = parseInt(row.querySelector('input[type="number"]').value);-->
+<!--            let totalPrice = price * quantity;-->
+<!--            row.querySelector('td:nth-child(4)').textContent = totalPrice + ' VND';-->
+<!--            total += totalPrice;-->
+<!--        });-->
+
+<!--        // Update total price in the footer-->
+<!--        document.querySelector('tfoot th:nth-child(4)').textContent = total + ' VND';-->
+<!--    }-->
+
+<!--    document.querySelectorAll('input[type="number"]').forEach(input => {-->
+<!--        input.addEventListener('input', updateTotal);-->
+<!--    });-->
+
+<!--    // Initialize total on page load-->
+<!--    updateTotal();-->
+<!--</script>-->
+
+</body>
+</html>

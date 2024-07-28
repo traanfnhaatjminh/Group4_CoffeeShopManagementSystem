@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Product Detail - Cafe House</title>
+    <base href="/">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/templatemo-style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <style>
+        body {
+            background-color: #e4e4e4;
+        }
+        .tm-section {
+            padding-top: 100px;
+        }
+        .product-detail-image img {
+            max-width: 300px;
+            max-height: 300px;
+            object-fit: cover;
+        }
+        .card-img-top {
+            max-width: 400px;
+            max-height: 400px;
+
+        }
+        .tm-daily-menu-img {
+            max-width: 300px;
+            max-height: 300px;
+        }
+        .py-5 {
+            padding-top: 90px;
+            margin-right: 10px;
+        }
+        .text {
+            font-style: oblique;
+        }
+        .shipping-now-button {
+            background-color: #333;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            margin-top: 20px;
+            margin-right: 10px;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .shipping-now-button:hover {
+            background-color: #555;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+        }
+        .quantity-control button {
+            background-color: #333;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .quantity-control button:hover {
+            background-color: #555;
+        }
+        .quantity-control input {
+            text-align: center;
+            width: 50px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .detail-table {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .category-name {
+            background: url('img/vertical-menu-bg.png') no-repeat center center;
+            background-size: cover;
+            padding: 10px;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+            text-transform: uppercase;
+            color: #7c6a51;
+        }
+    </style>
+</head>
+<body>
+<!-- Preloader -->
+<div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+</div>
+<!-- End Preloader -->
+<div class="tm-top-header">
+    <div class="container">
+        <div class="row">
+            <div class="tm-top-header-inner">
+                <div class="tm-logo-container">
+                    <img src="img/logo.png" alt="Logo" class="tm-site-logo">
+                    <h1 class="tm-site-name tm-handwriting-font">Coffee Shop</h1>
+                </div>
+                <div class="mobile-menu-icon">
+                    <i class="fa fa-bars"></i>
+                </div>
+                <nav class="tm-nav">
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="today-special.html">Today Special</a></li>
+                        <li><a href="/menu">Menu</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="detail-table">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6">
+                    <img class="card-img-top mb-5 mb-md-0 product-detail-image" th:src="@{${product.image}}" alt="Product Image" />
+                </div>
+                <div class="col-md-6">
+                    <p class="category-name" th:text="${categoryName}">Product Category</p>
+                    <h1 class="display-5 fw-bolder" th:text="${product.pname}">Product Name</h1>
+                    <p class="lead" th:text="${product.description}">Description</p>
+                    <div class="fs-5 mb-5">
+                        <span th:text="${product.price}">40.00</span> VND
+                    </div>
+                    <div class="d-flex mb-3">
+                        <div class="quantity-control">
+                            <button type="button" id="decreaseQuantity">-</button>
+                            <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" />
+                            <button type="button" id="increaseQuantity">+</button>
+                        </div>
+                        <button class="shipping-now-button" type="button">
+                            <i class="bi-cart-fill me-1"></i>
+                            Shipping Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="container" id="main">
+    <section class="tm-section">
+        <div class="row">
+            <div class="col-lg-12 tm-section-header-container">
+                <h2 class="tm-section-header gold-text tm-handwriting-font"><img src="img/logo.png" alt="Logo"
+                                                                                 class="tm-site-logo"> Letter To You
+                </h2>
+                <div class="tm-hr-container">
+                    <hr class="tm-hr">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="tm-daily-menu-container margin-top-60">
+                <div class="col-lg-4 col-md-4">
+                    <img src="img/bear.png" alt="Menu board" class="tm-daily-menu-img">
+                </div>
+                <div class="col-lg-8 col-md-8">
+                    <p class="text">
+                        "Trong màu đen của cà phê tinh ý sẽ thấy được nét sóng sánh của màu nâu đỏ, sau vị đắng ngắm lòng là dư vị ngòn ngọt lạ kỳ của vị hương. Nhìn đời qua lăng kính phân kì sẽ thấy ngỡ ngàng sự hòa quyện của một tập hợp bao nhiêu là màu sắc, thoang thoảng trong ký ức bao trùm cả không gian những mùi vị của yêu thương." </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<footer>
+    <div class="tm-black-bg">
+        <div class="container">
+            <div class="row margin-bottom-60">
+                <nav class="col-lg-3 col-md-3 tm-footer-nav tm-footer-div">
+                    <h3 class="tm-footer-div-title">Main Menu</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Today Special</a></li>
+                        <li><a href="/menu">Menu</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="col-lg-5 col-md-5 tm-footer-div">
+                    <h3 class="tm-footer-div-title">About Us</h3>
+                    <p class="margin-top-15">The Coffee Shop sẽ là nơi mọi người xích lại gần nhau, đề cao giá trị kết
+                        nối con người và sẻ chia thân tình bên những tách cà phê, ly trà đượm hương, truyền cảm hứng về
+                        lối sống hiện đại.</p>
+                </div>
+                <div class="col-lg-4 col-md-4 tm-footer-div">
+                    <p><i class="bi bi-telephone"></i> Đặt hàng: 1800 6936</p>
+                    <p><i class="bi bi-envelope"></i> Liên hệ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <div class="row tm-copyright">
+                <p class="col-lg-12 small copyright-text text-center">Copyright &copy; 2024 Coffee Shop</p>
+            </div>
+        </div>
+    </div>
+</footer> <!-- Footer content-->
+<!-- JS -->
+<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script> <!-- jQuery -->
+<script type="text/javascript" src="js/templatemo-script.js"></script> <!-- Templatemo Script -->
+<script>
+    document.getElementById('increaseQuantity').addEventListener('click', function() {
+        var inputQuantity = document.getElementById('inputQuantity');
+        inputQuantity.value = parseInt(inputQuantity.value) + 1;
+    });
+
+    document.getElementById('decreaseQuantity').addEventListener('click', function() {
+        var inputQuantity = document.getElementById('inputQuantity');
+        if (parseInt(inputQuantity.value) > 1) {
+            inputQuantity.value = parseInt(inputQuantity.value) - 1;
+        }
+    });
+</script>
+</body>
+</html>
