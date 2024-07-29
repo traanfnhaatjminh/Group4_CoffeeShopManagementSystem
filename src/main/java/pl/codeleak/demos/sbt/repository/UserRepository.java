@@ -11,6 +11,8 @@ import pl.codeleak.demos.sbt.model.Users;
 @Repository
 public interface UserRepository extends JpaRepository<Users, Integer> {
     Users findByUsername(String username);
+    Users findByEmail(String email);
+    Users findByPhone(String phone);
 
     @Modifying
     @Transactional

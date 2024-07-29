@@ -43,13 +43,6 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
                 .logoutSuccessUrl("/login?logout")
                 .permitAll();
     }
-//
-//    //upload file handle
-//    @Override
-//    public void addResourceHandlers(ResourceHandlerRegistry registry){
-//        registry.addResourceHandler("/uploads/**")
-//                .addResourceLocations("file:uploads/");
-//    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -51,7 +51,6 @@ public class ProductController {
     public String homepage(Model model, Principal principal) {
         if (principal != null) {
             String username = principal.getName();
-            Users user = userService.findByUsername(username);
             model.addAttribute("username", username);
         }
         List<Product> listP = productService.getLastestProducts();
@@ -97,7 +96,12 @@ public class ProductController {
     public String showMenu(Model model,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(required = false) Integer categoryId,
-                           @RequestParam(required = false) String search) {
+                           @RequestParam(required = false) String search,
+                           Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            model.addAttribute("username", username);
+        }
         Page<Product> productPage;
         if (search != null && !search.trim().isEmpty()) {
             productPage = productService.searchProducts(search, PageRequest.of(page, 5));
@@ -114,7 +118,6 @@ public class ProductController {
         model.addAttribute("searchQuery", search);
         return "menu";
     }
-
 
     @GetMapping("/product/{pid}")
     public String viewProductDetails(@PathVariable("pid") Integer pid, Model model) {

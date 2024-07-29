@@ -32,6 +32,20 @@ public class RegisterController {
             return "redirect:/register";
         }
 
+        if (userService.isEmailTaken(user.getEmail())) {
+            redirectAttributes.addFlashAttribute("error", "Email đã được sử dụng");
+            return "redirect:/register";
+        }
+
+        if (userService.isPhoneTaken(user.getPhone())) {
+            redirectAttributes.addFlashAttribute("error", "Số điện thoại đã được sử dụng");
+            return "redirect:/register";
+        }
+        if (userService.isUsernameTaken(user.getUsername())) {
+            redirectAttributes.addFlashAttribute("error", "Username đã được sử dụng");
+            return "redirect:/register";
+        }
+
         try {
             userService.saveUser(user);
         } catch (Exception e) {
@@ -42,5 +56,3 @@ public class RegisterController {
         return "redirect:/login";
     }
 }
-
-
