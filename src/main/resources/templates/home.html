@@ -39,8 +39,10 @@
                         <li><a href="#">Today Special</a></li>
                         <li><a href="/menu">Menu</a></li>
                         <li><a href="#">Contact</a></li>
-                        <li><a href="/register">Register</a></li>
-                        <li><a href="/login">Login</a></li>
+                        <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
+                        <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
+                        <li th:if="${username != null}"><a href="#"><span th:text="${username}"></span></a></li>
+                        <li th:if="${username != null}"><a href="/logout">Logout</a></li>
                     </ul>
                 </nav>
             </div>

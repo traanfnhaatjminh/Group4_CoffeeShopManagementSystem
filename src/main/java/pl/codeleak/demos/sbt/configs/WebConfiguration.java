@@ -29,19 +29,20 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/","/product/*","/menu","/homepage", "/login", "/register", "/resources/**", "/css/**", "/js/**", "/img/**").permitAll()
+                .antMatchers("/", "/product/*", "/menu", "/homepage", "/login", "/register", "/resources/**", "/css/**", "/js/**", "/img/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/management", true)
+                .defaultSuccessUrl("/homepage", true)
                 .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/homepage")
                 .permitAll();
     }
+
 
     //upload file handle
     @Override

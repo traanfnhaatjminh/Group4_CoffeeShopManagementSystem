@@ -97,7 +97,7 @@ public class ManagementController {
 
         // Get the logged-in user's ID
         String username = principal.getName();
-        int userId = userService.getUserByUsername(username).get().getUid();
+        int userId = userService.getUserByUsername(username).getUid();
 
         // Get cart items and calculate total cost
         List<CartItem> cartItems = cartService.getCartItems();

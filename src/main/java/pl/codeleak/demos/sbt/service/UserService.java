@@ -14,8 +14,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public Optional<Users> getUserByUsername(String username) {
-        return Optional.ofNullable(userRepository.findByUsername(username));
+    public Users getUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     public void saveUser(Users user) {
