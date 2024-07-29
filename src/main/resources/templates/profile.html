@@ -67,6 +67,7 @@
         .container.bootstrap.snippets.bootdey {
             margin-top: 150px; /* Adjust the value as needed */
         }
+
         /* Button styles */
         .btn-custom {
             background-color: #000000; /* Black color */
@@ -121,12 +122,6 @@
         <img src="img/light.png" alt="Light" class="light light-3">
     </div>
 </div>
-
-<!-- Header Image Section -->
-<!--<div class="header-image">-->
-<!--    &lt;!&ndash; Optionally add some content or text here &ndash;&gt;-->
-<!--</div>-->
-
 
 <!-- Success Message -->
 <div class="container bootstrap snippets bootdey">
@@ -186,7 +181,7 @@
                     <div class="form-group">
                         <div class="col-sm-10 col-sm-offset-2">
                             <button type="button" class="btn btn-custom" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
-                            <button type="reset" class="btn btn-default">Change Password</button>
+                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
                         </div>
                     </div>
                 </form>
@@ -196,7 +191,7 @@
 </div>
 <hr>
 
-<!-- Modal -->
+<!-- Edit Profile Modal -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -222,20 +217,55 @@
                         <input type="text" id="address" name="address" class="form-control" th:value="${user.address}" required />
                     </div>
                     <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" required />
+                    </div>
+                    <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" required />
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone</label>
-                        <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" required />
+                        <button type="submit" class="btn btn-custom">Save changes</button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Save Changes</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Change Password Modal -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="changePasswordForm" th:action="@{/profile/changePassword}" method="post" onsubmit="return validateChangePasswordForm()">
+                    <input type="hidden" name="uid" th:value="${user.uid}" />
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <input type="password" id="currentPassword" name="currentPassword" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-custom">Change Password</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <footer>
     <div class="tm-black-bg">
         <div class="container">
@@ -251,7 +281,9 @@
                 </nav>
                 <div class="col-lg-5 col-md-5 tm-footer-div">
                     <h3 class="tm-footer-div-title">About Us</h3>
-                    <p class="margin-top-15">The Coffee Shop sẽ là nơi mọi người xích lại gần nhau, đề cao giá trị kết nối con người và sẻ chia thân tình bên những tách cà phê, ly trà đượm hương, truyền cảm hứng về lối sống hiện đại.</p>
+                    <p class="margin-top-15">The Coffee Shop sẽ là nơi mọi người xích lại gần nhau, đề cao giá trị kết
+                        nối con người và sẻ chia thân tình bên những tách cà phê, ly trà đượm hương, truyền cảm hứng về
+                        lối sống hiện đại.</p>
                 </div>
                 <div class="col-lg-4 col-md-4 tm-footer-div">
                     <p><i class="bi bi-telephone"></i> Đặt hàng: 1800 6936</p>
@@ -268,10 +300,34 @@
         </div>
     </div>
 </footer>
+<!-- JavaScript Validation -->
+<script>
+    function validateChangePasswordForm() {
+        var currentPassword = document.getElementById('currentPassword').value;
+        var newPassword = document.getElementById('newPassword').value;
+        var confirmPassword = document.getElementById('confirmPassword').value;
 
-<!-- Include jQuery and Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        // Check if new password and confirm password match
+        if (newPassword !== confirmPassword) {
+            alert('New Password and Confirm Password do not match!');
+            return false;
+        }
+
+        // Check if any field is empty
+        if (currentPassword === '' || newPassword === '' || confirmPassword === '') {
+            alert('Please fill out all fields.');
+            return false;
+        }
+
+        // Check if new password is the same as the current password
+        if (newPassword === currentPassword) {
+            alert('New Password cannot be the same as Current Password!');
+            return false;
+        }
+
+        return true; // Form is valid
+    }
+</script>
+
 </body>
 </html>
