@@ -12,7 +12,6 @@ import pl.codeleak.demos.sbt.model.Users;
 public interface UserRepository extends JpaRepository<Users, Integer> {
     Users findByUsername(String username);
 
-
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO Users (fullname, dob, email, phone, address, avatar, username, pass, role_id) " +
