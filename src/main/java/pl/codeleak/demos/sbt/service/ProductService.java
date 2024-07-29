@@ -144,5 +144,9 @@ public class ProductService {
     public Page<Product> getProductsManagement(int page, int size) {
         return productRepository.findAll(PageRequest.of(page, size));
     }
-
+    public Page<Product> searchProducts(String query, Pageable pageable) {
+        Page<Product> productPage = productRepository.findByPnameContainingIgnoreCase(query, pageable);
+        productPage.forEach(this::setCategoryName);
+        return productPage;
+    }
 }

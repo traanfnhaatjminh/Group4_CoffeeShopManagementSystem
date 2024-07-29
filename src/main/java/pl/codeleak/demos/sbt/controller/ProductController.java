@@ -2,6 +2,7 @@ package pl.codeleak.demos.sbt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -93,9 +94,14 @@ public class ProductController {
     }
 
     @GetMapping("/menu")
-    public String showMenu(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(required = false) Integer categoryId) {
+    public String showMenu(Model model,
+                           @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(required = false) Integer categoryId,
+                           @RequestParam(required = false) String search) {
         Page<Product> productPage;
-        if (categoryId != null) {
+        if (search != null && !search.trim().isEmpty()) {
+            productPage = productService.searchProducts(search, PageRequest.of(page, 5));
+        } else if (categoryId != null) {
             productPage = productService.getProductByCategories(page, 5, categoryId);
         } else {
             productPage = productService.getProducts(page, 5);
@@ -105,8 +111,10 @@ public class ProductController {
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("selectedCategoryId", categoryId);
+        model.addAttribute("searchQuery", search);
         return "menu";
     }
+
 
     @GetMapping("/product/{pid}")
     public String viewProductDetails(@PathVariable("pid") Integer pid, Model model) {
