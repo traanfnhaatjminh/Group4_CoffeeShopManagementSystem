@@ -103,11 +103,12 @@
                 </div>
                 <nav class="tm-nav">
                     <ul>
-                        <li><a href="/homepage">Home</a></li>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Today Special</a></li>
                         <li><a href="/menu">Menu</a></li>
                         <li><a href="#">Contact</a></li>
-                        <li th:if="${user != null}"><a href="#"><span th:text="${user.getUsername()}"></span></a></li>
-                        <li th:if="${user != null}"><a href="/logout">Logout</a></li>
+                        <li><a href="/register">Register</a></li>
+                        <li><a href="/login">Login</a></li>
                     </ul>
                 </nav>
             </div>
@@ -180,7 +181,7 @@
                     <div class="form-group">
                         <div class="col-sm-10 col-sm-offset-2">
                             <button type="button" class="btn btn-custom" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
-                            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#changePasswordModal">Change Password</button>
+                            <a href="/profile/changePassword" class="btn btn-default">Change Password</a>
                         </div>
                     </div>
                 </form>
@@ -201,6 +202,7 @@
                 </button>
             </div>
             <div class="modal-body">
+
                 <form th:action="@{/profile/edit}" method="post">
                     <input type="hidden" name="uid" th:value="${user.uid}" />
                     <div class="form-group">
@@ -232,38 +234,6 @@
     </div>
 </div>
 
-<!-- Change Password Modal -->
-<div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="changePasswordModalLabel">Change Password</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="changePasswordForm" th:action="@{/profile/changePassword}" method="post" onsubmit="return validateChangePasswordForm()">
-                    <input type="hidden" name="uid" th:value="${user.uid}" />
-                    <div class="form-group">
-                        <label for="currentPassword">Current Password</label>
-                        <input type="password" id="currentPassword" name="currentPassword" class="form-control" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="newPassword">New Password</label>
-                        <input type="password" id="newPassword" name="newPassword" class="form-control" required />
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm New Password</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" class="form-control" required />
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-custom">Change Password</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
 </div>
 <footer>
     <div class="tm-black-bg">
@@ -272,7 +242,8 @@
                 <nav class="col-lg-3 col-md-3 tm-footer-nav tm-footer-div">
                     <h3 class="tm-footer-div-title">Main Menu</h3>
                     <ul>
-                        <li><a href="/homepage">Home</a></li>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Today Special</a></li>
                         <li><a href="/menu">Menu</a></li>
                         <li><a href="#">Contact</a></li>
                     </ul>
@@ -298,34 +269,6 @@
         </div>
     </div>
 </footer>
-<!-- JavaScript Validation -->
-<script>
-    function validateChangePasswordForm() {
-        var currentPassword = document.getElementById('currentPassword').value;
-        var newPassword = document.getElementById('newPassword').value;
-        var confirmPassword = document.getElementById('confirmPassword').value;
-
-        // Check if new password and confirm password match
-        if (newPassword !== confirmPassword) {
-            alert('New Password and Confirm Password do not match!');
-            return false;
-        }
-
-        // Check if any field is empty
-        if (currentPassword === '' || newPassword === '' || confirmPassword === '') {
-            alert('Please fill out all fields.');
-            return false;
-        }
-
-        // Check if new password is the same as the current password
-        if (newPassword === currentPassword) {
-            alert('New Password cannot be the same as Current Password!');
-            return false;
-        }
-
-        return true; // Form is valid
-    }
-</script>
 
 </body>
 </html>

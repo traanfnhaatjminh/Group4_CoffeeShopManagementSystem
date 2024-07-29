@@ -45,27 +45,45 @@ public class UsersController {
         redirectAttributes.addFlashAttribute("message", "Edit Successfully!");
         return "redirect:/profile";
     }
+
     @GetMapping("/changePassword")
     public String showChangePasswordForm() {
         return "changePassword"; // Ensure this view exists
     }
+
+
     @PostMapping("/changePassword")
-    public String changePassword(@RequestParam String currentPassword,
-                                 @RequestParam String newPassword,
-                                 @RequestParam String confirmPassword,
+    public String changePassword(@RequestParam("currentPassword") String currentPassword,
+                                 @RequestParam("newPassword") String newPassword,
+                                 @RequestParam("confirmPassword") String confirmPassword,
                                  Principal principal,
                                  RedirectAttributes redirectAttributes) {
         String username = principal.getName();
-        Users user = userService.findByUsername(username);
+        Users user = userService.findByUsername(username); // Get the current user
 
-        // Update password
+        // Check if the current password is correct
+        if (!userService.checkPassword(user, currentPassword)) {
+            redirectAttributes.addFlashAttribute("error", "Current password is incorrect.");
+            return "redirect:/profile/changePassword";
+        }
 
-        user.setPass(newPassword);
-        userService.save(user);
+        // Check if the new password and confirm password match
+        if (!newPassword.equals(confirmPassword)) {
+            redirectAttributes.addFlashAttribute("error", "New password and confirm password do not match.");
+            return "redirect:/profile/changePassword";
+        }
 
+        // Check if the new password is not the same as the current password
+        if (newPassword.equals(currentPassword)) {
+            redirectAttributes.addFlashAttribute("error", "New password cannot be the same as the current password.");
+            return "redirect:/profile/changePassword";
+        }
+
+        // Update the password
+        userService.updatePassword(user, newPassword);
         redirectAttributes.addFlashAttribute("message", "Password changed successfully!");
+
         return "redirect:/profile";
     }
 
 }
-

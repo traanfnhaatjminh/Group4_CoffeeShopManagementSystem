@@ -1,6 +1,7 @@
 package pl.codeleak.demos.sbt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import pl.codeleak.demos.sbt.model.Users;
@@ -13,7 +14,8 @@ public class UserService {
     private static final String UPLOAD_DIR = "uploads/";
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     public Users getUserByUsername(String username) {
         return userRepository.findByUsername(username);
     }
@@ -39,7 +41,14 @@ public class UserService {
     public Users save(Users user) {
         return userRepository.save(user);
     }
-}
+    public boolean checkPassword(Users user, String rawPassword) {
+        return passwordEncoder.matches(rawPassword, user.getPass());
+    }
 
+    public void updatePassword(Users user, String newPassword) {
+        user.setPass(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+}
 
 

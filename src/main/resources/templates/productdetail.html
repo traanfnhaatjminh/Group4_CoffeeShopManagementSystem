@@ -13,7 +13,10 @@
     <link href="css/templatemo-style.css" rel="stylesheet">
     <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
     <style>
-        .tm-section{
+        body {
+            background-color: #e4e4e4;
+        }
+        .tm-section {
             padding-top: 100px;
         }
         .product-detail-image img {
@@ -22,22 +25,22 @@
             object-fit: cover;
         }
         .card-img-top {
-            max-width: 350px;
-            max-height: 350px;
-            margin-left: 100px;
+            max-width: 400px;
+            max-height: 400px;
+
         }
-        .tm-daily-menu-img{
+        .tm-daily-menu-img {
             max-width: 300px;
             max-height: 300px;
         }
         .py-5 {
             padding-top: 90px;
-            margin-right: 120px;
+            margin-right: 10px;
         }
-        .text{
+        .text {
             font-style: oblique;
         }
-        .shipping-now-button{
+        .shipping-now-button {
             background-color: #333;
             color: white;
             padding: 10px 20px;
@@ -50,7 +53,7 @@
             align-items: center;
             text-decoration: none;
         }
-        .shipping-now-button:hover{
+        .shipping-now-button:hover {
             background-color: #555;
         }
         .quantity-control {
@@ -76,6 +79,23 @@
             margin: 0 5px;
             border: 1px solid #ddd;
             border-radius: 4px;
+        }
+        .detail-table {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .category-name {
+            background: url('img/vertical-menu-bg.png') no-repeat center center;
+            background-size: cover;
+            padding: 10px;
+            color: white;
+            border-radius: 5px;
+            display: inline-block;
+            text-transform: uppercase;
+            color: #7c6a51;
         }
     </style>
 </head>
@@ -112,27 +132,29 @@
 </div>
 <section class="py-5">
     <div class="container px-4 px-lg-5 my-5">
-        <div class="row gx-4 gx-lg-5 align-items-center">
-            <div class="col-md-6">
-                <img class="card-img-top mb-5 mb-md-0 product-detail-image" th:src="@{${product.image}}" alt="Product Image" />
-            </div>
-            <div class="col-md-6">
-                <p th:text="${categoryName}">Product Category</p>
-                <h1 class="display-5 fw-bolder" th:text="${product.pname}">Product Name</h1>
-                <div class="fs-5 mb-5">
-                    <span th:text="${product.price}">40.00</span> VND
+        <div class="detail-table">
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6">
+                    <img class="card-img-top mb-5 mb-md-0 product-detail-image" th:src="@{${product.image}}" alt="Product Image" />
                 </div>
-                <p class="lead" th:text="${product.description}">Description</p>
-                <div class="d-flex mb-3">
-                    <div class="quantity-control">
-                        <button type="button" id="decreaseQuantity">-</button>
-                        <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" />
-                        <button type="button" id="increaseQuantity">+</button>
+                <div class="col-md-6">
+                    <p class="category-name" th:text="${categoryName}">Product Category</p>
+                    <h1 class="display-5 fw-bolder" th:text="${product.pname}">Product Name</h1>
+                    <p class="lead" th:text="${product.description}">Description</p>
+                    <div class="fs-5 mb-5">
+                        <span th:text="${product.price}">40.00</span> VND
                     </div>
-                    <button class="shipping-now-button" type="button">
-                        <i class="bi-cart-fill me-1"></i>
-                        Shipping Now
-                    </button>
+                    <div class="d-flex mb-3">
+                        <div class="quantity-control">
+                            <button type="button" id="decreaseQuantity">-</button>
+                            <input class="form-control text-center me-3" id="inputQuantity" type="number" value="1" />
+                            <button type="button" id="increaseQuantity">+</button>
+                        </div>
+                        <button class="shipping-now-button" type="button">
+                            <i class="bi-cart-fill me-1"></i>
+                            MUA
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -164,10 +186,35 @@
     </section>
 </div>
 <footer>
+    <div class="tm-black-bg">
+        <div class="container">
+            <div class="row margin-bottom-60">
+                <nav class="col-lg-3 col-md-3 tm-footer-nav tm-footer-div">
+                    <h3 class="tm-footer-div-title">Main Menu</h3>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Today Special</a></li>
+                        <li><a href="/menu">Menu</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="col-lg-5 col-md-5 tm-footer-div">
+                    <h3 class="tm-footer-div-title">About Us</h3>
+                    <p class="margin-top-15">The Coffee Shop sẽ là nơi mọi người xích lại gần nhau, đề cao giá trị kết
+                        nối con người và sẻ chia thân tình bên những tách cà phê, ly trà đượm hương, truyền cảm hứng về
+                        lối sống hiện đại.</p>
+                </div>
+                <div class="col-lg-4 col-md-4 tm-footer-div">
+                    <p><i class="bi bi-telephone"></i> Đặt hàng: 1800 6936</p>
+                    <p><i class="bi bi-envelope"></i> Liên hệ</p>
+                </div>
+            </div>
+        </div>
+    </div>
     <div>
         <div class="container">
             <div class="row tm-copyright">
-                <p class="col-lg-12 small copyright-text text-center">Copyright &copy; 2084 Your Cafe House</p>
+                <p class="col-lg-12 small copyright-text text-center">Copyright &copy; 2024 Coffee Shop</p>
             </div>
         </div>
     </div>
