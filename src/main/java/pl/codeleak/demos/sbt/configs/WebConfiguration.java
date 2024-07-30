@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import pl.codeleak.demos.sbt.service.CustomUserDetailsService;
 
@@ -29,7 +28,7 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/","/menu","/homepage","/management", "/login", "/register", "/resources/**", "/css/**", "/js/**", "/img/**").permitAll()
+                .antMatchers("/","/menu","/homepage","/product/*","/management", "/login", "/register", "/resources/**", "/css/**", "/js/**", "/img/**").permitAll()
                 .antMatchers("/profile/**").authenticated()
                 .anyRequest().authenticated()
                 .and()

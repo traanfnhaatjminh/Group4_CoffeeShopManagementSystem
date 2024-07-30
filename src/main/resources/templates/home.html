@@ -35,13 +35,13 @@
                 </div>
                 <nav class="tm-nav">
                     <ul>
-                        <li><a href="/homepage" class="active">Home</a></li>
-                        <li><a href="/menu">Menu</a></li>
+                        <li><a th:classappend="${currentPage == 'home'} ? 'active'" href="/homepage" class="active">Home</a></li>
+                        <li><a th:classappend="${currentPage == 'menu'} ? 'active'" href="/menu">Menu</a></li>
                         <li><a href="#">Contact</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
-                        <li th:if="${username != null}"><a href="#"><span th:text="${username}"></span></a></li>
-                        <li th:if="${username != null}"><a href="/profile">Profile</a></li>
+                        <li th:if="${username != null}"><a style="color: yellow" href="#"><span th:text="${username}"></span></a></li>
+                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${username != null}"><a href="/profile">Profile</a></li>
                         <li th:if="${username != null}"><a href="/login?logout">Logout</a></li>
                     </ul>
                 </nav>

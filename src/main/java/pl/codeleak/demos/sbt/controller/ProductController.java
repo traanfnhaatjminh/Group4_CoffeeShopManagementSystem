@@ -57,6 +57,7 @@ public class ProductController {
         Iterable<Category> listC = categoryService.getAllCategories();
         model.addAttribute("categories", listC);
         model.addAttribute("products", listP);
+        model.addAttribute("currentPage", "home");
         return "home";
     }
 
@@ -116,17 +117,23 @@ public class ProductController {
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("selectedCategoryId", categoryId);
         model.addAttribute("searchQuery", search);
+        model.addAttribute("currentPage1", "menu");
         return "menu";
     }
 
     @GetMapping("/product/{pid}")
-    public String viewProductDetails(@PathVariable("pid") Integer pid, Model model) {
+    public String viewProductDetails(@PathVariable("pid") Integer pid, Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            model.addAttribute("username", username);
+        }
         Product product = productService.getProductByPid(pid);
         if (product == null) {
             return "error/404";
         }
         model.addAttribute("product", product);
         model.addAttribute("categoryName", product.getCategoryName());
+        model.addAttribute("currentPage", "menu");
         return "productdetail";
     }
 
