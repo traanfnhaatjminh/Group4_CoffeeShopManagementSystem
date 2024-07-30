@@ -19,6 +19,9 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
     @Autowired
     private CustomUserDetailsService userDetailsService;
 
+    @Autowired
+    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
@@ -28,20 +31,18 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/","/menu","/homepage","/product/*","/management", "/login", "/register", "/resources/**", "/css/**", "/js/**", "/img/**").permitAll()
+                .antMatchers("/", "/menu", "/homepage", "/product/*", "/management", "/login", "/register", "/resources/**", "/css/**", "/js/**", "/img/**").permitAll()
                 .antMatchers("/profile/**").authenticated()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
-                .defaultSuccessUrl("/homepage", true)
+                .successHandler(customAuthenticationSuccessHandler) // Sử dụng custom success handler
                 .permitAll()
                 .and()
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
-                //.invalidateHttpSession(true)
-               // .clearAuthentication(true)
                 .permitAll();
     }
 
