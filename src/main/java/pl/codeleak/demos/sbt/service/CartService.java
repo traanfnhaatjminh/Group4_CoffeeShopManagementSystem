@@ -16,7 +16,6 @@ public class CartService {
         Optional<CartItem> existingItem = cartItems.stream()
                 .filter(item -> item.getProduct().getPid() == product.getPid())
                 .findFirst();
-
         if (existingItem.isPresent()) {
             CartItem cartItem = existingItem.get();
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
