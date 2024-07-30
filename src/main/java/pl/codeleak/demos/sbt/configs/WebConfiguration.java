@@ -41,6 +41,8 @@ public class WebConfiguration extends WebSecurityConfigurerAdapter implements We
                 .logout()
                 .logoutUrl("/logout")
                 .logoutSuccessUrl("/login?logout")
+                //.invalidateHttpSession(true)
+               // .clearAuthentication(true)
                 .permitAll();
     }
 
