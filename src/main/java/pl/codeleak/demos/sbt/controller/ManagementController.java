@@ -42,7 +42,12 @@ public class ManagementController {
     @GetMapping("/management")
     public String management(@RequestParam("page") Optional<Integer> page,
                              @RequestParam("size") Optional<Integer> size,
-                             Model model) {
+                             Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
         int currentPage = page.orElse(1);
         int pageSize = size.orElse(6);
 
@@ -108,7 +113,7 @@ public class ManagementController {
         }
 
         // Create a new Bill
-        Bill bill = new Bill(new Date(), numberOfGuest, totalCost, tableId, userId);
+        Bill bill = new Bill(new Date(), numberOfGuest, totalCost, tableId, userId,0,1);
         billService.save(bill);
         logger.info("Bill saved with ID: {}", bill.getBillId());
 
@@ -126,6 +131,18 @@ public class ManagementController {
 
         model.addAttribute("successMessage", "Bill created successfully!");
         return "redirect:/management";
+    }
+
+    @GetMapping("/management/allbill")
+    public String allBill(Model model,Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        Iterable<Bill> listBill = billService.getAllBills();
+        model.addAttribute("bills", listBill);
+        return "allbill-cashier";
     }
 
 }

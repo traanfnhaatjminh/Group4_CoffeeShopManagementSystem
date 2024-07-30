@@ -26,16 +26,22 @@ public class Bill {
     private int tableId;
     @Column(name = "user_id")
     private int userId;
+    @Column(name = "status")
+    private int status;
+    @Column(name = "type")
+    private int type;
 
     public Bill() {
     }
 
-    public Bill(Date createdTime, int numberOfGuest, float totalCost, int tableId, int userId) {
+    public Bill(Date createdTime, int numberOfGuest, float totalCost, int tableId, int userId, int status, int type) {
         this.createdTime = createdTime;
         this.numberOfGuest = numberOfGuest;
         this.totalCost = totalCost;
         this.tableId = tableId;
         this.userId = userId;
+        this.status = status;
+        this.type = type;
     }
 
     public Bill(int billId) {

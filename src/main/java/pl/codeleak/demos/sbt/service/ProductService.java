@@ -77,8 +77,6 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-
-
     public void deleteProductById(int id) {
         productRepository.deleteById(id);
     }

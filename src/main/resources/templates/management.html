@@ -46,7 +46,7 @@
                 <a href="/management">Home</a>
                 <a href="#">Warehouse</a>
                 <a href="#">Product</a>
-                <a href="#">All Bill</a>
+                <a href="/management/allbill">All Bill</a>
                 <a href="#">Statistic</a>
                 <a href="#">Setting</a>
             </nav>
@@ -113,11 +113,14 @@
         </div>
         <div class="col-md-5">
             <div class="row" style="border-bottom: 1px solid rgb(184, 184, 184);">
-                <div class="col-6">
-                    fullname
+                <div class="col-4" style="color: #0e4bf1;text-transform: uppercase">
+                    <h5 th:text="${user.getUsername()}"></h5>
                 </div>
-                <div class="col-6">
-                    <a href="/login">Logout</a>
+                <div class="col-4">
+                    <a href="#">PROFILE</a>
+                </div>
+                <div class="col-4">
+                    <a href="#">LOGOUT</a>
                 </div>
             </div>
             <form id="cart-form" th:action="@{/createBill}" method="POST">

@@ -14,4 +14,8 @@ public class BillService {
     public void save(Bill bill) {
         billRepository.save(bill);
     }
+
+    public Iterable<Bill> getAllBills() {
+        return billRepository.findAll();
+    }
 }
