@@ -16,4 +16,10 @@ public class CategoryService {
     public  Category getCategoryById(int cid){
         return categoryRepository.findById(cid).orElse(null);
     }
+
+    public void saveCategory(Category category) {
+        categoryRepository.save(category);
+    }
+
+
 }

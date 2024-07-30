@@ -77,6 +77,8 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+
+
     public void deleteProductById(int id) {
         productRepository.deleteById(id);
     }
@@ -149,4 +151,7 @@ public class ProductService {
         productPage.forEach(this::setCategoryName);
         return productPage;
     }
+
+
+
 }
