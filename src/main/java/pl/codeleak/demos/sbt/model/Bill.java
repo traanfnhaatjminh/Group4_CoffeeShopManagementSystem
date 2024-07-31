@@ -17,6 +17,10 @@ public class Bill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bill_id")
     private int billId;
+    @Column(name="phone")
+    private String phone;
+    @Column(name="address")
+    private String address;
     @Column(name = "created_time")
     private Date createdTime;
     @Column(name = "number_of_guest")
@@ -35,7 +39,9 @@ public class Bill {
     public Bill() {
     }
 
-    public Bill(Date createdTime, int numberOfGuest, float totalCost, int tableId, int userId, int status, int type) {
+    public Bill(String phone, String address, Date createdTime, int numberOfGuest, float totalCost, int tableId, int userId, int status, int type) {
+        this.phone = phone;
+        this.address = address;
         this.createdTime = createdTime;
         this.numberOfGuest = numberOfGuest;
         this.totalCost = totalCost;

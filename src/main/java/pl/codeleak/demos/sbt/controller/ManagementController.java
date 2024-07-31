@@ -157,7 +157,7 @@ public class ManagementController {
         }
 
         // Create a new Bill
-        Bill bill = new Bill(new Date(), numberOfGuest, totalCost, tableId, userId, 0, 1);
+        Bill bill = new Bill("","",new Date(), numberOfGuest, totalCost, tableId, userId, 0, 1);
         billService.save(bill);
         tableService.updateTableStatus(tableId,1);
         logger.info("Bill saved with ID: {}", bill.getBillId());
