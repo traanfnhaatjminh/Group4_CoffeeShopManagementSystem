@@ -150,6 +150,16 @@ public class ProductService {
         return productPage;
     }
 
+    @Autowired
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
+    public void deleteProductsByCategoryId(int categoryId) {
+        Iterable<Product> products = productRepository.findByCategoryId(categoryId);
+        for (Product product : products) {
+            productRepository.delete(product);
+        }
+    }
 
 }

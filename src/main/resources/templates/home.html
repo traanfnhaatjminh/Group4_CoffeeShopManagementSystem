@@ -36,7 +36,6 @@
                 <nav class="tm-nav">
                     <ul>
                         <li><a th:classappend="${currentPage == 'home'} ? 'active'" href="/homepage">Home</a></li>
-                        <li><a th:classappend="${currentPage == 'menu'} ? 'active'" href="/menu">Menu</a></li>
                         <li><a href="#">Contact</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
