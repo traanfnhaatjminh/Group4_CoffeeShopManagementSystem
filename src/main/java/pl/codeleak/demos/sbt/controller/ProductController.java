@@ -140,7 +140,8 @@ public class ProductController {
     public String viewProductDetails(@PathVariable("pid") Integer pid, Model model, Principal principal) {
         if (principal != null) {
             String username = principal.getName();
-            model.addAttribute("username", username);
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
         }
         Product product = productService.getProductByPid(pid);
         if (product == null) {
