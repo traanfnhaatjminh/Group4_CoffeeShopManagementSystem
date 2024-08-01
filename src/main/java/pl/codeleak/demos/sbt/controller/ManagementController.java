@@ -200,11 +200,13 @@ public class ManagementController {
         }
         Pageable pageable = PageRequest.of(page, size);
         Page<Bill> billsPage;
+        boolean noBills = false;
         if (createdTime != null && !createdTime.isEmpty()){
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate date = LocalDate.parse(createdTime, formatter);
             Date dateValue = java.sql.Date.valueOf(date);
             billsPage = billService.searchByCreatedTime(dateValue, pageable);
+            noBills = billsPage.isEmpty();
         }else{
             billsPage = billService.getAllBills(pageable);
         }
@@ -214,6 +216,7 @@ public class ManagementController {
         model.addAttribute("totalPages", billsPage.getTotalPages());
         model.addAttribute("size", size);
         model.addAttribute("createdTime", createdTime);
+        model.addAttribute("noBills", noBills);
         return "allbill-cashier";
     }
 
