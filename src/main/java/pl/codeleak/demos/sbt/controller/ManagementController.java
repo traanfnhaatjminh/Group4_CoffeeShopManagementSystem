@@ -1,9 +1,12 @@
 package pl.codeleak.demos.sbt.controller;
 
+import org.apache.tomcat.jni.Local;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +14,12 @@ import pl.codeleak.demos.sbt.model.*;
 import pl.codeleak.demos.sbt.service.*;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -182,14 +189,31 @@ public class ManagementController {
     }
 
     @GetMapping("/management/allbill")
-    public String allBill(Model model, Principal principal) {
+    public String allBill(@RequestParam(value = "page", defaultValue = "0") int page,
+                          @RequestParam(value = "size", defaultValue = "10") int size,
+                          @RequestParam(value = "createdTime", required = false) String createdTime,
+                          Model model, Principal principal) {
         if (principal != null) {
             String username = principal.getName();
             Users user = userService.findByUsername(username);
             model.addAttribute("user", user);
         }
-        Iterable<Bill> listBill = billService.getAllBills();
-        model.addAttribute("bills", listBill);
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Bill> billsPage;
+        if (createdTime != null && !createdTime.isEmpty()){
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate date = LocalDate.parse(createdTime, formatter);
+            Date dateValue = java.sql.Date.valueOf(date);
+            billsPage = billService.searchByCreatedTime(dateValue, pageable);
+        }else{
+            billsPage = billService.getAllBills(pageable);
+        }
+//        Iterable<Bill> listBill = billService.getAllBills();
+        model.addAttribute("bills", billsPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", billsPage.getTotalPages());
+        model.addAttribute("size", size);
+        model.addAttribute("createdTime", createdTime);
         return "allbill-cashier";
     }
 
