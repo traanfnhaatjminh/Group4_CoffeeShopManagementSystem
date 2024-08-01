@@ -6,4 +6,5 @@ import pl.codeleak.demos.sbt.model.Cart;
 
 @Repository
 public interface CartRepository extends CrudRepository<Cart, Integer> {
+    Iterable<Cart> findByUid(int uid);
 }
