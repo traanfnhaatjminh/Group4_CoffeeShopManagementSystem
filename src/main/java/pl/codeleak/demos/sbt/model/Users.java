@@ -45,9 +45,12 @@ public class Users {
 
     private int role_id;
 
+    @Column(name="status")
+    private int status;
+
     public Users() {}
 
-    public Users(int uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String pass, int role) {
+    public Users(int uid, String fullname, String dob, String email, String phone, String address, String avatar, String username, String pass, int role,int status) {
         this.uid = uid;
         this.fullname = fullname;
         this.dob = dob;
@@ -58,5 +61,6 @@ public class Users {
         this.username = username;
         this.pass = pass;
         this.role_id = role;
+        this.status = status;
     }
 }
