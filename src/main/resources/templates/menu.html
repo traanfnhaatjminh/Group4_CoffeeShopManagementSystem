@@ -169,6 +169,7 @@
                                 <img th:src="@{${product.image}}" alt="Product">
                                 <div class="tm-product-text">
                                     <h3 class="tm-product-title" th:text="${product.pname}">Product Name</h3>
+                                    <h4 style="color: darkgray" th:text="${product.getPrice()}+' VND'"></h4>
                                     <p class="tm-product-description">Nhấn vào ... để thêm chi tiết</p>
                                 </div>
                                 <!--                                <a th:href="@{/product/{pid}(pid=${product.pid})}" class="tm-product-price-link tm-handwriting-font">-->
