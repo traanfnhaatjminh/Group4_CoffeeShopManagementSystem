@@ -109,7 +109,13 @@
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
                         <li th:if="${user != null}"><a style="color: yellow" href="#"><span th:text="${user.getUsername()}"></span></a></li>
-                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${user != null}"><a href="/profile">Profile</a></li>
+                        <li th:if="${user != null}"><a th:classappend="${currentPage == 'profile'} ? 'active'" href="/profile">Profile</a></li>
+                        <li th:if="${user != null}">
+                            <a class="nav-icon position-relative text-decoration-none" href="/cart">
+                                <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                                <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">0</span>
+                            </a>
+                        </li>
                         <li th:if="${user != null}"><a href="/login?logout">Logout</a></li>
                     </ul>
                 </nav>
