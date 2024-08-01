@@ -26,6 +26,7 @@ public class RegisterController {
 
         user.setRole_id(1);
         user.setAvatar("abc");
+        user.setStatus(1);
 
         if (user.getUsername() == null || user.getPass() == null || user.getEmail() == null) {
             redirectAttributes.addFlashAttribute("error", "Username, password, and email cannot be null");
