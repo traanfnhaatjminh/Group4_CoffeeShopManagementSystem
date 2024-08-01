@@ -20,6 +20,6 @@ public class LogoutController {
             session.invalidate();
         }
         SecurityContextHolder.clearContext();
-        response.sendRedirect("/login?logout");
+        response.sendRedirect("/homepage");
     }
 }
