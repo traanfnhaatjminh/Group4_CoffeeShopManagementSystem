@@ -44,8 +44,13 @@
         <div class="col-md-1 sidebar">
             <nav class="nav flex-column">
                 <a href="/management">Home</a>
+
                 <a href="/products">Warehouse</a>
                 <a href="##">Product</a>
+
+                <a href="#">Warehouse</a>
+                <a href="#">Table List</a>
+
                 <a href="/management/allbill">All Bill</a>
                 <a href="#">Statistic</a>
                 <a href="#">Setting</a>
@@ -137,9 +142,18 @@
                                    required>
                         </label>
                     </div>
+
                     <div class="col-6">
                         <label>
-                            <input type="number" class="form-control" placeholder="Table ID" name="tableId" required>
+                            <select class="form-control" name="tableId" required>
+                                <option value="" disabled selected>Select Table</option>
+                                <th:block th:each="table : ${tables}">
+                                    <option th:value="${table.getTid()}">
+                                        <span th:text="${table.getTid()}"></span>
+                                        <span th:text="${table.getStatus() == 0 ? ' - còn bàn' : ' - hết bàn'}"></span>
+                                    </option>
+                                </th:block>
+                            </select>
                         </label>
                     </div>
                 </div>
@@ -200,31 +214,6 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!--<script>-->
-<!--    function updateTotal() {-->
-<!--        let table = document.querySelector('.table');-->
-<!--        let rows = table.querySelectorAll('tbody tr');-->
-<!--        let total = 0;-->
-
-<!--        rows.forEach(row => {-->
-<!--            let price = parseFloat(row.querySelector('td:nth-child(2)').textContent.replace(' VND', ''));-->
-<!--            let quantity = parseInt(row.querySelector('input[type="number"]').value);-->
-<!--            let totalPrice = price * quantity;-->
-<!--            row.querySelector('td:nth-child(4)').textContent = totalPrice + ' VND';-->
-<!--            total += totalPrice;-->
-<!--        });-->
-
-<!--        // Update total price in the footer-->
-<!--        document.querySelector('tfoot th:nth-child(4)').textContent = total + ' VND';-->
-<!--    }-->
-
-<!--    document.querySelectorAll('input[type="number"]').forEach(input => {-->
-<!--        input.addEventListener('input', updateTotal);-->
-<!--    });-->
-
-<!--    // Initialize total on page load-->
-<!--    updateTotal();-->
-<!--</script>-->
 
 </body>
 </html>

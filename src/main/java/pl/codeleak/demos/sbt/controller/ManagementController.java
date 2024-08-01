@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.codeleak.demos.sbt.model.*;
 import pl.codeleak.demos.sbt.service.*;
+
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +40,9 @@ public class ManagementController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private TableService tableService;
+
     @GetMapping("/management")
     public String management(@RequestParam("page") Optional<Integer> page,
                              @RequestParam("size") Optional<Integer> size,
@@ -66,18 +70,37 @@ public class ManagementController {
         model.addAttribute("cartItems", cartService.getCartItems());
         model.addAttribute("totalPrice", cartService.getTotalPrice());
         model.addAttribute("currentPage", currentPage);
+        model.addAttribute("tables", tableService.getAllTables());
         return "management";
     }
 
-
     @GetMapping("/management/products/{cid}")
-    public String productByCategory(@PathVariable int cid, Model model) {
+    public String productByCategory(@PathVariable int cid, Model model,
+                                    @RequestParam("page") Optional<Integer> page,
+                                    @RequestParam("size") Optional<Integer> size,
+                                    Principal principal) {
+
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
+        int currentPage = page.orElse(1);
+
+        List<Integer> pageNumbers = IntStream.rangeClosed(1, 1)
+                .boxed()
+                .collect(Collectors.toList());
+        model.addAttribute("pageNumbers", pageNumbers);
+
         Iterable<Product> listP = productService.getProductsByCategory(cid);
         Iterable<Category> listC = categoryService.getAllCategories();
         model.addAttribute("products", listP);
         model.addAttribute("categories", listC);
         model.addAttribute("cartItems", cartService.getCartItems());
         model.addAttribute("totalPrice", cartService.getTotalPrice());
+        model.addAttribute("currentPage", currentPage);
+        model.addAttribute("tables", tableService.getAllTables());
         return "management";
     }
 
@@ -96,7 +119,28 @@ public class ManagementController {
     public String createBill(@RequestParam("numberOfGuest") int numberOfGuest,
                              @RequestParam("tableId") int tableId,
                              Principal principal,
-                             Model model) {
+                             Model model,
+                             @RequestParam("page") Optional<Integer> page,
+                             @RequestParam("size") Optional<Integer> size) {
+
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(6);
+
+        Page<Product> productPage = productService.getProducts(currentPage - 1, pageSize);
+
+        int totalPages = productPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
 
         logger.info("createBill called with numberOfGuest: {}, tableId: {}", numberOfGuest, tableId);
 
@@ -113,8 +157,9 @@ public class ManagementController {
         }
 
         // Create a new Bill
-        Bill bill = new Bill(new Date(), numberOfGuest, totalCost, tableId, userId,0,1);
+        Bill bill = new Bill(new Date(), numberOfGuest, totalCost, tableId, userId, 0, 1);
         billService.save(bill);
+        tableService.updateTableStatus(tableId,1);
         logger.info("Bill saved with ID: {}", bill.getBillId());
 
         // Create BillDetail entries for each cart item
@@ -129,12 +174,15 @@ public class ManagementController {
         cartService.clearCart();
         logger.info("Cart cleared");
 
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("currentPage", currentPage);
         model.addAttribute("successMessage", "Bill created successfully!");
-        return "redirect:/management";
+        return "management";
     }
 
     @GetMapping("/management/allbill")
-    public String allBill(Model model,Principal principal) {
+    public String allBill(Model model, Principal principal) {
         if (principal != null) {
             String username = principal.getName();
             Users user = userService.findByUsername(username);
