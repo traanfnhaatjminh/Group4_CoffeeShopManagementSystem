@@ -7,6 +7,7 @@
     <title>Cashier Feature</title>
     <!-- Bootstrap CSS -->
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         .sidebar {
             height: 100vh;
@@ -35,6 +36,13 @@
 
         .product-list {
             background-color: rgb(244, 243, 243);
+        }
+
+        .username{
+            background-color: gray;
+            color: aliceblue;
+            text-align: center;
+            padding: 5px 0;
         }
     </style>
 </head>
@@ -115,16 +123,25 @@
         </div>
         <div class="col-md-5">
             <div class="row" style="border-bottom: 1px solid rgb(184, 184, 184);">
-                <div class="col-4" style="color: #0e4bf1;text-transform: uppercase">
-                    <h5 th:text="${user.getUsername()}"></h5>
+                <div class="col-4" style="color: #0e4bf1; text-transform: uppercase">
+                    <h5 class="username" th:text="${user.getUsername()}"></h5>
                 </div>
                 <div class="col-4">
-                    <a href="/profile">PROFILE</a>
+                    <button type="button" class="btn btn-secondary">
+                        <a href="/profile" style="color: aliceblue">
+                            <i class="fas fa-user"></i> PROFILE
+                        </a>
+                    </button>
                 </div>
                 <div class="col-4">
-                    <a href="/logout">LOGOUT</a>
+                    <button type="button" class="btn btn-secondary">
+                        <a href="/logout" style="color: aliceblue">
+                            <i class="fas fa-sign-out-alt"></i> LOGOUT
+                        </a>
+                    </button>
                 </div>
             </div>
+
             <form id="cart-form" th:action="@{/createBill}" method="POST">
                 <div class="row">
                     <div class="col-12">
