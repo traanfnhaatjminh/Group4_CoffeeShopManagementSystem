@@ -17,6 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
        @Query(value = "SELECT TOP 3 * FROM Product ORDER BY pid DESC;", nativeQuery = true)
        List<Product> getTop3Products();
+
        Page<Product> findByPnameContainingIgnoreCase(String pname, Pageable pageable);
        Page<Product> findByPnameContaining(String keyword, Pageable pageable);
 }

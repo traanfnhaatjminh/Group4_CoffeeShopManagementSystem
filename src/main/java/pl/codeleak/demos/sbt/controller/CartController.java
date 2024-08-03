@@ -23,9 +23,6 @@ public class CartController {
     private ProductService productService;
 
     @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -45,7 +42,6 @@ public class CartController {
         }
         return "cart";
     }
-
 
     @PostMapping("/cart/add")
     public String addCartItem(@RequestParam("productId") int productId,
@@ -73,6 +69,5 @@ public class CartController {
         }
         return "redirect:/cart"; // Redirect back to the cart page
     }
-
 
 }

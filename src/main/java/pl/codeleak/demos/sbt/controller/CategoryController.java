@@ -63,8 +63,6 @@
 //
 //
 
-
-
 package pl.codeleak.demos.sbt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
