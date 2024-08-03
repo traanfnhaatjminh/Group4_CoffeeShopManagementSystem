@@ -14,11 +14,11 @@ import pl.codeleak.demos.sbt.service.ProductService;
 import pl.codeleak.demos.sbt.service.UserService;
 
 import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
 public class ProductController {
+
     @Autowired
     private ProductService productService;
 
@@ -29,37 +29,33 @@ public class ProductController {
     private UserService userService;
 
     @GetMapping("/products")
-    public String products(Model model) {
-        Iterable<Product> listP = productService.getAllProducts();
-        Iterable<Category> listC = categoryService.getAllCategories();
-        model.addAttribute("products", listP);
-        model.addAttribute("categories", listC);
-        // model.addAttribute("category", new Category());
-        return "homepage";
-    }
-
-    @GetMapping("/products/{cid}")
-    public String productByCategory(@PathVariable int cid, Model model) {
-        Iterable<Product> listP = productService.getProductsByCategory(cid);
-        Iterable<Category> listC = categoryService.getAllCategories();
-        model.addAttribute("products", listP);
-        model.addAttribute("categories", listC);
-        model.addAttribute("selectedCategoryId", cid);
-        return "homepage";
-    }
-
-    @GetMapping("/homepage")
-    public String homepage(Model model, Principal principal) {
+    public String products(Model model,
+                           @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                           @RequestParam(required = false) Integer categoryId,
+                           @RequestParam(required = false) String keyword,
+                           Principal principal) {
         if (principal != null) {
             String username = principal.getName();
-            model.addAttribute("username", username);
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
         }
-        List<Product> listP = productService.getLastestProducts();
-        Iterable<Category> listC = categoryService.getAllCategories();
-        model.addAttribute("categories", listC);
-        model.addAttribute("products", listP);
-        model.addAttribute("currentPage", "home");
-        return "home";
+
+        Page<Product> productPage;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            productPage = productService.searchProducts(keyword, PageRequest.of(pageNo - 1, 10));
+        } else if (categoryId != null) {
+            productPage = productService.getProductsByCategory(categoryId, PageRequest.of(pageNo - 1, 10));
+        } else {
+            productPage = productService.getProducts(PageRequest.of(pageNo - 1, 10));
+        }
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("totalPage", productPage.getTotalPages());
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedCategoryId", categoryId);
+        return "homepage";
     }
 
     @GetMapping("/products/update/{pid}")
@@ -93,57 +89,6 @@ public class ProductController {
         }
     }
 
-    @GetMapping("/menu")
-    public String showMenu(Model model,
-                           @RequestParam(defaultValue = "0") int page,
-                           @RequestParam(required = false) Integer categoryId,
-                           @RequestParam(required = false) String search,
-                           Principal principal) {
-        if (principal != null) {
-            String username = principal.getName();
-            model.addAttribute("username", username);
-        }
-        Page<Product> productPage;
-        if (search != null && !search.trim().isEmpty()) {
-            productPage = productService.searchProducts(search, PageRequest.of(page, 5));
-        } else if (categoryId != null) {
-            productPage = productService.getProductByCategories(page, 5, categoryId);
-        } else {
-            productPage = productService.getProducts(page, 5);
-        }
-        model.addAttribute("products", productPage.getContent());
-        model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", productPage.getTotalPages());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("selectedCategoryId", categoryId);
-        model.addAttribute("searchQuery", search);
-        model.addAttribute("currentPage1", "menu");
-        return "menu";
-    }
-
-    @GetMapping("/product/{pid}")
-    public String viewProductDetails(@PathVariable("pid") Integer pid, Model model, Principal principal) {
-        if (principal != null) {
-            String username = principal.getName();
-            Users user = userService.findByUsername(username);
-            model.addAttribute("user", user);
-        }
-        Product product = productService.getProductByPid(pid);
-        if (product == null) {
-            return "error/404";
-        }
-        model.addAttribute("product", product);
-        model.addAttribute("categoryName", product.getCategoryName());
-        model.addAttribute("currentPage", "menu");
-        return "productdetail";
-    }
-
-    @GetMapping("/products/delete/{pid}")
-    public String deleteProduct(@PathVariable int pid) {
-        productService.deleteProductById(pid);
-        return "redirect:/products";
-    }
-
     @GetMapping("/products/add")
     public String addProductForm(Model model) {
         model.addAttribute("product", new Product());
@@ -154,6 +99,12 @@ public class ProductController {
     @PostMapping("/products/add")
     public String saveNewProduct(@ModelAttribute("product") Product product) {
         productService.saveProduct(product);
+        return "redirect:/products";
+    }
+
+    @GetMapping("/products/delete/{pid}")
+    public String deleteProduct(@PathVariable int pid) {
+        productService.deleteProductById(pid);
         return "redirect:/products";
     }
 }

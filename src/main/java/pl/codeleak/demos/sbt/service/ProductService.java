@@ -111,18 +111,24 @@ public class ProductService {
         products.forEach(this::setCategoryName);
         return products;
     }
+    public Page<Product> getProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
 
     public Page<Product> getProducts(int page, int size) {
         Page<Product> productPage = productRepository.findAll(PageRequest.of(page, size));
         productPage.forEach(this::setCategoryName);
         return productPage;
     }
-
-    public Page<Product> getProductByCategories(int page, int size, int categoryId) {
-        Page<Product> productPage = productRepository.findByCategoryId(categoryId, PageRequest.of(page, size));
-        productPage.forEach(this::setCategoryName);
-        return productPage;
+    public Page<Product> getProductsByCategory(int categoryId, Pageable pageable) {
+        return productRepository.findByCategoryId(categoryId, pageable);
     }
+
+//    public Page<Product> getProductByCategories(int page, int size, int categoryId) {
+//        Page<Product> productPage = productRepository.findByCategoryId(categoryId, PageRequest.of(page, size));
+//        productPage.forEach(this::setCategoryName);
+//        return productPage;
+//    }
 
     public Product getProductByPid(Integer pid) {
         Product product = productRepository.findById(pid).orElse(null);
@@ -160,6 +166,10 @@ public class ProductService {
         for (Product product : products) {
             productRepository.delete(product);
         }
+    }
+
+    public Page<Product> searchProducts2(String keyword, Pageable pageable) {
+        return productRepository.findByPnameContaining(keyword, pageable);
     }
 
 }
