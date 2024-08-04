@@ -33,26 +33,6 @@ public class ProductController {
     @Autowired
     private CartItemService cartItemService;
 
-    @GetMapping("/products")
-    public String products(Model model) {
-        Iterable<Product> listP = productService.getAllProducts();
-        Iterable<Category> listC = categoryService.getAllCategories();
-        model.addAttribute("products", listP);
-        model.addAttribute("categories", listC);
-        // model.addAttribute("category", new Category());
-        return "homepage";
-    }
-
-    @GetMapping("/products/{cid}")
-    public String productByCategory(@PathVariable int cid, Model model) {
-        Iterable<Product> listP = productService.getProductsByCategory(cid);
-        Iterable<Category> listC = categoryService.getAllCategories();
-        model.addAttribute("products", listP);
-        model.addAttribute("categories", listC);
-        model.addAttribute("selectedCategoryId", cid);
-        return "homepage";
-    }
-
     @GetMapping("/homepage")
     public String homepage(Model model, Principal principal) {
         if (principal != null) {
