@@ -162,4 +162,13 @@ public class ProductService {
         }
     }
 
+    public Page<Product> getProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
+    }
+    public Page<Product> getProductsByCategory(int categoryId, Pageable pageable) {
+        return productRepository.findByCategoryId(categoryId, pageable);
+    }
+    public Page<Product> searchProducts2(String keyword, Pageable pageable) {
+        return productRepository.findByPnameContaining(keyword, pageable);
+    }
 }

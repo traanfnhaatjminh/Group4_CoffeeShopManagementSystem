@@ -33,25 +33,39 @@ public class ProductController {
     @Autowired
     private CartItemService cartItemService;
 
+
+
+
     @GetMapping("/products")
-    public String products(Model model) {
-        Iterable<Product> listP = productService.getAllProducts();
-        Iterable<Category> listC = categoryService.getAllCategories();
-        model.addAttribute("products", listP);
-        model.addAttribute("categories", listC);
-        // model.addAttribute("category", new Category());
+    public String products(Model model,
+                           @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                           @RequestParam(required = false) Integer categoryId,
+                           @RequestParam(required = false) String keyword,
+                           Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
+        Page<Product> productPage;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            productPage = productService.searchProducts2(keyword, PageRequest.of(pageNo - 1, 10));
+        } else if (categoryId != null) {
+            productPage = productService.getProductsByCategory(categoryId, PageRequest.of(pageNo - 1, 10));
+        } else {
+            productPage = productService.getProducts(PageRequest.of(pageNo - 1, 10));
+        }
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("totalPage", productPage.getTotalPages());  // Đảm bảo rằng bạn đã thêm thuộc tính này
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedCategoryId", categoryId);
         return "homepage";
     }
 
-    @GetMapping("/products/{cid}")
-    public String productByCategory(@PathVariable int cid, Model model) {
-        Iterable<Product> listP = productService.getProductsByCategory(cid);
-        Iterable<Category> listC = categoryService.getAllCategories();
-        model.addAttribute("products", listP);
-        model.addAttribute("categories", listC);
-        model.addAttribute("selectedCategoryId", cid);
-        return "homepage";
-    }
 
     @GetMapping("/homepage")
     public String homepage(Model model, Principal principal) {
@@ -71,18 +85,47 @@ public class ProductController {
         return "home";
     }
 
-    @GetMapping("/products/update/{pid}")
-    public String updateProduct(@PathVariable int pid, Model model) {
-        Optional<Product> product = productService.getProductById(pid);
-        if (product.isPresent()) {
-            model.addAttribute("product", product.get());
-            model.addAttribute("categories", categoryService.getAllCategories());
-            return "updateproductdemo";
-        } else {
-            return "redirect:/products";
-        }
+//    @GetMapping("/products/update/{pid}")
+//    public String updateProduct(@PathVariable int pid, Model model) {
+//        Optional<Product> product = productService.getProductById(pid);
+//        if (product.isPresent()) {
+//            model.addAttribute("product", product.get());
+//            model.addAttribute("categories", categoryService.getAllCategories());
+//            return "updateproductdemo";
+//        } else {
+//            return "redirect:/products";
+//        }
+//    }
+//
+//    @PostMapping("/products/update")
+//    public String saveUpdatedProduct(@ModelAttribute("product") Product product) {
+//        Optional<Product> existingProduct = productService.getProductById(product.getPid());
+//        if (existingProduct.isPresent()) {
+//            Product updatedProduct = existingProduct.get();
+//            updatedProduct.setPname(product.getPname());
+//            updatedProduct.setDescription(product.getDescription());
+//            updatedProduct.setUnit(product.getUnit());
+//            updatedProduct.setQuantity(product.getQuantity());
+//            updatedProduct.setPrice(product.getPrice());
+//            updatedProduct.setImage(product.getImage());
+//            updatedProduct.setCategoryId(product.getCategoryId());
+//            productService.updateProduct(updatedProduct);
+//            return "redirect:/products";
+//        } else {
+//            return "redirect:/products";
+//        }
+//    }
+@GetMapping("/products/update/{pid}")
+public String updateProduct(@PathVariable int pid, Model model) {
+    Optional<Product> product = productService.getProductById(pid);
+    if (product.isPresent()) {
+        model.addAttribute("product", product.get());
+        model.addAttribute("categories", categoryService.getAllCategories());
+        return "updateproductdemo";
+    } else {
+        return "redirect:/products";
     }
-
+}
     @PostMapping("/products/update")
     public String saveUpdatedProduct(@ModelAttribute("product") Product product) {
         Optional<Product> existingProduct = productService.getProductById(product.getPid());
@@ -160,16 +203,30 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("/products/add")
-    public String addProductForm(Model model) {
-        model.addAttribute("product", new Product());
-        model.addAttribute("categories", categoryService.getAllCategories());
-        return "addproduct";
-    }
-
+//    @GetMapping("/products/add")
+//    public String addProductForm(Model model) {
+//        model.addAttribute("product", new Product());
+//        model.addAttribute("categories", categoryService.getAllCategories());
+//        return "addproduct";
+//    }
+//
+//    @PostMapping("/products/add")
+//    public String saveNewProduct(@ModelAttribute("product") Product product) {
+//        productService.saveProduct(product);
+//        return "redirect:/products";
+//    }
+@GetMapping("/products/add")
+public String addProductForm(Model model) {
+    model.addAttribute("product", new Product());
+    model.addAttribute("categories", categoryService.getAllCategories());
+    return "addproduct";
+}
     @PostMapping("/products/add")
     public String saveNewProduct(@ModelAttribute("product") Product product) {
         productService.saveProduct(product);
         return "redirect:/products";
     }
+
+
+
 }
