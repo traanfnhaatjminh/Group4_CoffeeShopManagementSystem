@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Include any necessary CSS here -->
+    <style>
+        .modal-dialog.custom-width {
+            max-width: 500px; /* Adjust the percentage to your preference */
+        }
+    </style>
+</head>
+<body>
+<div th:fragment="billDetailModalContent">
+    <h4>Bill No: <span th:text="${bill.getBillId()}"></span></h4>
+    <h5>Created Time: <span th:text="${#dates.format(bill.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></span></h5>
+    <h5>Number of Guests: <span th:text="${bill.getNumberOfGuest()}"></span></h5>
+    <h5>Total Cost: <span th:text="${bill.getTotalCost()}"></span> VND</h5>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
+            <th scope="col">Price</th>
+            <th scope="col">Total</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="detail : ${billDetails}">
+            <td>
+                <img th:src="@{${detail.product.image}}" alt="Product Image" style="width: 100px; height: auto;" />
+            </td>
+            <td th:text="${detail.product.pname}"></td>
+            <td th:text="${detail.quantity}"></td>
+            <td th:text="${detail.price + ' VND'}"></td>
+            <td th:text="${detail.quantity * detail.price + ' VND'}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

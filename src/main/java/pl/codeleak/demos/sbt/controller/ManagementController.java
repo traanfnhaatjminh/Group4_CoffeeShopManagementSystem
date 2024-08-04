@@ -188,6 +188,7 @@ public class ManagementController {
         return "management";
     }
 
+
     @GetMapping("/management/allbill")
     public String allBill(@RequestParam(value = "page", defaultValue = "0") int page,
                           @RequestParam(value = "size", defaultValue = "10") int size,
@@ -218,6 +219,47 @@ public class ManagementController {
         model.addAttribute("createdTime", createdTime);
         model.addAttribute("noBills", noBills);
         return "allbill-cashier";
+    }
+    @GetMapping("/management/billdetail/{billId}")
+    public String viewBillDetail(@PathVariable("billId") int billId, Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        Bill bill = billService.findById(billId);
+        List<BillDetail> billDetails = billDetailService.findByBillId(billId);
+        float totalCost = billService.calculateTotalCost(billId);
+        model.addAttribute("bill", bill);
+        model.addAttribute("billDetails", billDetails);
+        model.addAttribute("totalCost", totalCost);
+        return "fragments/billDetail :: billDetailModalContent";
+    }
+    @PostMapping("/management/updateBillStatus")
+    public String updateBillStatus(@RequestParam("billId") int billId, @RequestParam("status") int status, Principal principal, Model model) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
+        // Validate the status value (1 for paid, 0 for not paid)
+        if (status != 0 && status != 1) {
+            model.addAttribute("error", "Invalid status value");
+            return "redirect:/management/allbill";
+        }
+
+        // Update the bill status
+        Bill bill = billService.findById(billId);
+        if (bill != null) {
+            bill.setStatus(status);
+            billService.save(bill);
+            logger.info("Updated status for billId: {} to status: {}", billId, status);
+        } else {
+            model.addAttribute("error", "Bill not found");
+        }
+
+        return "redirect:/management/allbill";
     }
 
 }
