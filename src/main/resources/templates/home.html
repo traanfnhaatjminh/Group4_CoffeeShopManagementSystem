@@ -41,7 +41,7 @@
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
                         <li th:if="${username != null}"><a style="color: yellow" href="#"><span th:text="${username}"></span></a></li>
-                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${username != null}"><a href="/profile">Profile</a></li>
+                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${username != null}"><a href="/staffProfile">Profile</a></li>
                         <li th:if="${username != null}">
                             <a class="nav-icon position-relative text-decoration-none" href="/cart">
                                 <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
