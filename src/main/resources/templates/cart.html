@@ -13,7 +13,7 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/templatemo-style.css" rel="stylesheet">
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
     <link rel="stylesheet" type="text/css" href="/css/home.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
@@ -98,7 +98,7 @@
             display: flex;
         }
 
-        .number-input{
+        .number-input {
             width: 60%;
         }
     </style>
@@ -134,7 +134,7 @@
                             <a class="nav-icon position-relative text-decoration-none" href="/cart">
                                 <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                                 <span
-                                        class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark">0</span>
+                                        class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" th:text="${cartItems.size()}"></span>
                             </a>
                         </li>
                         <li th:if="${user != null}"><a href="/login?logout">Logout</a></li>
@@ -163,7 +163,7 @@
                                         </div>
                                         <div class="flex-grow-1 ms-3">
                                             <h4 class="text-primary" th:text="${cartItemWithProduct.product.pname}">
-                                                </h4>
+                                            </h4>
                                             <div class="d-flex align-items-center" style="display: flex">
                                                 <p class="fw-bold mb-0 me-5 pe-3"
                                                    th:text="${cartItemWithProduct.product.getPrice() * cartItemWithProduct.cartItem.quantity} + ' VND'">
@@ -185,12 +185,19 @@
                                                         </div>
                                                         <div>
                                                             <button type="submit"
-                                                                    class="btn btn-primary ms-3"><i class="bi bi-check-circle"></i>
+                                                                    class="btn btn-primary ms-3"><i
+                                                                    class="bi bi-check-circle"></i>
                                                             </button>
                                                         </div>
                                                     </div>
                                                 </form>
-
+                                                <form th:action="@{/cart/delete}" method="post">
+                                                    <input type="hidden" name="cartItemId"
+                                                           th:value="${cartItemWithProduct.cartItem.itemId}">
+                                                    <button type="submit" class="btn btn-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
@@ -216,14 +223,14 @@
                                     <div data-mdb-input-init class="form-outline mb-5">
                                         <label>
                                             <input type="text" class="form-control form-control-lg" name="phone"
-                                                   placeholder="Enter your phone" />
+                                                   placeholder="Enter your phone"/>
                                         </label>
                                     </div>
 
                                     <div data-mdb-input-init class="form-outline mb-5">
                                         <label>
                                             <input type="text" class="form-control form-control-lg" name="address"
-                                                   placeholder="Enter your address" />
+                                                   placeholder="Enter your address"/>
                                         </label>
                                     </div>
                                     <h5>Choose method payment:</h5>
@@ -247,7 +254,7 @@
                                     </button>
 
                                     <h5 class="fw-bold mb-5">
-                                        <a href="#">Back to shopping</a>
+                                        <a href="/menu">Back to shopping</a>
                                     </h5>
                                 </form>
                             </div>

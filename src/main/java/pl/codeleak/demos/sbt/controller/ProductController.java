@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.codeleak.demos.sbt.model.Category;
 import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.model.Users;
+import pl.codeleak.demos.sbt.service.CartItemService;
 import pl.codeleak.demos.sbt.service.CategoryService;
 import pl.codeleak.demos.sbt.service.ProductService;
 import pl.codeleak.demos.sbt.service.UserService;
@@ -28,6 +29,9 @@ public class ProductController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CartItemService cartItemService;
 
     @GetMapping("/products")
     public String products(Model model) {
@@ -53,6 +57,10 @@ public class ProductController {
     public String homepage(Model model, Principal principal) {
         if (principal != null) {
             String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            int userId = user.getUid();
+            List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
+            model.addAttribute("cartItems", cartItems);
             model.addAttribute("username", username);
         }
         List<Product> listP = productService.getLastestProducts();
@@ -102,6 +110,10 @@ public class ProductController {
                            Principal principal) {
         if (principal != null) {
             String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            int userId = user.getUid();
+            List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
+            model.addAttribute("cartItems", cartItems);
             model.addAttribute("username", username);
         }
         Page<Product> productPage;
@@ -126,7 +138,11 @@ public class ProductController {
     public String viewProductDetails(@PathVariable("pid") Integer pid, Model model, Principal principal) {
         if (principal != null) {
             String username = principal.getName();
-            model.addAttribute("username", username);
+            Users user = userService.getUserByUsername(username);
+            int userId = user.getUid();
+            List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("user", user);
         }
         Product product = productService.getProductByPid(pid);
         if (product == null) {

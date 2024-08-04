@@ -70,4 +70,10 @@ public class CartController {
         return "redirect:/cart"; // Redirect back to the cart page
     }
 
+    @PostMapping("/cart/delete")
+    public String deleteCartItem(@RequestParam("cartItemId") int cartItemId) {
+        cartItemService.deleteCartItem(cartItemId);
+        return "redirect:/cart"; // Redirect to the cart page after deletion
+    }
+
 }
