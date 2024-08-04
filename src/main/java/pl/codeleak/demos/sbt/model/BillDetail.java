@@ -3,9 +3,7 @@ package pl.codeleak.demos.sbt.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -15,11 +13,13 @@ public class BillDetail {
 
     @EmbeddedId
     private BillDetailId id;
-
+    @Column(name = "quantity")
     private int quantity;
-
+    @Column(name = "price")
     private float price;
-
+    @ManyToOne
+    @JoinColumn(name = "pid", insertable = false, updatable = false)
+    private Product product;
     public BillDetail() {
     }
 

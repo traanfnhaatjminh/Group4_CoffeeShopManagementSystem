@@ -6,17 +6,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.codeleak.demos.sbt.model.Bill;
+import pl.codeleak.demos.sbt.model.BillDetail;
+import pl.codeleak.demos.sbt.repository.BillDetailRepository;
 import pl.codeleak.demos.sbt.repository.BillRepository;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BillService {
-
+    @Autowired
+    private BillDetailRepository billDetailRepository;
     @Autowired
     private BillRepository billRepository;
+    @Autowired
+    private BillDetailService billDetailService;
 
     public void save(Bill bill) {
         billRepository.save(bill);
@@ -43,5 +49,25 @@ public class BillService {
 
         return billRepository.findByCreatedTimeBetween(startDate, endDate, pageable);
     }
+    public Bill findById(int billId) {
+        return billRepository.findById(billId).orElse(null); // Assuming findById from JpaRepository
+    }
 
+    public List<BillDetail> getBillDetails(int billId) {
+        return billDetailService.findByBillId(billId);
+    }
+
+    public float calculateTotalCost(int billId) {
+        List<BillDetail> billDetails = getBillDetails(billId);
+        return (float) billDetails.stream()
+                .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
+                .sum();
+    }
+    public void updateBillStatus(int billId, Integer status) {
+        Optional<Bill> optionalBill = billRepository.findById(billId);
+        if (optionalBill.isPresent()) {
+            Bill bill = optionalBill.get();
+            bill.setStatus(status);
+            billRepository.save(bill);
+        }}
 }
