@@ -131,7 +131,7 @@
                         <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${user != null}"><a
                                 href="/profile">Profile</a></li>
                         <li th:if="${user != null}">
-                            <a class="nav-icon position-relative text-decoration-none" href="/cart">
+                            <a th:classappend="${currentPage == 'cart'} ? 'active'" class="nav-icon position-relative text-decoration-none" href="/cart">
                                 <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                                 <span
                                         class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" th:text="${cartItems.size()}"></span>
@@ -222,42 +222,42 @@
                                 <form class="mb-5">
                                     <div data-mdb-input-init class="form-outline mb-5">
                                         <label>
-                                            <input type="text" class="form-control form-control-lg" name="phone"
-                                                   placeholder="Enter your phone"/>
+                                            <input type="text" class="form-control form-control-lg" name="phone" placeholder="Enter your phone" />
                                         </label>
                                     </div>
 
                                     <div data-mdb-input-init class="form-outline mb-5">
                                         <label>
-                                            <input type="text" class="form-control form-control-lg" name="address"
-                                                   placeholder="Enter your address"/>
+                                            <input type="text" class="form-control form-control-lg" name="address" placeholder="Enter your address" />
                                         </label>
                                     </div>
-                                    <h5>Choose method payment:</h5>
+
+                                    <h5>Choose payment method:</h5>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                               id="flexRadioDefault1">
-                                        <label class="form-check-label" for="flexRadioDefault1">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="cashOnDelivery" value="cash">
+                                        <label class="form-check-label" for="cashOnDelivery">
                                             Thanh toán khi nhận hàng
                                         </label>
                                     </div>
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                               id="flexRadioDefault2" checked>
-                                        <label class="form-check-label" for="flexRadioDefault2">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="bankTransfer" value="bank">
+                                        <label class="form-check-label" for="bankTransfer">
                                             Chuyển khoản qua tài khoản ngân hàng
                                         </label>
                                     </div>
 
-                                    <button type="submit" data-mdb-button-init data-mdb-ripple-init
-                                            class="btn btn-primary btn-block btn-lg" style="margin: 10% 0;">Buy now
-                                    </button>
+                                    <div id="qrCode" style="display: none; margin-top: 20px;">
+                                        <img style="width: 50%" src="/img/qrcode.jpg" alt="QR Code" class="img-fluid">
+                                    </div>
+
+                                    <button type="submit" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block btn-lg" style="margin: 10% 0;">Buy now</button>
 
                                     <h5 class="fw-bold mb-5">
                                         <a href="/menu">Back to shopping</a>
                                     </h5>
                                 </form>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -303,6 +303,24 @@
     </div>
 </footer> <!-- Footer content-->
 <!-- JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const bankTransferRadio = document.getElementById('bankTransfer');
+        const qrCodeDiv = document.getElementById('qrCode');
+
+        bankTransferRadio.addEventListener('change', function () {
+            if (this.checked) {
+                qrCodeDiv.style.display = 'block';
+            }
+        });
+
+        document.getElementById('cashOnDelivery').addEventListener('change', function () {
+            if (this.checked) {
+                qrCodeDiv.style.display = 'none';
+            }
+        });
+    });
+</script>
 </body>
 
 </html>

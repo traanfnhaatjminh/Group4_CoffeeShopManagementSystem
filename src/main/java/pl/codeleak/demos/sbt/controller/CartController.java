@@ -38,7 +38,8 @@ public class CartController {
             double totalPrice = cartItemService.calculateTotalPrice(userId);  // Tính tổng tiền
             model.addAttribute("user", user);
             model.addAttribute("cartItems", cartItems);
-            model.addAttribute("totalPrice", totalPrice);  // Thêm tổng tiền vào model
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("currentPage", "cart");
         }
         return "cart";
     }
