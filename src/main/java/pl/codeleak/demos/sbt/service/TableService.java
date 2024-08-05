@@ -2,6 +2,7 @@ package pl.codeleak.demos.sbt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.codeleak.demos.sbt.model.Bill;
 import pl.codeleak.demos.sbt.model.Tables;
 import pl.codeleak.demos.sbt.repository.TableRepository;
 
@@ -21,4 +22,11 @@ public class TableService {
         table.setStatus(status);
         tableRepository.save(table);
     }
+    public Tables findByTid(int tid ) {
+        return tableRepository.findById(tid).orElse(null); // Assuming findById from JpaRepository
+    }
+    public void save(Tables table) {
+        tableRepository.save(table);
+    }
+
 }

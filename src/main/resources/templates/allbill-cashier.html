@@ -53,6 +53,12 @@
             width: 20px;
             height: 20px;
         }
+        .table-bordered{
+            background-color: white;
+        }
+        .table th, .table td {
+            text-align: center;
+        }
     </style>
 </head>
 
@@ -91,6 +97,20 @@
                     <a href="#">LOGOUT</a>
                 </div>
             </div>
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong th:text="${success}"></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Display error message -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong th:text="${error}"></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
             <div class="row">
                 <div class="col-12">
                     <div th:if="${bills.isEmpty()}">
@@ -98,7 +118,7 @@
                     </div>
 
                     <div th:unless="${bills.isEmpty()}">
-                        <table class="table">
+                        <table class="table table-bordered">
                             <thead>
                             <tr>
                                 <th scope="col" >Bill No</th>
@@ -106,7 +126,9 @@
                                 <th scope="col">Number of guest</th>
                                 <th scope="col">Table</th>
                                 <th scope="col">Total Price</th>
-                                <th scope="col"></th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Action</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -118,6 +140,10 @@
                                 <td th:text="${bill.getNumberOfGuest()}"></td>
                                 <td th:text="${bill.getTableId()}"></td>
                                 <td th:text="${bill.getTotalCost()} + ' VND'"></td>
+                                <td>
+                                <span th:text="${bill.status == 1 ? 'Paid' : 'Not Paid'}"
+                                      th:classappend="${bill.status == 1 ? 'text-success' : 'text-danger'}"></span>
+                                </td>
                                 <!--                                <td>-->
                                 <!--                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#billDetailModal"-->
                                 <!--                                            th:attr="data-bill-id=${bill.getBillId()}">Detail</button>-->
@@ -134,7 +160,7 @@
                                         <input type="radio" id="paid" name="status" value="1" th:checked="${bill.status == 1}" class="status-radio" />
                                         <label for="paid" class="status-label paid">Paid</label>
 
-                                        <button type="submit">Check</button>
+                                        <button type="submit" class="btn btn-secondary">Check</button>
                                     </form>
                                 </td>
 
