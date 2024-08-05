@@ -33,6 +33,36 @@ public class ProductController {
     @Autowired
     private CartItemService cartItemService;
 
+    @GetMapping("/products")
+    public String products(Model model,
+                           @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                           @RequestParam(required = false) Integer categoryId,
+                           @RequestParam(required = false) String keyword,
+                           Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
+        Page<Product> productPage;
+        if (keyword != null && !keyword.trim().isEmpty()) {
+            productPage = productService.searchProducts2(keyword, PageRequest.of(pageNo - 1, 10));
+        } else if (categoryId != null) {
+            productPage = productService.getProductsByCategory(categoryId, PageRequest.of(pageNo - 1, 10));
+        } else {
+            productPage = productService.getProducts(PageRequest.of(pageNo - 1, 10));
+        }
+
+        model.addAttribute("products", productPage.getContent());
+        model.addAttribute("totalPage", productPage.getTotalPages());  // Đảm bảo rằng bạn đã thêm thuộc tính này
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("selectedCategoryId", categoryId);
+        return "homepage";
+    }
+
     @GetMapping("/homepage")
     public String homepage(Model model, Principal principal) {
         if (principal != null) {
