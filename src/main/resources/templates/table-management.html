@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table List</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            background-color: rgb(198, 198, 198);
+        }
+
+        .nav a {
+            margin: 20px 0;
+            background-color: gray;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .nav a:hover {
+            color: blue;
+        }
+
+        .bill-list {
+            background-color: rgb(244, 243, 243);
+        }
+
+        /* Custom styling for table */
+        .table th, .table td {
+            text-align: center;
+        }
+
+        .status-label {
+            /* Default styles if needed */
+        }
+
+        .status-radio {
+            margin-right: 5px;
+        }
+
+        .btn-custom {
+            padding: 2px 5px;
+        }
+
+        /* Base styles */
+        .status-label {
+            /* Default styles if needed */
+        }
+
+        /* Checked state styling */
+        input[type="radio"]:checked + label.available {
+            color: green;
+        }
+
+        input[type="radio"]:checked + label.not-available {
+            color: red;
+        }
+
+        input[type="radio"] {
+            width: 20px;
+            height: 20px;
+        }
+        .table-bordered{
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1 sidebar">
+            <nav class="nav flex-column">
+                <a href="/management">Home</a>
+                <a href="#">Warehouse</a>
+                <a href="/management/table">Table List</a>
+                <a href="/management/allbill">All Bill</a>
+                <a href="#">Statistic</a>
+                <a href="#">Setting</a>
+            </nav>
+        </div>
+        <div class="col-md-11 offset-md-1 bill-list">
+
+            <div class="row">
+                <div class="col-2">
+                    <h1 class="my-4">Table List</h1>
+                </div>
+
+                <div class="col-2 my-4">
+                    <h5 style="color: #0e4bf1;text-transform: uppercase" th:text="${user.username}"></h5>
+                </div>
+                <div class="col-2 my-4">
+                    <a href="/staffProfile">PROFILE</a>
+                </div>
+                <div class="col-2 my-4">
+                    <a href="#">LOGOUT</a>
+                </div>
+            </div>
+            <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong th:text="${success}"></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <!-- Display error message -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong th:text="${error}"></strong>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <table class="table  table-bordered">
+                        <thead>
+                        <tr>
+                            <th scope="col">Table No</th>
+                            <th scope="col">Number Of Chairs</th>
+                            <th scope="col">Status</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="table : ${tables}">
+                            <td th:text="${table.getTid()}"></td>
+                            <td th:text="${table.getNumberOfChair()}"></td>
+                            <td>
+                                <span th:text="${table.status == 1 ? 'Available' : 'Not Available'}"
+                                      th:classappend="${table.status == 1 ? 'text-success' : 'text-danger'}"></span>
+                            </td>
+                            <td>
+                                <form action="#" th:action="@{/management/updateTableStatus}" method="post">
+                                    <input type="hidden" name="tid" th:value="${table.getTid()}"/>
+
+                                    <!-- Radio button for "Not Available" -->
+                                    <input type="radio" id="notAvailable" name="status" value="0"
+                                           th:checked="${table.status == 0}" class="status-radio" />
+                                    <label for="notAvailable" class="status-label not-available">Not Available</label>
+
+                                    <!-- Radio button for "Available" -->
+                                    <input type="radio" id="available" name="status" value="1"
+                                           th:checked="${table.status == 1}" class="status-radio" />
+                                    <label for="available" class="status-label available">Available</label>
+
+                                    <button type="submit" class="btn btn-secondary">Check</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

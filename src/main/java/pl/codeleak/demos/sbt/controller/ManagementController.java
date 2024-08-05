@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.*;
 import pl.codeleak.demos.sbt.service.*;
 
@@ -235,16 +236,16 @@ public class ManagementController {
     }
 
     @PostMapping("/management/updateBillStatus")
-    public String updateBillStatus(@RequestParam("billId") int billId, @RequestParam("status") int status, Principal principal, Model model) {
+    public String updateBillStatus(@RequestParam("billId") int billId, @RequestParam("status") int status, Principal principal, RedirectAttributes redirectAttributes) {
         if (principal != null) {
             String username = principal.getName();
             Users user = userService.findByUsername(username);
-            model.addAttribute("user", user);
+            redirectAttributes.addAttribute("user", user);
         }
 
         // Validate the status value (1 for paid, 0 for not paid)
         if (status != 0 && status != 1) {
-            model.addAttribute("error", "Invalid status value");
+            redirectAttributes.addAttribute("error", "Invalid status value");
             return "redirect:/management/allbill";
         }
 
@@ -254,11 +255,11 @@ public class ManagementController {
             bill.setStatus(status);
             billService.save(bill);
             logger.info("Updated status for billId: {} to status: {}", billId, status);
+            redirectAttributes.addFlashAttribute("success", "Updated status of bill successfully");
         } else {
-            model.addAttribute("error", "Bill not found");
+            redirectAttributes.addFlashAttribute("error", "Bill not found");
         }
 
         return "redirect:/management/allbill";
     }
-
 }
