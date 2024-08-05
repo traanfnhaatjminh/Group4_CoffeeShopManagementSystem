@@ -50,6 +50,10 @@ public class CartItemService {
         }
     }
 
+    public void clearCart() {
+        cartRepository.deleteAll();
+    }
+
     public float calculateTotalPrice(int customerId) {
         List<CartItemWithProduct> cartItems = getCartItemsByCustomerId(customerId);
         float total = 0.0F;

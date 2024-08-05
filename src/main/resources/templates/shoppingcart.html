@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cafe House Template</title>
+
+    <link rel="stylesheet" href="/css/shopping-cart.css">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet'
+          type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="/css/templatemo-style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/home.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200&display=swap');
+
+        body {
+            font-family: 'Manrope', sans-serif;
+            background: #eee;
+        }
+
+        .size span {
+            font-size: 11px;
+        }
+
+        .color span {
+            font-size: 11px;
+        }
+
+        .pay-button {
+            color: #fff;
+        }
+
+        .pay-button:hover {
+            color: #fff;
+        }
+
+        .pay-button:focus {
+            color: #fff;
+            box-shadow: none;
+        }
+
+        .qty i {
+            font-size: 11px;
+        }
+
+    </style>
+</head>
+
+
+<body>
+
+<div class="tm-top-header">
+    <div class="container">
+        <div class="row">
+            <div class="tm-top-header-inner">
+                <div class="tm-logo-container">
+                    <img src="/img/logo.png" alt="Logo" class="tm-site-logo">
+                    <h1 class="tm-site-name tm-handwriting-font">Coffee Shop</h1>
+                </div>
+                <div class="mobile-menu-icon">
+                    <i class="fa fa-bars"></i>
+                </div>
+                <nav class="tm-nav">
+                    <ul>
+                        <li><a th:classappend="${currentPage == 'home'} ? 'active'" href="/homepage">Home</a></li>
+                        <li><a th:classappend="${currentPage == 'menu'} ? 'active'" href="/menu">Menu</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a>
+                        </li>
+                        <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
+                        <li th:if="${user != null}"><a style="color: yellow" href="#"><span
+                                th:text="${user.getUsername()}"></span></a></li>
+                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${user != null}"><a
+                                href="/profile">Profile</a></li>
+                        <li th:if="${user != null}">
+                            <a th:classappend="${currentPage == 'cart'} ? 'active'"
+                               class="nav-icon position-relative text-decoration-none" href="/cart">
+                                <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
+                                <span
+                                        class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"
+                                        th:text="${cartItems.size()}"></span>
+                            </a>
+                        </li>
+                        <li th:if="${user != null}"><a href="/logout">Logout</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main class="page">
+    <section class="shopping-cart dark">
+        <div class="container">
+            <div class="block-heading">
+                <h2>Shopping Cart</h2>
+            </div>
+            <div class="content">
+                <div class="row">
+                    <div class="col-md-12 col-lg-8">
+                        <div class="items">
+                            <div th:each="cartItemWithProduct : ${cartItems}">
+                                <div class="product">
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <img class="img-fluid mx-auto d-block image"
+                                                 th:src="@{${cartItemWithProduct.product.image}}" alt="">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="info">
+                                                <div class="row">
+                                                    <div class="col-md-5 product-name">
+                                                        <div class="product-name">
+                                                            <h5 class="text-primary"
+                                                                th:text="${cartItemWithProduct.product.pname}"></h5>
+                                                        </div>
+                                                    </div>
+
+                                                    <form th:action="@{/cart/updateQuantity}" method="post">
+                                                        <input type="hidden" name="productId"
+                                                               th:value="${cartItemWithProduct.product.pid}">
+                                                        <input type="hidden" name="cartItemId"
+                                                               th:value="${cartItemWithProduct.cartItem.itemId}">
+                                                        <div style="display: flex">
+                                                            <div class="col-md-4 quantity">
+                                                                <label for="quantity">Quantity:</label>
+                                                                <input id="quantity" type="number" min="0"
+                                                                       name="quantity"
+                                                                       th:value="${cartItemWithProduct.cartItem.quantity}"
+                                                                       class="form-control quantity-input quantity">
+                                                            </div>
+                                                        </div>
+                                                    </form>
+
+
+                                                    <div class="col-md-3 price">
+                                                        <span th:text="${cartItemWithProduct.product.getPrice() * cartItemWithProduct.cartItem.quantity} + ' VND'"></span>
+                                                    </div>
+
+                                                    <form th:action="@{/cart/delete}" method="post">
+                                                        <input type="hidden" name="cartItemId"
+                                                               th:value="${cartItemWithProduct.cartItem.itemId}">
+                                                        <button type="submit" class="btn btn-danger">
+                                                            <i class="bi bi-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-lg-4">
+                        <div class="summary">
+                            <h3>Summary</h3>
+                            <div class="summary-item"><span class="text">Discount</span><span class="price">0%</span>
+                            </div>
+                            <div class="summary-item"><span class="text">Shipping</span><span
+                                    class="price">Free Ship</span></div>
+                            <div class="summary-item"><span class="text">Total</span><span class="price"
+                                                                                           th:text="${totalPrice}+' VND'"></span>
+                            </div>
+                            <button class="btn btn-warning btn-block btn-lg ml-2 pay-button" type="button">
+                                <a href="/cart/checkout">CHECKOUT</a>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+
+<footer>
+    <div class="tm-black-bg">
+        <div class="container">
+            <div class="row margin-bottom-60">
+                <nav class="col-lg-3 col-md-3 tm-footer-nav tm-footer-div">
+                    <h3 class="tm-footer-div-title">Main Menu</h3>
+                    <ul>
+                        <li><a href="/homepage">Home</a></li>
+                        <li><a href="/menu">Menu</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
+                <div class="col-lg-5 col-md-5 tm-footer-div">
+                    <h3 class="tm-footer-div-title">About Us</h3>
+                    <p class="margin-top-15">The Coffee Shop sẽ là nơi mọi người xích lại gần nhau, đề cao giá trị
+                        kết
+                        nối con người và sẻ chia thân tình bên những tách cà phê, ly trà đượm hương, truyền cảm hứng
+                        về
+                        lối sống hiện đại.</p>
+                </div>
+                <div class="col-lg-4 col-md-4 tm-footer-div">
+                    <p><i class="bi bi-telephone"></i> Đặt hàng: 1800 6936</p>
+                    <p><i class="bi bi-envelope"></i> Liên hệ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="container">
+            <div class="row tm-copyright">
+                <p class="col-lg-12 small copyright-text text-center">Copyright &copy; 2024 Coffee Shop</p>
+            </div>
+        </div>
+    </div>
+</footer> <!-- Footer content-->
+
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

@@ -134,57 +134,54 @@ public class ManagementController {
             String username = principal.getName();
             Users user = userService.findByUsername(username);
             model.addAttribute("user", user);
+
+            int currentPage = page.orElse(1);
+            int pageSize = size.orElse(6);
+
+            Page<Product> productPage = productService.getProducts(currentPage - 1, pageSize);
+
+            int totalPages = productPage.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                        .boxed()
+                        .collect(Collectors.toList());
+                model.addAttribute("pageNumbers", pageNumbers);
+            }
+
+            logger.info("createBill called with numberOfGuest: {}, tableId: {}", numberOfGuest, tableId);
+
+            // Get cart items and calculate total cost
+            List<CartItem> cartItems = cartService.getCartItems();
+            float totalCost = 0;
+            for (int i = 0; i < cartItems.size(); i++) {
+                CartItem item = cartItems.get(i);
+                totalCost += item.getProduct().getPrice() * item.getQuantity();
+            }
+
+            // Create a new Bill
+            Bill bill = new Bill("", "", new Date(), numberOfGuest, totalCost, tableId, user.getUid(), 0, 1);
+            billService.save(bill);
+            tableService.updateTableStatus(tableId, 1);
+            logger.info("Bill saved with ID: {}", bill.getBillId());
+
+            // Create BillDetail entries for each cart item
+            for (int i = 0; i < cartItems.size(); i++) {
+                CartItem item = cartItems.get(i);
+                BillDetail billDetail = new BillDetail(bill.getBillId(), item.getProduct().getPid(), item.getQuantity(), item.getProduct().getPrice());
+                billDetailService.save(billDetail);
+                logger.info("BillDetail saved for billId: {}, productId: {}, quantity: {}, price: {}", bill.getBillId(), item.getProduct().getPid(), item.getQuantity(), item.getProduct().getPrice());
+            }
+
+            // Clear the cart
+            cartService.clearCart();
+            logger.info("Cart cleared");
+
+            model.addAttribute("categories", categoryService.getAllCategories());
+            model.addAttribute("products", productPage.getContent());
+            model.addAttribute("currentPage", currentPage);
+            model.addAttribute("successMessage", "Bill created successfully!");
         }
 
-        int currentPage = page.orElse(1);
-        int pageSize = size.orElse(6);
-
-        Page<Product> productPage = productService.getProducts(currentPage - 1, pageSize);
-
-        int totalPages = productPage.getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
-
-        logger.info("createBill called with numberOfGuest: {}, tableId: {}", numberOfGuest, tableId);
-
-        // Get the logged-in user's ID
-        String username = principal.getName();
-        int userId = userService.getUserByUsername(username).getUid();
-
-        // Get cart items and calculate total cost
-        List<CartItem> cartItems = cartService.getCartItems();
-        float totalCost = 0;
-        for (int i = 0; i < cartItems.size(); i++) {
-            CartItem item = cartItems.get(i);
-            totalCost += item.getProduct().getPrice() * item.getQuantity();
-        }
-
-        // Create a new Bill
-        Bill bill = new Bill("","",new Date(), numberOfGuest, totalCost, tableId, userId, 0, 1);
-        billService.save(bill);
-        tableService.updateTableStatus(tableId,1);
-        logger.info("Bill saved with ID: {}", bill.getBillId());
-
-        // Create BillDetail entries for each cart item
-        for (int i = 0; i < cartItems.size(); i++) {
-            CartItem item = cartItems.get(i);
-            BillDetail billDetail = new BillDetail(bill.getBillId(), item.getProduct().getPid(), item.getQuantity(), item.getProduct().getPrice());
-            billDetailService.save(billDetail);
-            logger.info("BillDetail saved for billId: {}, productId: {}, quantity: {}, price: {}", bill.getBillId(), item.getProduct().getPid(), item.getQuantity(), item.getProduct().getPrice());
-        }
-
-        // Clear the cart
-        cartService.clearCart();
-        logger.info("Cart cleared");
-
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("products", productPage.getContent());
-        model.addAttribute("currentPage", currentPage);
-        model.addAttribute("successMessage", "Bill created successfully!");
         return "management";
     }
 
@@ -202,13 +199,13 @@ public class ManagementController {
         Pageable pageable = PageRequest.of(page, size);
         Page<Bill> billsPage;
         boolean noBills = false;
-        if (createdTime != null && !createdTime.isEmpty()){
+        if (createdTime != null && !createdTime.isEmpty()) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate date = LocalDate.parse(createdTime, formatter);
             Date dateValue = java.sql.Date.valueOf(date);
             billsPage = billService.searchByCreatedTime(dateValue, pageable);
             noBills = billsPage.isEmpty();
-        }else{
+        } else {
             billsPage = billService.getAllBills(pageable);
         }
 //        Iterable<Bill> listBill = billService.getAllBills();
@@ -220,6 +217,7 @@ public class ManagementController {
         model.addAttribute("noBills", noBills);
         return "allbill-cashier";
     }
+
     @GetMapping("/management/billdetail/{billId}")
     public String viewBillDetail(@PathVariable("billId") int billId, Model model, Principal principal) {
         if (principal != null) {
@@ -235,6 +233,7 @@ public class ManagementController {
         model.addAttribute("totalCost", totalCost);
         return "fragments/billDetail :: billDetailModalContent";
     }
+
     @PostMapping("/management/updateBillStatus")
     public String updateBillStatus(@RequestParam("billId") int billId, @RequestParam("status") int status, Principal principal, Model model) {
         if (principal != null) {

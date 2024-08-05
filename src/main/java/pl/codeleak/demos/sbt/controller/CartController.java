@@ -1,23 +1,24 @@
 package pl.codeleak.demos.sbt.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import pl.codeleak.demos.sbt.model.Cart;
-import pl.codeleak.demos.sbt.model.CartItem;
-import pl.codeleak.demos.sbt.model.Users;
+import pl.codeleak.demos.sbt.model.*;
 import pl.codeleak.demos.sbt.service.*;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 @Controller
 public class CartController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ManagementController.class);
 
     @Autowired
     private ProductService productService;
@@ -27,6 +28,12 @@ public class CartController {
 
     @Autowired
     private CartItemService cartItemService;
+
+    @Autowired
+    private BillService billService;
+
+    @Autowired
+    private BillDetailService billDetailService;
 
     @GetMapping("/cart")
     public String cart(Model model, Principal principal) {
@@ -41,7 +48,23 @@ public class CartController {
             model.addAttribute("totalPrice", totalPrice);
             model.addAttribute("currentPage", "cart");
         }
-        return "cart";
+        return "shoppingcart";
+    }
+
+    @GetMapping("/cart/checkout")
+    public String checkout(Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            int userId = user.getUid();
+            List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
+            double totalPrice = cartItemService.calculateTotalPrice(userId);  // Tính tổng tiền
+            model.addAttribute("user", user);
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("currentPage", "cart");
+        }
+        return "checkout";
     }
 
     @PostMapping("/cart/add")
@@ -55,7 +78,7 @@ public class CartController {
     }
 
     @PostMapping("/cart/updateQuantity")
-    public String updateQuantity(@RequestParam int productId, @RequestParam int cartItemId, @RequestParam int quantity, Principal principal) {
+    public String updateQuantity(@RequestParam int productId, @RequestParam int cartItemId, @RequestParam int quantity, Principal principal, Model model) {
         if (principal != null) {
             String username = principal.getName();
             Users user = userService.findByUsername(username);
@@ -67,6 +90,7 @@ public class CartController {
                 cartItem.setQuantity(quantity);
                 cartItemService.addCartItem(cartItem);
             }
+            model.addAttribute("cartItems", cartItem);
         }
         return "redirect:/cart"; // Redirect back to the cart page
     }
@@ -75,6 +99,45 @@ public class CartController {
     public String deleteCartItem(@RequestParam("cartItemId") int cartItemId) {
         cartItemService.deleteCartItem(cartItemId);
         return "redirect:/cart"; // Redirect to the cart page after deletion
+    }
+
+    @PostMapping("/cart/checkout")
+    public String createBill(@RequestParam("phone") String phone,
+                             @RequestParam("address") String address,
+                             Principal principal,
+                             Model model) {
+
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+
+            // Get cart items and calculate total cost
+            List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(user.getUid());
+            float totalPrice = cartItemService.calculateTotalPrice(user.getUid());
+            // Create a new Bill
+            Bill bill = new Bill(phone, address, new Date(), 0, totalPrice, 0, user.getUid(), 0, 0);
+            billService.save(bill);
+
+            // Create BillDetail entries for each cart item
+            for (int i = 0; i < cartItems.size(); i++) {
+                CartItemService.CartItemWithProduct item = cartItems.get(i);
+                BillDetail billDetail = new BillDetail(bill.getBillId(), item.getProduct().getPid(), item.getCartItem().getQuantity(), item.getProduct().getPrice());
+                billDetailService.save(billDetail);
+                logger.info("BillDetail saved for billId: {}, productId: {}, quantity: {}, price: {}", bill.getBillId(), item.getProduct().getPid(), item.getCartItem().getQuantity(), item.getProduct().getPrice());
+            }
+
+            // Clear the cart
+            cartItemService.clearCart();
+            logger.info("Cart cleared");
+            model.addAttribute("user", user);
+            model.addAttribute("cartItems", cartItems);
+            model.addAttribute("totalPrice", totalPrice);
+            model.addAttribute("currentPage", "cart");
+            model.addAttribute("successMessage", "Thanh toán đơn hàng thành công.");
+        }
+
+        return "checkout";
     }
 
 }
