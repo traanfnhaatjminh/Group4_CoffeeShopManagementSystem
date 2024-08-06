@@ -1,13 +1,24 @@
 package pl.codeleak.demos.sbt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pl.codeleak.demos.sbt.model.Users;
 import pl.codeleak.demos.sbt.repository.UserRepository;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -84,5 +95,40 @@ public class UserService {
         }
         return null;
     }
+
+    public List<Users> findAll() {
+        return userRepository.findAll();
+    }
+    public void deleteById(int uid) {
+        userRepository.deleteById(uid);
+    }
+
+    public Users findById(int uid) {
+        return userRepository.findById(uid).orElse(null);
+    }
+
+    @Value("${upload.path}")
+    private String uploadPath;
+
+    public Users save1(Users user, MultipartFile avatarFile) throws IOException {
+        if (avatarFile != null && !avatarFile.isEmpty()) {
+            Path path = Paths.get(uploadPath + avatarFile.getOriginalFilename());
+            Files.write(path, avatarFile.getBytes());
+            user.setAvatar(path.toString());
+        }
+        return userRepository.save(user);
+    }
+    public Page<Users> findPaginated(int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return userRepository.findAll(pageable);
+    }
+
+    public Page<Users> search(String keyword, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        return userRepository.search(keyword, pageable);
+    }
+
+
+
 
 }

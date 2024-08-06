@@ -1,5 +1,7 @@
 package pl.codeleak.demos.sbt.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,7 +15,9 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
     Users findByUsername(String username);
     Users findByEmail(String email);
     Users findByPhone(String phone);
-
+    void deleteById(int uid);
+    @Query("SELECT u FROM Users u WHERE u.fullname LIKE %?1% OR u.email LIKE %?1% OR u.username LIKE %?1%")
+    Page<Users> search(String keyword, Pageable pageable);
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO Users (fullname, dob, email, phone, address, avatar, username, pass, role_id, status) " +
