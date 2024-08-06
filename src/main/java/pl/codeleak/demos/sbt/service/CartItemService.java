@@ -42,14 +42,6 @@ public class CartItemService {
         cartRepository.save(cartItem);
     }
 
-    public void updateCartItemQuantity(int cartItemId, int quantity) {
-        Cart cartItem = cartRepository.findById(cartItemId).orElse(null);
-        if (cartItem != null) {
-            cartItem.setQuantity(quantity);
-            cartRepository.save(cartItem);
-        }
-    }
-
     public void clearCart() {
         cartRepository.deleteAll();
     }
@@ -63,6 +55,7 @@ public class CartItemService {
         return total;
     }
 
+    @Getter
     public static class CartItemWithProduct {
         private Cart cartItem;
         private Product product;
@@ -72,13 +65,6 @@ public class CartItemService {
             this.product = product;
         }
 
-        public Cart getCartItem() {
-            return cartItem;
-        }
-
-        public Product getProduct() {
-            return product;
-        }
     }
 }
 
