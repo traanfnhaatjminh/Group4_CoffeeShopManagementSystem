@@ -39,8 +39,18 @@ public class CartItemService {
     }
 
     public void addCartItem(Cart cartItem) {
-        cartRepository.save(cartItem);
+        Optional<Cart> existingCartItem = cartRepository.findByPidAndUid(cartItem.getPid(), cartItem.getUid());
+        if (existingCartItem.isPresent()) {
+            Cart existingItem = existingCartItem.get();
+            existingItem.setQuantity(existingItem.getQuantity() + cartItem.getQuantity());
+            float newTotalCost = existingItem.getQuantity() * productService.getProductByPid(existingItem.getPid()).getPrice();
+            existingItem.setTotalCost(newTotalCost);
+            cartRepository.save(existingItem);
+        } else {
+            cartRepository.save(cartItem);
+        }
     }
+
 
     public void clearCart() {
         cartRepository.deleteAll();
@@ -55,6 +65,18 @@ public class CartItemService {
         return total;
     }
 
+    public void updateCartItemQuantity(int cartItemId, int newQuantity) {
+        Optional<Cart> optionalCart = cartRepository.findById(cartItemId);
+        if (optionalCart.isPresent()) {
+            Cart cartItem = optionalCart.get();
+            cartItem.setQuantity(newQuantity);
+            float newTotalCost = newQuantity * productService.getProductByPid(cartItem.getPid()).getPrice();
+            cartItem.setTotalCost(newTotalCost);
+            cartRepository.save(cartItem);
+        }
+    }
+
+
     @Getter
     public static class CartItemWithProduct {
         private Cart cartItem;
@@ -64,7 +86,7 @@ public class CartItemService {
             this.cartItem = cartItem;
             this.product = product;
         }
-
     }
+
 }
 

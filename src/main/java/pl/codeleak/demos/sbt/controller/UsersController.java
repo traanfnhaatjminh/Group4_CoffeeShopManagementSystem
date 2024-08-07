@@ -95,4 +95,16 @@ public class UsersController {
         return "redirect:/profile";
     }
 
+    @GetMapping("/history")
+    public String history(Model model, Principal principal) {
+        String username = principal.getName();
+        Users user = userService.findByUsername(username);
+        int userId = user.getUid();
+        List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
+        model.addAttribute("cartItems", cartItems);
+        model.addAttribute("user", user);
+        model.addAttribute("currentPage", "profile");
+        return "orderhistory";
+    }
+
 }

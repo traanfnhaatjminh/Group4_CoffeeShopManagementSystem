@@ -125,17 +125,12 @@
                                                     </div>
 
                                                     <form th:action="@{/cart/updateQuantity}" method="post">
-                                                        <input type="hidden" name="productId"
-                                                               th:value="${cartItemWithProduct.product.pid}">
-                                                        <input type="hidden" name="cartItemId"
-                                                               th:value="${cartItemWithProduct.cartItem.itemId}">
+                                                        <input type="hidden" name="productId" th:value="${cartItemWithProduct.product.pid}">
+                                                        <input type="hidden" name="cartItemId" th:value="${cartItemWithProduct.cartItem.itemId}">
                                                         <div style="display: flex">
                                                             <div class="col-md-4 quantity">
                                                                 <label for="quantity">Quantity:</label>
-                                                                <input id="quantity" type="number" min="0"
-                                                                       name="quantity"
-                                                                       th:value="${cartItemWithProduct.cartItem.quantity}"
-                                                                       class="form-control quantity-input quantity">
+                                                                <input id="quantity" type="number" name="quantity" th:value="${cartItemWithProduct.cartItem.quantity}" class="form-control quantity-input quantity">
                                                             </div>
                                                         </div>
                                                     </form>
@@ -181,7 +176,6 @@
         </div>
     </section>
 </main>
-
 
 <footer>
     <div class="tm-black-bg">

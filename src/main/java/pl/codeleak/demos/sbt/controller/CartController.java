@@ -71,11 +71,16 @@ public class CartController {
     public String addCartItem(@RequestParam("productId") int productId,
                               @RequestParam("quantity") int quantity,
                               @RequestParam("customerId") int customerId) {
-        float totalCost = productService.getProductById(productId).get().getPrice() * quantity;
-        Cart cartItem = new Cart(productId, quantity, totalCost, customerId);
-        cartItemService.addCartItem(cartItem);
+        Product product = productService.getProductByPid(productId);
+        if (product != null) {
+            float totalCost = product.getPrice() * quantity;
+            Cart cartItem = new Cart(productId, quantity, totalCost, customerId);
+            cartItemService.addCartItem(cartItem);
+
+        }
         return "redirect:/cart";
     }
+
 
     @PostMapping("/cart/updateQuantity")
     public String updateQuantity(@RequestParam int productId, @RequestParam int cartItemId, @RequestParam int quantity, Principal principal, Model model) {
@@ -84,16 +89,15 @@ public class CartController {
             Users user = userService.findByUsername(username);
             int userId = user.getUid();
 
-            // Update the cart item in the database
+            // Update the cart item quantity in the database
             Cart cartItem = cartItemService.getCartById(cartItemId).orElseThrow(() -> new RuntimeException("Cart item not found"));
             if (cartItem.getUid() == userId && cartItem.getPid() == productId) {
-                cartItem.setQuantity(quantity);
-                cartItemService.addCartItem(cartItem);
+                cartItemService.updateCartItemQuantity(cartItemId, quantity);
             }
-            model.addAttribute("cartItems", cartItem);
         }
         return "redirect:/cart"; // Redirect back to the cart page
     }
+
 
     @PostMapping("/cart/delete")
     public String deleteCartItem(@RequestParam("cartItemId") int cartItemId) {
@@ -104,6 +108,7 @@ public class CartController {
     @PostMapping("/cart/checkout")
     public String createBill(@RequestParam("phone") String phone,
                              @RequestParam("address") String address,
+                             @RequestParam("paymentMethod") String paymentMethod,
                              Principal principal,
                              Model model) {
 
@@ -112,14 +117,12 @@ public class CartController {
             Users user = userService.findByUsername(username);
             model.addAttribute("user", user);
 
-            // Get cart items and calculate total cost
             List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(user.getUid());
             float totalPrice = cartItemService.calculateTotalPrice(user.getUid());
-            // Create a new Bill
-            Bill bill = new Bill(phone, address, new Date(), 0, totalPrice, 0, user.getUid(), 0, 0);
+            int status = paymentMethod.equals("cash") ? 0 : 1;
+            Bill bill = new Bill(phone, address, new Date(), 0, totalPrice, 0, user.getUid(), status, 0);
             billService.save(bill);
 
-            // Create BillDetail entries for each cart item
             for (int i = 0; i < cartItems.size(); i++) {
                 CartItemService.CartItemWithProduct item = cartItems.get(i);
                 BillDetail billDetail = new BillDetail(bill.getBillId(), item.getProduct().getPid(), item.getCartItem().getQuantity(), item.getProduct().getPrice());
@@ -127,7 +130,6 @@ public class CartController {
                 logger.info("BillDetail saved for billId: {}, productId: {}, quantity: {}, price: {}", bill.getBillId(), item.getProduct().getPid(), item.getCartItem().getQuantity(), item.getProduct().getPrice());
             }
 
-            // Clear the cart
             cartItemService.clearCart();
             logger.info("Cart cleared");
             model.addAttribute("user", user);
