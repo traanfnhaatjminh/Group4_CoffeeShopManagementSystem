@@ -124,33 +124,7 @@
   </style>
 </head>
 <body>
-<div class="tm-top-header">
-  <div class="container">
-    <div class="row">
-      <div class="tm-top-header-inner">
-        <div class="tm-logo-container">
-          <img src="img/logo.png" alt="Logo" class="tm-site-logo">
-          <h1 class="tm-site-name tm-handwriting-font">Coffee Shop</h1>
-        </div>
-        <div class="mobile-menu-icon">
-          <i class="fa fa-bars"></i>
-        </div>
-        <nav class="tm-nav">
-          <ul>
-            <li><a th:classappend="${currentPage == 'home'} ? 'active'" href="/homepage">Home</a></li>
-            <li><a th:classappend="${currentPage == 'menu'} ? 'active'" href="/menu">Menu</a></li>
-            <li><a href="#">Contact</a></li>
-            <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
-            <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
-            <li th:if="${username != null}"><a style="color: yellow" href="/profile"><span th:text="${username}"></span></a></li>
-            <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${username != null}"><a href="/profile">Profile</a></li>
-            <li th:if="${username != null}"><a href="/logout">Logout</a></li>
-          </ul>
-        </nav>
-      </div>
-    </div>
-  </div>
-</div>
+
 <div class="container tm-position-relative">
   <div class="tm-lights-container">
     <img src="img/light.png" alt="Light" class="light light-1">
@@ -166,10 +140,10 @@
       <nav class="nav flex-column">
         <a href="/management">Home</a>
         <a href="/products">Warehouse</a>
-        <a href="##">Product</a>
+        <a href="/categories">Categories</a>
         <a href="/management/allbill">All Bill</a>
         <a href="#">Statistic</a>
-        <a href="#">Setting</a>
+        <a href="admin/users">Setting</a>
       </nav>
     </div>
     <div class="col-md-10 product-list">
@@ -183,7 +157,7 @@
           </div>
 
           <div class="mb-3">
-            <a class="btn btn-success" th:href="@{/categories/add}">Thêm danh mục</a>
+            <button class="btn btn-success" id="addCategoryButton">Thêm danh mục</button>
           </div>
           <table class="table table-striped">
             <thead class="thead-dark">
@@ -209,6 +183,37 @@
             </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- Add Category Modal -->
+      <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addCategoryModalLabel">Thêm danh mục mới</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="addCategoryForm" th:action="@{/categories/add}" method="post">
+                <div class="form-group">
+                  <label for="newGroupName">Tên nhóm</label>
+                  <input type="text" id="newGroupName" name="groupName" class="form-control" required/>
+                </div>
+                <div class="form-group">
+                  <label for="newCategoryName">Tên danh mục</label>
+                  <input type="text" id="newCategoryName" name="categoryName" class="form-control" required/>
+                </div>
+                <div class="form-group">
+                  <label for="newDescribe">Mô tả</label>
+                  <input type="text" id="newDescribe" name="describe" class="form-control" required/>
+                </div>
+                <button type="submit" class="btn btn-success">Lưu</button>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -267,6 +272,10 @@
       $('#describe').val(describe);
 
       $('#updateCategoryModal').modal('show');
+    });
+
+    $('#addCategoryButton').click(function() {
+      $('#addCategoryModal').modal('show');
     });
   });
 </script>
