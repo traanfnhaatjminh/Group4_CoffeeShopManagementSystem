@@ -82,8 +82,8 @@
                 <th:block th:each="product : ${products}">
                     <div class="col-md-4 mb-4">
                         <div class="card">
-                            <img th:src="${product.getImage()}" class="card-img-top product-img"
-                                 alt="Product Image">
+                            <td><img th:src="'data:image/jpeg;base64,' + ${product.image}" alt="Product Image"
+                                     /></td>
                             <div class="card-body">
                                 <a class="card-title"
                                    th:href="@{/management/products/{pid}/addtocart(pid=${product.pid})}"
