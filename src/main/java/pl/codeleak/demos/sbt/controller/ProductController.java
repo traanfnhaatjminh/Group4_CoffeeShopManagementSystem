@@ -20,6 +20,7 @@ import pl.codeleak.demos.sbt.service.UserService;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,24 +102,85 @@ public class ProductController {
         }
     }
 
+//    @PostMapping("/products/update")
+//    public String saveUpdatedProduct(@ModelAttribute("product") Product product) {
+//        Optional<Product> existingProduct = productService.getProductById(product.getPid());
+//        if (existingProduct.isPresent()) {
+//            Product updatedProduct = existingProduct.get();
+//            updatedProduct.setPname(product.getPname());
+//            updatedProduct.setDescription(product.getDescription());
+//            updatedProduct.setUnit(product.getUnit());
+//            updatedProduct.setQuantity(product.getQuantity());
+//            updatedProduct.setPrice(product.getPrice());
+//            updatedProduct.setImage(product.getImage());
+//            updatedProduct.setCategoryId(product.getCategoryId());
+//            productService.updateProduct(updatedProduct);
+//            return "redirect:/products";
+//        } else {
+//            return "redirect:/products";
+//        }
+//    }
+
+
     @PostMapping("/products/update")
-    public String saveUpdatedProduct(@ModelAttribute("product") Product product) {
-        Optional<Product> existingProduct = productService.getProductById(product.getPid());
+    public String saveUpdatedProduct(@RequestParam("pid") int pid,
+                                     @RequestParam("pname") String pname,
+                                     @RequestParam("description") String description,
+                                     @RequestParam("unit") String unit,
+                                     @RequestParam("quantity") int quantity,
+                                     @RequestParam("price") float price,
+                                     @RequestParam("categoryId") int categoryId,
+                                     @RequestParam("file") MultipartFile file,
+                                     RedirectAttributes redirectAttributes) {
+        Optional<Product> existingProduct = productService.getProductById(pid);
         if (existingProduct.isPresent()) {
             Product updatedProduct = existingProduct.get();
-            updatedProduct.setPname(product.getPname());
-            updatedProduct.setDescription(product.getDescription());
-            updatedProduct.setUnit(product.getUnit());
-            updatedProduct.setQuantity(product.getQuantity());
-            updatedProduct.setPrice(product.getPrice());
-            updatedProduct.setImage(product.getImage());
-            updatedProduct.setCategoryId(product.getCategoryId());
+            updatedProduct.setPname(pname);
+            updatedProduct.setDescription(description);
+            updatedProduct.setUnit(unit);
+            updatedProduct.setQuantity(quantity);
+            updatedProduct.setPrice(price);
+            updatedProduct.setCategoryId(categoryId);
+
+            if (!file.isEmpty()) {
+                try {
+                    updatedProduct.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    redirectAttributes.addFlashAttribute("message", "Failed to upload image");
+                    return "redirect:/products";
+                }
+            }
             productService.updateProduct(updatedProduct);
-            return "redirect:/products";
+          //  productService.saveProductToDB(file, pname, description, unit, quantity, price, categoryId);
+            redirectAttributes.addFlashAttribute("message", "Product updated successfully");
         } else {
-            return "redirect:/products";
+            redirectAttributes.addFlashAttribute("message", "Product not found");
         }
+        return "redirect:/products";
     }
+
+
+
+    @PostMapping("/products/add")
+    public String saveNewProduct(//@ModelAttribute("product") Product product,
+                                 @RequestParam("file") MultipartFile file,
+                                 @RequestParam("pname") String name,
+                                 @RequestParam("description") String description,
+                                 @RequestParam("unit") String unit,
+                                 @RequestParam("quantity") int quantity,
+                                 @RequestParam("price") float price,
+                                 @RequestParam("categoryId") int categoryId,
+                                 RedirectAttributes redirectAttributes
+    ) {
+
+        //   productService.saveProduct(product);
+        productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
+        redirectAttributes.addFlashAttribute("message", "Product added successfully");
+
+        return "redirect:/products";
+    }
+
 
 
     @GetMapping("/menu")
@@ -186,35 +248,12 @@ public class ProductController {
         return "addproduct";
     }
 
-    @PostMapping("/products/add")
-    public String saveNewProduct(@ModelAttribute("product") Product product) {
-        productService.saveProduct(product);
-        return "redirect:/products";
-    }
-
 //    @PostMapping("/products/add")
-//    public String saveNewProduct(@ModelAttribute("product") Product product,
-//                                 @RequestParam("file") MultipartFile file,
-//                                 RedirectAttributes redirectAttributes) {
-//        try {
-//            if (!file.isEmpty()) {
-//                String fileName = file.getOriginalFilename();
-//                File directory = new File(uploadDir);
-//                if (!directory.exists()) {
-//                    directory.mkdirs();  // Create the directory if it doesn't exist
-//                }
-//                File destFile = new File(directory, fileName);
-//                file.transferTo(destFile);
-//                product.setImage("/uploads/" + fileName);
-//            }
-//            productService.saveProduct(product);
-//            redirectAttributes.addFlashAttribute("message", "Product added successfully");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            redirectAttributes.addFlashAttribute("message", "Error uploading file: " + e.getMessage());
-//            return "redirect:/products/add?error";
-//        }
+//    public String saveNewProduct(@ModelAttribute("product") Product product) {
+//        productService.saveProduct(product);
 //        return "redirect:/products";
 //    }
+
+
 
 }

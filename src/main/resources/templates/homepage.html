@@ -1,16 +1,15 @@
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head>
-
     <meta charset="UTF-8">
-    <title>Danh sách sản phẩmh</title>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet'
-          type='text/css'>
+    <title>Danh sách sản phẩm</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/templatemo-style.css" rel="stylesheet">
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -19,32 +18,26 @@
         body {
             background-color: #e4e4e4;
         }
-
         .profile-table h3 {
             margin-top: 0;
         }
-
         .profile-table .form-control {
             border-radius: 0;
             border: 1px solid #cccccc;
         }
-
         .sidebar {
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-
             width: 150px;
             background-color: rgb(198, 198, 198);
             padding-top: 20px;
         }
-
         .sidebar .nav {
             display: flex;
             flex-direction: column;
         }
-
         .sidebar .nav a {
             margin: 10px 0;
             background-color: gray;
@@ -54,14 +47,11 @@
             padding: 10px 0;
             display: block;
         }
-
         .sidebar .nav a:hover {
             color: blue;
         }
-
         .product-list {
             background-color: rgb(244, 243, 243);
-
             margin-left: 220px;
             padding: 20px;
         }
@@ -84,44 +74,20 @@
         <div class="col-md-10 product-list">
             <div class="row">
                 <div class="col-12">
-                    <div class="col-md-5">
-                        <h1 class="my-4">Danh sách sản phẩm</h1>
-                        <!-- Thêm thông báo ở đây -->
-                        <div id="success-message" th:if="${message}" class="alert alert-success" role="alert">
-                            <span th:text="${message}"></span>
-                        </div>
-                        <div class="mb-3">
-                            <a class="btn btn-success" th:href="@{/products/add}">Thêm sản phẩm</a>
-                        </div>
+                    <h1 class="my-4">Danh sách sản phẩm</h1>
+                    <!-- Thêm thông báo ở đây -->
+                    <div id="success-message" th:if="${message}" class="alert alert-success" role="alert">
+                        <span th:text="${message}"></span>
+                    </div>
+                    <div class="mb-3">
+                        <a class="btn btn-success" th:href="@{/products/add}">Thêm sản phẩm</a>
+                    </div>
 
-                        <!-- Search Form -->
-                        <form class="form-inline mb-3" method="get" action="/products">
-                            <input type="text" class="form-control mr-2" name="keyword"
-                                   placeholder="Tìm kiếm sản phẩm..." th:value="${keyword}">
-                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                        </form>
-                    </div>
-                    <div class="col-md-7">
-                        <div class="row" style="border-bottom: 1px solid rgb(184, 184, 184); display: flex;margin-top: 5%">
-                            <div class="col-4" style="color: #0e4bf1; text-transform: uppercase">
-                                <h5 class="username" style="padding: 0 20px;font-weight: bold;" th:text="${user.getUsername()}"></h5>
-                            </div>
-                            <div class="col-4">
-                                <button type="button" class="btn btn-secondary">
-                                    <a href="/profile" style="padding: 0 20px">
-                                        <i class="fas fa-user"></i> PROFILE
-                                    </a>
-                                </button>
-                            </div>
-                            <div class="col-4">
-                                <button type="button" class="btn btn-secondary">
-                                    <a href="/logout" style="padding: 0 20px">
-                                        <i class="fas fa-sign-out-alt"></i> LOGOUT
-                                    </a>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Search Form -->
+                    <form class="form-inline mb-3" method="get" action="/products">
+                        <input type="text" class="form-control mr-2" name="keyword" placeholder="Tìm kiếm sản phẩm..." th:value="${keyword}">
+                        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                    </form>
 
                     <table class="table table-striped">
                         <thead class="thead-dark">
@@ -133,7 +99,6 @@
                             <th>Số lượng</th>
                             <th>Giá</th>
                             <th>Hình ảnh</th>
-                            <th>Tên danh mục</th>
                             <th>Hành động</th>
                         </tr>
                         </thead>
@@ -147,15 +112,11 @@
                             <td th:text="${product.unit}"></td>
                             <td th:text="${product.quantity}"></td>
                             <td th:text="${product.price}"></td>
-                            <td><img th:src="${product.image}" alt="Product Image" width="100" height="100"/></td>
-                            <td th:text="${product.categoryName}"></td>
+                            <td><img th:src="'data:image/jpeg;base64,' + ${product.image}" alt="Product Image" width="100" height="100"/></td>
+                            <!--                            <td th:text="${product.categoryName}"></td>-->
                             <td>
-                                <button class="btn btn-primary btn-update"
-                                        th:attr="data-pid=${product.pid}, data-pname=${product.pname}, data-description=${product.description}, data-unit=${product.unit}, data-quantity=${product.quantity}, data-price=${product.price}, data-image=${product.image}, data-categoryId=${product.categoryId}">
-                                    Cập nhật
-                                </button>
-                                <a class="btn btn-danger" th:href="@{/products/delete/{id}(id=${product.pid})}"
-                                   onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
+                                <button class="btn btn-primary btn-update" th:attr="data-pid=${product.pid}, data-pname=${product.pname}, data-description=${product.description}, data-unit=${product.unit}, data-quantity=${product.quantity}, data-price=${product.price}, data-image=${product.image}, data-categoryId=${product.categoryId}">Cập nhật</button>
+                                <a class="btn btn-danger" th:href="@{/products/delete/{id}(id=${product.pid})}" onclick="return confirm('Bạn có chắc chắn muốn xóa sản phẩm này?');">Xóa</a>
                             </td>
                         </tr>
                         </tbody>
@@ -186,8 +147,7 @@
                     </nav>
 
                     <!-- Update Product Modal -->
-                    <div class="modal fade" id="updateProductModal" tabindex="-1"
-                         aria-labelledby="updateProductModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="updateProductModal" tabindex="-1" aria-labelledby="updateProductModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
@@ -197,38 +157,37 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="updateProductForm" th:action="@{/products/update}" method="post">
-                                        <input type="hidden" id="productId" name="pid"/>
+                                    <form id="updateProductForm" th:action="@{/products/update}" method="post" enctype="multipart/form-data">
+                                        <input type="hidden" id="productId" name="pid" />
                                         <div class="form-group">
                                             <label for="pname">Tên sản phẩm</label>
-                                            <input type="text" id="pname" name="pname" class="form-control"/>
+                                            <input type="text" id="pname" name="pname" class="form-control" />
                                         </div>
                                         <div class="form-group">
                                             <label for="description">Mô tả</label>
-                                            <input type="text" id="description" name="description"
-                                                   class="form-control"/>
+                                            <input type="text" id="description" name="description" class="form-control" />
                                         </div>
                                         <div class="form-group">
                                             <label for="unit">Đơn vị</label>
-                                            <input type="text" id="unit" name="unit" class="form-control"/>
+                                            <input type="text" id="unit" name="unit" class="form-control" />
                                         </div>
                                         <div class="form-group">
                                             <label for="quantity">Số lượng</label>
-                                            <input type="number" id="quantity" name="quantity" class="form-control"/>
+                                            <input type="number" id="quantity" name="quantity" class="form-control" />
                                         </div>
                                         <div class="form-group">
                                             <label for="price">Giá</label>
-                                            <input type="number" id="price" name="price" class="form-control"/>
+                                            <input type="number" id="price" name="price" class="form-control" />
                                         </div>
+
                                         <div class="form-group">
-                                            <label for="image">Hình ảnh</label>
-                                            <input type="text" id="image" name="image" class="form-control"/>
+                                            <label for="file">Hình ảnh</label>
+                                            <input type="file" id="file" name="file" class="form-control" />
                                         </div>
                                         <div class="form-group">
                                             <label for="categoryId">Tên danh mục</label>
                                             <select id="categoryId" name="categoryId" class="form-control">
-                                                <option th:each="c : ${categories}" th:value="${c.cid}"
-                                                        th:text="${c.categoryName}"></option>
+                                                <option th:each="c : ${categories}" th:value="${c.cid}" th:text="${c.categoryName}"></option>
                                             </select>
                                         </div>
                                         <button type="submit" class="btn btn-success">Lưu</button>
@@ -238,44 +197,39 @@
                         </div>
                     </div>
 
-
                 </div>
             </div>
         </div>
-        <script>
-            $(document).ready(function () {
-                // Hiển thị thông báo trong 3 giây
-                setTimeout(function () {
-                    $('#success-message').fadeOut('slow');
-                }, 3000);
-                $('.btn-update').click(function () {
-                    var pid = $(this).data('pid');
-                    var pname = $(this).data('pname');
-                    var description = $(this).data('description');
-                    var unit = $(this).data('unit');
-                    var quantity = $(this).data('quantity');
-                    var price = $(this).data('price');
-                    var image = $(this).data('image');
-                    var categoryId = $(this).data('categoryid');
-                    $('#productId').val(pid);
-                    $('#pname').val(pname);
-                    $('#description').val(description);
-                    $('#unit').val(unit);
-                    $('#quantity').val(quantity);
-                    $('#price').val(price);
-                    $('#image').val(image);
-                    $('#categoryId').val(categoryId);
-                    $('#updateProductModal').modal('show');
-                });
-            });
-        </script>
+    </div>
+</div>
+<script>
+    $(document).ready(function() {
+        // Hiển thị thông báo trong 3 giây
+        setTimeout(function() {
+            $('#success-message').fadeOut('slow');
+        }, 3000);
+        $('.btn-update').click(function() {
+            var pid = $(this).data('pid');
+            var pname = $(this).data('pname');
+            var description = $(this).data('description');
+            var unit = $(this).data('unit');
+            var quantity = $(this).data('quantity');
+            var price = $(this).data('price');
+            var image = $(this).data('image');
+            var categoryId = $(this).data('categoryid');
+            $('#productId').val(pid);
+            $('#pname').val(pname);
+            $('#description').val(description);
+            $('#unit').val(unit);
+            $('#quantity').val(quantity);
+            $('#price').val(price);
+            $('#image').val(image);
+            $('#categoryId').val(categoryId);
+            $('#updateProductModal').modal('show');
+        });
+    });
+</script>
 </body>
 </html>
-
-
-
-
-
-
 
 
