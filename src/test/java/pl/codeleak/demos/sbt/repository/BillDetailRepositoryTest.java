@@ -22,16 +22,16 @@ public class BillDetailRepositoryTest {
     @BeforeEach
     public void setUp() {
         // Tạo và lưu các đối tượng Product vào cơ sở dữ liệu
-        Product product1 = new Product("Product 1", "Description 1", "Unit 1", 100, 10.0f, "image1.png", 1);
-        Product product2 = new Product("Product 2", "Description 2", "Unit 2", 200, 20.0f, "image2.png", 2);
+        Product product1 = new Product("Milk Tea", "Milk with tea", "gram", 100, 10000.0f, "image1.png", 1);
+        Product product2 = new Product("Coffee", "ca phe den", "gram", 200, 20000.0f, "image2.png", 2);
 
         productRepository.save(product1);
         productRepository.save(product2);
 
         // Tạo và lưu các đối tượng BillDetail vào cơ sở dữ liệu
-        BillDetail billDetail1 = new BillDetail(100, product1.getPid(), 5, 10.0f);
-        BillDetail billDetail2 = new BillDetail(100, product2.getPid(), 2, 20.0f);
-        BillDetail billDetail3 = new BillDetail(200, product1.getPid(), 1, 15.0f);
+        BillDetail billDetail1 = new BillDetail(100, product1.getPid(), 5, 10000.0f);
+        BillDetail billDetail2 = new BillDetail(100, product2.getPid(), 2, 20000.0f);
+        BillDetail billDetail3 = new BillDetail(200, product1.getPid(), 1, 15000.0f);
 
         billDetailRepository.save(billDetail1);
         billDetailRepository.save(billDetail2);
