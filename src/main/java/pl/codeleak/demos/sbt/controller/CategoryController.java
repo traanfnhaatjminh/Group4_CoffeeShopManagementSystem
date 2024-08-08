@@ -150,7 +150,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.Category;
+import pl.codeleak.demos.sbt.model.Users;
 import pl.codeleak.demos.sbt.service.CategoryService;
+import pl.codeleak.demos.sbt.service.UserService;
+
+import java.security.Principal;
 
 @Controller
 @RequestMapping("/categories")
@@ -159,9 +163,17 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping
-    public String listCategories(Model model) {
-        model.addAttribute("categories", categoryService.getAllCategories());
+    public String listCategories(Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+            model.addAttribute("categories", categoryService.getAllCategories());
+        }
         return "categories"; // Đảm bảo tên trang phù hợp với tệp HTML
     }
 

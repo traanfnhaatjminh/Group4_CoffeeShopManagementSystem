@@ -64,13 +64,13 @@
     <div class="row">
         <div class="col-md-1 sidebar">
             <nav class="nav flex-column">
-                <a href="/management">Home</a>
-                <a href="/products">Warehouse</a>
-                <a href="/categories">Categories</a>
-                <a href="/management/table">Table List</a>
-                <a href="/management/allbill">All Bill</a>
-                <a href="#">Statistic</a>
-                <a href="/admin/users">Setting</a>
+                <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management">Home</a>
+                <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/products">Warehouse</a>
+                <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/categories">Categories</a>
+                <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
+                <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
+                <a th:if="${user.getRole_id()==5}" href="#">Statistic</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
             </nav>
         </div>
         <div class="col-md-12 offset-md-1 bill-list">

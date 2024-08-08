@@ -26,7 +26,14 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 
         if (user.getRole_id() == 1) {
             response.sendRedirect("/homepage");
-        } else {
+        }else if(user.getRole_id() == 2){
+            response.sendRedirect("/products");
+        }else if(user.getRole_id() == 3){
+            response.sendRedirect("/management/table");
+        }else if(user.getRole_id() == 4){
+            response.sendRedirect("/management");
+        }
+        else {
             response.sendRedirect("/management");
         }
     }
