@@ -144,7 +144,7 @@
         <div class="detail-table">
             <div class="row gx-4 gx-lg-5 align-items-center">
                 <div class="col-md-6">
-                    <img class="card-img-top mb-5 mb-md-0 product-detail-image" th:src="@{${product.image}}" alt="Product Image" />
+                    <img class="card-img-top mb-5 mb-md-0 product-detail-image" th:src="'data:image/jpeg;base64,' + ${product.image}" alt="Product Image" />
                 </div>
                 <div class="col-md-6">
                     <p class="category-name" th:text="${categoryName}">Product Category</p>

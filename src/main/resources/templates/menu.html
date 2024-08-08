@@ -166,7 +166,7 @@
                     <div class="col-lg-9 col-md-9">
                         <div class="tm-menu-product-content">
                             <div class="tm-product" th:each="product : ${products}">
-                                <img th:src="@{${product.image}}" alt="Product">
+                                <img th:src="'data:image/jpeg;base64,' + ${product.image}" alt="Product">
 <!--                                <img th:src="'data:image/jpeg;base64,' + ${product.image}" alt="Product Image"-->
 <!--                                         width="100" height="100"/>-->
                                 <div class="tm-product-text">
