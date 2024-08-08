@@ -112,7 +112,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <img class="img-fluid mx-auto d-block image"
-                                                 th:src="@{${cartItemWithProduct.product.image}}" alt="">
+                                                 th:src="'data:image/jpeg;base64,' +${cartItemWithProduct.product.image}" alt="">
                                         </div>
                                         <div class="col-md-8">
                                             <div class="info">
