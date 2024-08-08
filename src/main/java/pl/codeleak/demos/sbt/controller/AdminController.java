@@ -85,6 +85,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.Users;
 import pl.codeleak.demos.sbt.service.UserService;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/admin/users")
 public class AdminController {
@@ -96,7 +98,12 @@ public class AdminController {
     public String listUsers(@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
                             @RequestParam(name = "keyword", required = false) String keyword,
                             @RequestParam(name = "role", required = false) Integer role,
-                            Model model) {
+                            Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
         int pageSize = 5; // Số phần tử trên một trang
 
         Page<Users> page;

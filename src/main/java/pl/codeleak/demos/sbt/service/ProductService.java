@@ -61,11 +61,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 import pl.codeleak.demos.sbt.model.Category;
 import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.repository.CategoryRepository;
 import pl.codeleak.demos.sbt.repository.ProductRepository;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -170,5 +175,34 @@ public class ProductService {
     }
     public Page<Product> searchProducts2(String keyword, Pageable pageable) {
         return productRepository.findByPnameContaining(keyword, pageable);
+    }
+    public void  saveProductToDB(MultipartFile file,String name,String description,String unit, int quantity
+            ,float price, int categoryId)
+    {
+        Product p = new Product();
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        if(fileName.contains(".."))
+        {
+            System.out.println("not a a valid file");
+        }
+        try {
+            p.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        p.setDescription(description);
+
+        p.setPname(name);
+        p.setDescription(description);
+        p.setUnit(unit);
+        p.setQuantity(quantity);
+        p.setPrice(price);
+        p.setCategoryId(categoryId);
+
+        productRepository.save(p);
+    }
+    public List<Product> getAllProduct()
+    {
+        return productRepository.findAll();
     }
 }

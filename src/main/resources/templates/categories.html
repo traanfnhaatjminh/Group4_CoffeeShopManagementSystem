@@ -1,283 +1,319 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Danh sách danh mục</title>
-  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'>
-  <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
-  <link href="css/bootstrap.min.css" rel="stylesheet">
-  <link href="css/font-awesome.min.css" rel="stylesheet">
-  <link href="css/templatemo-style.css" rel="stylesheet">
-  <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <style>
-    body {
-      background-color: #e4e4e4;
-    }
+    <meta charset="UTF-8">
+    <title>Danh sách danh mục</title>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet'
+          type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/templatemo-style.css" rel="stylesheet">
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #e4e4e4;
+        }
 
-    .avatar {
-      width: 200px;
-      height: 200px;
-      border-radius: 50%;
-    }
+        .avatar {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+        }
 
-    .avatar-container {
-      text-align: center;
-    }
+        .avatar-container {
+            text-align: center;
+        }
 
-    .username {
-      font-weight: bold;
-      margin-top: 10px;
-    }
+        .username {
+            font-weight: bold;
+            margin-top: 10px;
+        }
 
-    .profile-table {
-      background-color: #ffffff;
-      border: 1px solid #dddddd;
-      border-radius: 5px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px; /* Space between profile and footer */
-    }
+        .profile-table {
+            background-color: #ffffff;
+            border: 1px solid #dddddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px; /* Space between profile and footer */
+        }
 
-    .profile-table h3 {
-      margin-top: 0;
-    }
+        .profile-table h3 {
+            margin-top: 0;
+        }
 
-    .profile-table .form-control {
-      border-radius: 0;
-      border: 1px solid #cccccc;
-    }
+        .profile-table .form-control {
+            border-radius: 0;
+            border: 1px solid #cccccc;
+        }
 
-    .header-image {
-      background-image: url('img/cofe.jpg');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      height: 500px;
-      width: 100%;
-    }
+        .header-image {
+            background-image: url('/img/cofe.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            height: 500px;
+            width: 100%;
+        }
 
-    .tm-lights-container {
-      margin-bottom: 40px; /* Adjust the value as needed */
-    }
+        .tm-lights-container {
+            margin-bottom: 40px; /* Adjust the value as needed */
+        }
 
-    .container.bootstrap.snippets.bootdey {
-      margin-top: 150px; /* Adjust the value as needed */
-    }
+        .container.bootstrap.snippets.bootdey {
+            margin-top: 150px; /* Adjust the value as needed */
+        }
 
-    /* Button styles */
-    .btn-custom {
-      background-color: #000000; /* Black color */
-      color: #ffffff; /* White text */
-      border-color: #000000; /* Black border */
-    }
+        /* Button styles */
+        .btn-custom {
+            background-color: #000000; /* Black color */
+            color: #ffffff; /* White text */
+            border-color: #000000; /* Black border */
+        }
 
-    .btn-custom:hover {
-      background-color: #333333; /* Darker black */
-      border-color: #333333; /* Darker black border */
-      color: #ffffff; /* Ensure text remains white */
-    }
+        .btn-custom:hover {
+            background-color: #333333; /* Darker black */
+            border-color: #333333; /* Darker black border */
+            color: #ffffff; /* Ensure text remains white */
+        }
 
-    .btn-custom:focus, .btn-custom:active {
-      background-color: #333333; /* Darker black on focus/active */
-      border-color: #333333; /* Darker black border on focus/active */
-      color: #ffffff; /* Ensure text remains white */
-      box-shadow: none; /* Remove default focus shadow */
-    }
+        .btn-custom:focus, .btn-custom:active {
+            background-color: #333333; /* Darker black on focus/active */
+            border-color: #333333; /* Darker black border on focus/active */
+            color: #ffffff; /* Ensure text remains white */
+            box-shadow: none; /* Remove default focus shadow */
+        }
 
-    .sidebar {
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 200px; /* Adjust width as needed */
-      background-color: rgb(198, 198, 198);
-      padding-top: 20px;
-    }
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px; /* Adjust width as needed */
+            background-color: rgb(198, 198, 198);
+            padding-top: 20px;
+        }
 
-    .sidebar .nav {
-      display: flex;
-      flex-direction: column;
-    }
+        .sidebar .nav {
+            display: flex;
+            flex-direction: column;
+        }
 
-    .sidebar .nav a {
-      margin: 10px 0;
-      background-color: gray;
-      border-radius: 15px;
-      text-align: center;
-      color: white;
-      padding: 10px 0;
-      display: block;
-    }
+        .sidebar .nav a {
+            margin: 10px 0;
+            background-color: gray;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            padding: 10px 0;
+            display: block;
+        }
 
-    .sidebar .nav a:hover {
-      color: blue;
-    }
+        .sidebar .nav a:hover {
+            color: blue;
+        }
 
-    .product-list {
-      background-color: rgb(244, 243, 243);
-      margin-left: 220px; /* Ensure content does not overlap with sidebar */
-      padding: 20px; /* Add padding for spacing */
-    }
-  </style>
+        .product-list {
+            background-color: rgb(244, 243, 243);
+            margin-left: 220px; /* Ensure content does not overlap with sidebar */
+            padding: 20px; /* Add padding for spacing */
+        }
+    </style>
 </head>
 <body>
 
 <div class="container tm-position-relative">
-  <div class="tm-lights-container">
-    <img src="img/light.png" alt="Light" class="light light-1">
-    <img src="img/light.png" alt="Light" class="light light-2">
-    <img src="img/light.png" alt="Light" class="light light-3">
-  </div>
+    <div class="tm-lights-container">
+        <img src="img/light.png" alt="Light" class="light light-1">
+        <img src="img/light.png" alt="Light" class="light light-2">
+        <img src="img/light.png" alt="Light" class="light light-3">
+    </div>
 </div>
 
 <!-- Category List -->
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-md-2 sidebar">
-      <nav class="nav flex-column">
-        <a href="/management">Home</a>
-        <a href="/products">Warehouse</a>
-        <a href="/categories">Categories</a>
-        <a href="/management/allbill">All Bill</a>
-        <a href="#">Statistic</a>
-        <a href="admin/users">Setting</a>
-      </nav>
+    <div class="row">
+        <div class="col-md-2 sidebar">
+            <nav class="nav flex-column">
+                <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management">Home</a>
+                <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/products">Warehouse</a>
+                <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/categories">Categories</a>
+                <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
+                <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
+                <a th:if="${user.getRole_id()==5}" href="#">Statistic</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
+            </nav>
+        </div>
+        <div class="col-md-10 product-list">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="col-md-5">
+                        <h1 class="my-4">Danh sách danh mục</h1>
+                        <!-- Thêm thông báo ở đây -->
+                        <div id="success-message" th:if="${message}" class="alert alert-success" role="alert">
+                            <span th:text="${message}"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <button class="btn btn-success" id="addCategoryButton">Thêm danh mục</button>
+                        </div>
+                    </div>
+                    <div class="col-md-7">
+                        <div class="row"
+                             style="border-bottom: 1px solid rgb(184, 184, 184); display: flex;margin-top: 5%;margin-left: 5%">
+                            <div class="col-4" style="color: #0e4bf1; text-transform: uppercase">
+                                <h5 class="username" style="padding: 0 20px;font-weight: bold;"
+                                    th:text="${user.getUsername()}"></h5>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-secondary">
+                                    <a href="/profile" style="padding: 0 20px">
+                                        <i class="fas fa-user"></i> PROFILE
+                                    </a>
+                                </button>
+                            </div>
+                            <div class="col-4">
+                                <button type="button" class="btn btn-secondary">
+                                    <a href="/logout" style="padding: 0 20px">
+                                        <i class="fas fa-sign-out-alt"></i> LOGOUT
+                                    </a>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tên nhóm</th>
+                            <th>Tên danh mục</th>
+                            <th>Mô tả</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="category : ${categories}">
+                            <td th:text="${category.cid}"></td>
+                            <td th:text="${category.groupName}"></td>
+                            <td th:text="${category.categoryName}"></td>
+                            <td th:text="${category.describe}"></td>
+                            <td>
+                                <button class="btn btn-primary btn-update"
+                                        th:attr="data-cid=${category.cid}, data-groupName=${category.groupName}, data-categoryName=${category.categoryName}, data-describe=${category.describe}">
+                                    Cập nhật
+                                </button>
+                                <a class="btn btn-danger" th:href="@{/categories/delete/{cid}(cid=${category.cid})}"
+                                   onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?');">Xóa</a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Add Category Modal -->
+            <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addCategoryModalLabel">Thêm danh mục mới</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="addCategoryForm" th:action="@{/categories/add}" method="post">
+                                <div class="form-group">
+                                    <label for="newGroupName">Tên nhóm</label>
+                                    <input type="text" id="newGroupName" name="groupName" class="form-control"
+                                           required/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newCategoryName">Tên danh mục</label>
+                                    <input type="text" id="newCategoryName" name="categoryName" class="form-control"
+                                           required/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="newDescribe">Mô tả</label>
+                                    <input type="text" id="newDescribe" name="describe" class="form-control" required/>
+                                </div>
+                                <button type="submit" class="btn btn-success">Lưu</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Update Category Modal -->
+            <div class="modal fade" id="updateCategoryModal" tabindex="-1" aria-labelledby="updateCategoryModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="updateCategoryModalLabel">Cập nhật danh mục</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="updateCategoryForm" th:action="@{/categories/update}" method="post">
+                                <input type="hidden" id="categoryId" name="cid"/>
+                                <div class="form-group">
+                                    <label for="groupName">Tên nhóm</label>
+                                    <input type="text" id="groupName" name="groupName" class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoryName">Tên danh mục</label>
+                                    <input type="text" id="categoryName" name="categoryName" class="form-control"/>
+                                </div>
+                                <div class="form-group">
+                                    <label for="describe">Mô tả</label>
+                                    <input type="text" id="describe" name="describe" class="form-control"/>
+                                </div>
+                                <button type="submit" class="btn btn-success">Lưu</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
-    <div class="col-md-10 product-list">
-      <div class="row">
-        <div class="col-12">
-          <h1 class="my-4">Danh sách danh mục</h1>
-
-          <!-- Thêm thông báo ở đây -->
-          <div id="success-message" th:if="${message}" class="alert alert-success" role="alert">
-            <span th:text="${message}"></span>
-          </div>
-
-          <div class="mb-3">
-            <button class="btn btn-success" id="addCategoryButton">Thêm danh mục</button>
-          </div>
-          <table class="table table-striped">
-            <thead class="thead-dark">
-            <tr>
-              <th>ID</th>
-              <th>Tên nhóm</th>
-              <th>Tên danh mục</th>
-              <th>Mô tả</th>
-              <th>Hành động</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="category : ${categories}">
-              <td th:text="${category.cid}"></td>
-              <td th:text="${category.groupName}"></td>
-              <td th:text="${category.categoryName}"></td>
-              <td th:text="${category.describe}"></td>
-              <td>
-                <button class="btn btn-primary btn-update" th:attr="data-cid=${category.cid}, data-groupName=${category.groupName}, data-categoryName=${category.categoryName}, data-describe=${category.describe}">Cập nhật</button>
-                <a class="btn btn-danger" th:href="@{/categories/delete/{cid}(cid=${category.cid})}"
-                   onclick="return confirm('Bạn có chắc chắn muốn xóa danh mục này?');">Xóa</a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- Add Category Modal -->
-      <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="addCategoryModalLabel">Thêm danh mục mới</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form id="addCategoryForm" th:action="@{/categories/add}" method="post">
-                <div class="form-group">
-                  <label for="newGroupName">Tên nhóm</label>
-                  <input type="text" id="newGroupName" name="groupName" class="form-control" required/>
-                </div>
-                <div class="form-group">
-                  <label for="newCategoryName">Tên danh mục</label>
-                  <input type="text" id="newCategoryName" name="categoryName" class="form-control" required/>
-                </div>
-                <div class="form-group">
-                  <label for="newDescribe">Mô tả</label>
-                  <input type="text" id="newDescribe" name="describe" class="form-control" required/>
-                </div>
-                <button type="submit" class="btn btn-success">Lưu</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Update Category Modal -->
-      <div class="modal fade" id="updateCategoryModal" tabindex="-1" aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="updateCategoryModalLabel">Cập nhật danh mục</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form id="updateCategoryForm" th:action="@{/categories/update}" method="post">
-                <input type="hidden" id="categoryId" name="cid" />
-                <div class="form-group">
-                  <label for="groupName">Tên nhóm</label>
-                  <input type="text" id="groupName" name="groupName" class="form-control" />
-                </div>
-                <div class="form-group">
-                  <label for="categoryName">Tên danh mục</label>
-                  <input type="text" id="categoryName" name="categoryName" class="form-control" />
-                </div>
-                <div class="form-group">
-                  <label for="describe">Mô tả</label>
-                  <input type="text" id="describe" name="describe" class="form-control" />
-                </div>
-                <button type="submit" class="btn btn-success">Lưu</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
 </div>
 
 <script>
-  $(document).ready(function() {
-    // Hiển thị thông báo trong 3 giây
-    setTimeout(function() {
-      $('#success-message').fadeOut('slow');
-    }, 3000);
+    $(document).ready(function () {
+        // Hiển thị thông báo trong 3 giây
+        setTimeout(function () {
+            $('#success-message').fadeOut('slow');
+        }, 3000);
 
-    $('.btn-update').click(function() {
-      var cid = $(this).data('cid');
-      var groupName = $(this).data('groupname');
-      var categoryName = $(this).data('categoryname');
-      var describe = $(this).data('describe');
+        $('.btn-update').click(function () {
+            var cid = $(this).data('cid');
+            var groupName = $(this).data('groupname');
+            var categoryName = $(this).data('categoryname');
+            var describe = $(this).data('describe');
 
-      $('#categoryId').val(cid);
-      $('#groupName').val(groupName);
-      $('#categoryName').val(categoryName);
-      $('#describe').val(describe);
+            $('#categoryId').val(cid);
+            $('#groupName').val(groupName);
+            $('#categoryName').val(categoryName);
+            $('#describe').val(describe);
 
-      $('#updateCategoryModal').modal('show');
+            $('#updateCategoryModal').modal('show');
+        });
+
+        $('#addCategoryButton').click(function () {
+            $('#addCategoryModal').modal('show');
+        });
     });
-
-    $('#addCategoryButton').click(function() {
-      $('#addCategoryModal').modal('show');
-    });
-  });
 </script>
 </body>
 </html>
