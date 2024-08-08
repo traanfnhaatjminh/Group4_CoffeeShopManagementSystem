@@ -1,6 +1,8 @@
 package pl.codeleak.demos.sbt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -8,7 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.codeleak.demos.sbt.model.Bill;
 import pl.codeleak.demos.sbt.model.Users;
+import pl.codeleak.demos.sbt.service.BillService;
 import pl.codeleak.demos.sbt.service.CartItemService;
 import pl.codeleak.demos.sbt.service.UserService;
 
@@ -24,6 +28,9 @@ public class UsersController {
 
     @Autowired
     private CartItemService cartItemService;
+
+    @Autowired
+    private BillService billService;
 
     @GetMapping
     public String viewProfile(Model model, Principal principal) {
@@ -96,15 +103,23 @@ public class UsersController {
     }
 
     @GetMapping("/history")
-    public String history(Model model, Principal principal) {
+    public String getUserBills(
+                               @RequestParam(defaultValue = "0") int page,
+                               Model model,Principal principal) {
         String username = principal.getName();
         Users user = userService.findByUsername(username);
         int userId = user.getUid();
         List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
         model.addAttribute("cartItems", cartItems);
         model.addAttribute("user", user);
-        model.addAttribute("currentPage", "profile");
+        model.addAttribute("page", "profile");
+
+        PageRequest pageable = PageRequest.of(page, 5); // 5 bills per page
+        Page<Bill> bills = billService.getBillsByUserId(userId, pageable);
+        model.addAttribute("bills", bills);
+        model.addAttribute("currentPage", page);
         return "orderhistory";
     }
+
 
 }

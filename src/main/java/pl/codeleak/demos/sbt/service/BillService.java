@@ -31,6 +31,7 @@ public class BillService {
     public Iterable<Bill> getAllBills(PageRequest pageRequest) {
         return billRepository.findAll();
     }
+
     public Page<Bill> getAllBills(Pageable pageable) {
         return billRepository.findAll(pageable);
     }
@@ -49,6 +50,7 @@ public class BillService {
 
         return billRepository.findByCreatedTimeBetween(startDate, endDate, pageable);
     }
+
     public Bill findById(int billId) {
         return billRepository.findById(billId).orElse(null); // Assuming findById from JpaRepository
     }
@@ -63,11 +65,17 @@ public class BillService {
                 .mapToDouble(detail -> detail.getQuantity() * detail.getPrice())
                 .sum();
     }
+
     public void updateBillStatus(int billId, Integer status) {
         Optional<Bill> optionalBill = billRepository.findById(billId);
         if (optionalBill.isPresent()) {
             Bill bill = optionalBill.get();
             bill.setStatus(status);
             billRepository.save(bill);
-        }}
+        }
+    }
+
+    public Page<Bill> getBillsByUserId(int userId, Pageable pageable) {
+        return billRepository.findByUserId(userId, pageable);
+    }
 }

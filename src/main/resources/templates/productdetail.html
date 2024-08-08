@@ -6,40 +6,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Product Detail - Cafe House</title>
     <base href="/">
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,400italic,600,700' rel='stylesheet'
+          type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Damion' rel='stylesheet' type='text/css'>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/font-awesome.min.css" rel="stylesheet">
     <link href="css/templatemo-style.css" rel="stylesheet">
-    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon"/>
     <style>
         body {
             background-color: #e4e4e4;
         }
+
         .tm-section {
             padding-top: 100px;
         }
+
         .product-detail-image img {
             max-width: 300px;
             max-height: 300px;
             object-fit: cover;
         }
+
         .card-img-top {
             max-width: 400px;
             max-height: 400px;
 
         }
+
         .tm-daily-menu-img {
             max-width: 300px;
             max-height: 300px;
         }
+
         .py-5 {
             padding-top: 90px;
             margin-right: 10px;
         }
+
         .text {
             font-style: oblique;
         }
+
         .shipping-now-button {
             background-color: #333;
             color: white;
@@ -53,13 +61,16 @@
             align-items: center;
             text-decoration: none;
         }
+
         .shipping-now-button:hover {
             background-color: #555;
         }
+
         .quantity-control {
             display: flex;
             align-items: center;
         }
+
         .quantity-control button {
             background-color: #333;
             color: white;
@@ -70,9 +81,11 @@
             font-size: 1.2rem;
             line-height: 1;
         }
+
         .quantity-control button:hover {
             background-color: #555;
         }
+
         .quantity-control input {
             text-align: center;
             width: 50px;
@@ -80,13 +93,15 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
+
         .detail-table {
             background-color: white;
             border: 1px solid #ddd;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
+
         .category-name {
             background: url('/img/vertical-menu-bg.png') no-repeat center center;
             background-size: cover;
@@ -124,12 +139,15 @@
                         <li><a href="#">Contact</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
-                        <li th:if="${user != null}"><a style="color: yellow" href="#"><span th:text="${user.getUsername()}"></span></a></li>
-                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${user != null}"><a href="/profile">Profile</a></li>
+                        <li th:if="${user != null}"><a style="color: yellow" href="#"><span
+                                th:text="${user.getUsername()}"></span></a></li>
+                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${user != null}"><a
+                                href="/profile">Profile</a></li>
                         <li th:if="${user != null}">
                             <a class="nav-icon position-relative text-decoration-none" href="/cart">
                                 <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-                                <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" th:text="${cartItems.size()}"></span>
+                                <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark"
+                                      th:text="${cartItems.size()}"></span>
                             </a>
                         </li>
                         <li th:if="${user != null}"><a href="/logout">Logout</a></li>
@@ -144,7 +162,8 @@
         <div class="detail-table">
             <div class="row gx-4 gx-lg-5 align-items-center">
                 <div class="col-md-6">
-                    <img class="card-img-top mb-5 mb-md-0 product-detail-image" th:src="'data:image/jpeg;base64,' + ${product.image}" alt="Product Image" />
+                    <img class="card-img-top mb-5 mb-md-0 product-detail-image"
+                         th:src="'data:image/jpeg;base64,' + ${product.image}" alt="Product Image"/>
                 </div>
                 <div class="col-md-6">
                     <p class="category-name" th:text="${categoryName}">Product Category</p>
@@ -153,23 +172,44 @@
                     <div class="fs-5 mb-5">
                         <span th:text="${product.price}">40.00</span> VND
                     </div>
-                    <form th:action="@{/cart/add}" method="post">
+                    <div th:if="${user != null}">
+                        <form th:action="@{/cart/add}" method="post">
+                            <div class="d-flex mb-3">
+                                <div class="quantity-control">
+                                    <button type="button" id="decreaseQuantity">-</button>
+                                    <label for="inputQuantity"></label><input class="form-control text-center me-3"
+                                                                              id="inputQuantity" type="number"
+                                                                              name="quantity" value="1"/>
+                                    <button type="button" id="increaseQuantity">+</button>
+                                </div>
+                                <input type="hidden" name="productId" th:value="${product.pid}"/>
+                                <input type="hidden" name="customerId" th:value="${user.getUid()}"/>
+                                <button class="shipping-now-button" type="submit">
+                                    <i class="bi-cart-fill me-1"></i>
+                                    Thêm vào giỏ hàng
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div th:if="${user == null}">
                         <div class="d-flex mb-3">
                             <div class="quantity-control">
-                                <button type="button" id="decreaseQuantity">-</button>
-                                <label for="inputQuantity"></label><input class="form-control text-center me-3" id="inputQuantity" type="number" name="quantity" value="1" />
-                                <button type="button" id="increaseQuantity">+</button>
-                            </div>
-                            <input type="hidden" name="productId" th:value="${product.pid}" />
-                            <div th:if="${user != null}">
-                                <input type="hidden" name="customerId" th:value="${user.getUid()}" />
+                                <button type="button" id="decreaseQuantity1">-</button>
+                                <label for="inputQuantity"></label><input
+                                    class="form-control text-center me-3"
+                                    type="number"
+                                    id="inputQuantity1"
+                                    name="quantity" value="1"/>
+                                <button type="button" id="increaseQuantity1">+</button>
                             </div>
                             <button class="shipping-now-button" type="submit">
                                 <i class="bi-cart-fill me-1"></i>
                                 Thêm vào giỏ hàng
                             </button>
+                            <h5 style="color: red">Lưu ý: Quý khách bắt buộc đăng nhập vào hệ thống trước khi thêm sản phẩm vào giỏ hàng!</h5>
                         </div>
-                    </form>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -194,7 +234,10 @@
                 </div>
                 <div class="col-lg-8 col-md-8">
                     <p class="text">
-                        "Trong màu đen của cà phê tinh ý sẽ thấy được nét sóng sánh của màu nâu đỏ, sau vị đắng ngắm lòng là dư vị ngòn ngọt lạ kỳ của vị hương. Nhìn đời qua lăng kính phân kì sẽ thấy ngỡ ngàng sự hòa quyện của một tập hợp bao nhiêu là màu sắc, thoang thoảng trong ký ức bao trùm cả không gian những mùi vị của yêu thương." </p>
+                        "Trong màu đen của cà phê tinh ý sẽ thấy được nét sóng sánh của màu nâu đỏ, sau vị đắng ngắm
+                        lòng là dư vị ngòn ngọt lạ kỳ của vị hương. Nhìn đời qua lăng kính phân kì sẽ thấy ngỡ ngàng sự
+                        hòa quyện của một tập hợp bao nhiêu là màu sắc, thoang thoảng trong ký ức bao trùm cả không gian
+                        những mùi vị của yêu thương." </p>
                 </div>
             </div>
         </div>
@@ -236,19 +279,38 @@
 </footer> <!-- Footer content-->
 <!-- JS -->
 <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script> <!-- jQuery -->
-<script type="text/javascript" src="js/templatemo-script.js"></script> <!-- Templatemo Script -->
-<script>
-    document.getElementById('increaseQuantity').addEventListener('click', function() {
-        var inputQuantity = document.getElementById('inputQuantity');
-        inputQuantity.value = parseInt(inputQuantity.value) + 1;
-    });
+<script type="text/javascript" src="js/templatemo-script.js"></script>
+<div th:if="${user != null}">
+    <script>
+        document.getElementById('increaseQuantity').addEventListener('click', function () {
+            var inputQuantity = document.getElementById('inputQuantity');
+            inputQuantity.value = parseInt(inputQuantity.value) + 1;
+        });
 
-    document.getElementById('decreaseQuantity').addEventListener('click', function() {
-        var inputQuantity = document.getElementById('inputQuantity');
-        if (parseInt(inputQuantity.value) > 1) {
-            inputQuantity.value = parseInt(inputQuantity.value) - 1;
-        }
-    });
-</script>
+        document.getElementById('decreaseQuantity').addEventListener('click', function () {
+            var inputQuantity = document.getElementById('inputQuantity');
+            if (parseInt(inputQuantity.value) > 1) {
+                inputQuantity.value = parseInt(inputQuantity.value) - 1;
+            }
+        });
+    </script>
+
+</div><!-- Templatemo Script -->
+<div th:if="${user == null}">
+    <script>
+        document.getElementById('increaseQuantity1').addEventListener('click', function () {
+            var inputQuantity = document.getElementById('inputQuantity1');
+            inputQuantity.value = parseInt(inputQuantity.value) + 1;
+        });
+
+        document.getElementById('decreaseQuantity1').addEventListener('click', function () {
+            var inputQuantity = document.getElementById('inputQuantity1');
+            if (parseInt(inputQuantity.value) > 1) {
+                inputQuantity.value = parseInt(inputQuantity.value) - 1;
+            }
+        });
+    </script>
+</div>
+
 </body>
 </html>

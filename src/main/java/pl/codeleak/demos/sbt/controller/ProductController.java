@@ -152,14 +152,13 @@ public class ProductController {
                 }
             }
             productService.updateProduct(updatedProduct);
-          //  productService.saveProductToDB(file, pname, description, unit, quantity, price, categoryId);
+            //  productService.saveProductToDB(file, pname, description, unit, quantity, price, categoryId);
             redirectAttributes.addFlashAttribute("message", "Product updated successfully");
         } else {
             redirectAttributes.addFlashAttribute("message", "Product not found");
         }
         return "redirect:/products";
     }
-
 
 
     @PostMapping("/products/add")
@@ -182,20 +181,20 @@ public class ProductController {
     }
 
 
-
     @GetMapping("/menu")
     public String showMenu(Model model,
                            @RequestParam(defaultValue = "0") int page,
                            @RequestParam(required = false) Integer categoryId,
                            @RequestParam(required = false) String search,
                            Principal principal) {
+
         if (principal != null) {
             String username = principal.getName();
             Users user = userService.findByUsername(username);
             int userId = user.getUid();
             List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
             model.addAttribute("cartItems", cartItems);
-            model.addAttribute("username", username);
+            model.addAttribute("user", user);
         }
         Page<Product> productPage;
         if (search != null && !search.trim().isEmpty()) {
@@ -212,6 +211,7 @@ public class ProductController {
         model.addAttribute("selectedCategoryId", categoryId);
         model.addAttribute("searchQuery", search);
         model.addAttribute("currentPage1", "menu");
+
         return "menu";
     }
 
@@ -253,7 +253,6 @@ public class ProductController {
 //        productService.saveProduct(product);
 //        return "redirect:/products";
 //    }
-
 
 
 }
