@@ -16,8 +16,13 @@ public interface UserRepository extends JpaRepository<Users, Integer> {
     Users findByEmail(String email);
     Users findByPhone(String phone);
     void deleteById(int uid);
+    @Query("SELECT u FROM Users u WHERE u.role_id = ?1")
+    Page<Users> findByRole(Integer role, Pageable pageable);
     @Query("SELECT u FROM Users u WHERE u.fullname LIKE %?1% OR u.email LIKE %?1% OR u.username LIKE %?1%")
     Page<Users> search(String keyword, Pageable pageable);
+    @Query("SELECT u FROM Users u WHERE (u.fullname LIKE %?1% OR u.email LIKE %?1% OR u.username LIKE %?1%) AND u.role_id = ?2")
+    Page<Users> searchByKeywordAndRole(String keyword, Integer role, Pageable pageable);
+
     @Modifying
     @Transactional
     @Query(value = "INSERT INTO Users (fullname, dob, email, phone, address, avatar, username, pass, role_id, status) " +

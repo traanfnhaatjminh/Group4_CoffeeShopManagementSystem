@@ -123,9 +123,20 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public Page<Users> search(String keyword, int pageNo, int pageSize) {
+    public Page<Users> findByRole(Integer role, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
-        return userRepository.search(keyword, pageable);
+        return userRepository.findByRole(role, pageable);
+    }
+
+
+
+    public Page<Users> search(String keyword, Integer role, int pageNo, int pageSize) {
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
+        if (role != null) {
+            return userRepository.searchByKeywordAndRole(keyword, role, pageable);
+        } else {
+            return userRepository.search(keyword, pageable);
+        }
     }
 
 

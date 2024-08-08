@@ -61,11 +61,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pl.codeleak.demos.sbt.model.Category;
 import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.repository.CategoryRepository;
 import pl.codeleak.demos.sbt.repository.ProductRepository;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -170,5 +173,21 @@ public class ProductService {
     }
     public Page<Product> searchProducts2(String keyword, Pageable pageable) {
         return productRepository.findByPnameContaining(keyword, pageable);
+    }
+    public void saveProductToDB(MultipartFile file, String name, String description, int price) {
+        Product product = new Product();
+        product.setPname(name);
+        product.setDescription(description);
+        product.setPrice(price);
+        try {
+            if (!file.isEmpty()) {
+                String fileName = file.getOriginalFilename();
+                file.transferTo(new File("D:/Sem6FSOFT/Process&Tool/Code/Group4_CoffeeShopManagementSystem/uploads/" + fileName));
+                product.setImage("/uploads/" + fileName);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        productRepository.save(product);
     }
 }

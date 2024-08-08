@@ -1,11 +1,14 @@
 package pl.codeleak.demos.sbt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.Category;
 import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.model.Users;
@@ -14,6 +17,8 @@ import pl.codeleak.demos.sbt.service.CategoryService;
 import pl.codeleak.demos.sbt.service.ProductService;
 import pl.codeleak.demos.sbt.service.UserService;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -32,6 +37,9 @@ public class ProductController {
 
     @Autowired
     private CartItemService cartItemService;
+
+    @Value("${file.upload-dir}")
+    private String uploadDir;
 
     @GetMapping("/products")
     public String products(Model model,
@@ -112,6 +120,7 @@ public class ProductController {
         }
     }
 
+
     @GetMapping("/menu")
     public String showMenu(Model model,
                            @RequestParam(defaultValue = "0") int page,
@@ -182,4 +191,30 @@ public class ProductController {
         productService.saveProduct(product);
         return "redirect:/products";
     }
+
+//    @PostMapping("/products/add")
+//    public String saveNewProduct(@ModelAttribute("product") Product product,
+//                                 @RequestParam("file") MultipartFile file,
+//                                 RedirectAttributes redirectAttributes) {
+//        try {
+//            if (!file.isEmpty()) {
+//                String fileName = file.getOriginalFilename();
+//                File directory = new File(uploadDir);
+//                if (!directory.exists()) {
+//                    directory.mkdirs();  // Create the directory if it doesn't exist
+//                }
+//                File destFile = new File(directory, fileName);
+//                file.transferTo(destFile);
+//                product.setImage("/uploads/" + fileName);
+//            }
+//            productService.saveProduct(product);
+//            redirectAttributes.addFlashAttribute("message", "Product added successfully");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            redirectAttributes.addFlashAttribute("message", "Error uploading file: " + e.getMessage());
+//            return "redirect:/products/add?error";
+//        }
+//        return "redirect:/products";
+//    }
+
 }
