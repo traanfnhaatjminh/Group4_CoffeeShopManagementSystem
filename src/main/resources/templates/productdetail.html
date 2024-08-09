@@ -191,24 +191,6 @@
                             </div>
                         </form>
                     </div>
-                    <div th:if="${user == null}">
-                        <div class="d-flex mb-3">
-                            <div class="quantity-control">
-                                <button type="button" id="decreaseQuantity1">-</button>
-                                <label for="inputQuantity"></label><input
-                                    class="form-control text-center me-3"
-                                    type="number"
-                                    id="inputQuantity1"
-                                    name="quantity" value="1"/>
-                                <button type="button" id="increaseQuantity1">+</button>
-                            </div>
-                            <button class="shipping-now-button" type="submit">
-                                <i class="bi-cart-fill me-1"></i>
-                                Thêm vào giỏ hàng
-                            </button>
-                            <h5 style="color: red">Lưu ý: Quý khách bắt buộc đăng nhập vào hệ thống trước khi thêm sản phẩm vào giỏ hàng!</h5>
-                        </div>
-                    </div>
 
                 </div>
             </div>
@@ -296,21 +278,5 @@
     </script>
 
 </div><!-- Templatemo Script -->
-<div th:if="${user == null}">
-    <script>
-        document.getElementById('increaseQuantity1').addEventListener('click', function () {
-            var inputQuantity = document.getElementById('inputQuantity1');
-            inputQuantity.value = parseInt(inputQuantity.value) + 1;
-        });
-
-        document.getElementById('decreaseQuantity1').addEventListener('click', function () {
-            var inputQuantity = document.getElementById('inputQuantity1');
-            if (parseInt(inputQuantity.value) > 1) {
-                inputQuantity.value = parseInt(inputQuantity.value) - 1;
-            }
-        });
-    </script>
-</div>
-
 </body>
 </html>

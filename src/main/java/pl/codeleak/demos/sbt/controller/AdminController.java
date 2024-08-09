@@ -126,7 +126,7 @@ public class AdminController {
     public String filterUsersByRole(@RequestParam(name = "role", required = false) Integer role,
                                     @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
                                     Model model) {
-        int pageSize = 5; // Số phần tử trên một trang
+        int pageSize = 5;
 
         Page<Users> page;
         if (role != null) {

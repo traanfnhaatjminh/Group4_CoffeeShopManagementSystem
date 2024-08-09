@@ -8,9 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.*;
 import pl.codeleak.demos.sbt.service.*;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
@@ -56,16 +58,21 @@ public class CartController {
         if (principal != null) {
             String username = principal.getName();
             Users user = userService.findByUsername(username);
-            int userId = user.getUid();
-            List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
-            double totalPrice = cartItemService.calculateTotalPrice(userId);  // Tính tổng tiền
             model.addAttribute("user", user);
-            model.addAttribute("cartItems", cartItems);
-            model.addAttribute("totalPrice", totalPrice);
+
+            // `cartItems` được lấy từ `RedirectAttributes` nếu tồn tại
+            if (!model.containsAttribute("cartItems")) {
+                List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(user.getUid());
+                double totalPrice = cartItemService.calculateTotalPrice(user.getUid());
+                model.addAttribute("cartItems", cartItems);
+                model.addAttribute("totalPrice", totalPrice);
+            }
+
             model.addAttribute("currentPage", "cart");
         }
         return "checkout";
     }
+
 
     @PostMapping("/cart/add")
     public String addCartItem(@RequestParam("productId") int productId,
@@ -110,7 +117,7 @@ public class CartController {
                              @RequestParam("address") String address,
                              @RequestParam("paymentMethod") String paymentMethod,
                              Principal principal,
-                             Model model) {
+                             Model model, RedirectAttributes redirectAttributes, HttpSession session) {
 
         if (principal != null) {
             String username = principal.getName();
@@ -131,15 +138,16 @@ public class CartController {
             }
 
             cartItemService.clearCart();
-            logger.info("Cart cleared");
-            model.addAttribute("user", user);
-            model.addAttribute("cartItems", cartItems);
-            model.addAttribute("totalPrice", totalPrice);
-            model.addAttribute("currentPage", "cart");
-            model.addAttribute("successMessage", "Thanh toán đơn hàng thành công.");
+            redirectAttributes.addFlashAttribute("cartItems", cartItems);
+            redirectAttributes.addFlashAttribute("totalPrice", totalPrice);
+            redirectAttributes.addFlashAttribute("successMessage", "Thanh toán đơn hàng thành công.");
+            redirectAttributes.addFlashAttribute("phone", phone);
+            redirectAttributes.addFlashAttribute("address", address);
+            redirectAttributes.addFlashAttribute("paymentMethod", paymentMethod);
+
         }
 
-        return "checkout";
+        return "redirect:/cart/checkout";
     }
 
 }

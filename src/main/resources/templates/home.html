@@ -40,15 +40,15 @@
                         <li><a href="#">Contact</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
-                        <li th:if="${username != null}"><a style="color: yellow" href="#"><span th:text="${username}"></span></a></li>
-                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${username != null}"><a href="/profile">Profile</a></li>
-                        <li th:if="${username != null}">
+                        <li th:if="${user != null}"><a style="color: yellow" href="#"><span th:text="${user.getUsername()}"></span></a></li>
+                        <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${user != null}"><a href="/profile">Profile</a></li>
+                        <li th:if="${user != null}">
                             <a class="nav-icon position-relative text-decoration-none" href="/cart">
                                 <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
                                 <span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bg-light text-dark" th:text="${cartItems.size()}"></span>
                             </a>
                         </li>
-                        <li th:if="${username != null}"><a href="/logout">Logout</a></li>
+                        <li th:if="${user != null}"><a href="/logout">Logout</a></li>
                     </ul>
                 </nav>
             </div>
@@ -113,8 +113,17 @@
                             </h3>
                             <hr class="tm-popular-item-hr">
                             <p class="description" th:text="${product.description}"></p>
-                            <div class="order-now-container">
-                                <a href="#" class="order-now-link tm-handwriting-font">Order Now</a>
+                            <div th:if="${user != null}">
+                                <form th:action="@{/cart/add}" method="post">
+                                    <input type="hidden" name="productId" th:value="${product.pid}"/>
+                                    <input type="hidden" name="customerId" th:value="${user.getUid()}"/>
+                                    <input type="hidden" name="quantity" value="1"/>
+                                    <button class="shipping-now-button" style="margin-top: 15%" type="submit">
+                                        <i class="bi-cart-fill me-1"></i>
+                                        Add to cart
+                                    </button>
+                                </form>
+
                             </div>
                         </div>
                     </div>

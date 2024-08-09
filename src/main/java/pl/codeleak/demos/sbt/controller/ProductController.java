@@ -80,7 +80,7 @@ public class ProductController {
             int userId = user.getUid();
             List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(userId);
             model.addAttribute("cartItems", cartItems);
-            model.addAttribute("username", username);
+            model.addAttribute("user", user);
         }
         List<Product> listP = productService.getLastestProducts();
         Iterable<Category> listC = categoryService.getAllCategories();
