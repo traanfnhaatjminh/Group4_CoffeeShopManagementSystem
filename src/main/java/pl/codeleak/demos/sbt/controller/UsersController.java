@@ -44,12 +44,6 @@ public class UsersController {
         return "profile";
     }
 
-
-
-
-//Erorr1 CHoose img
-
-
     
     @PostMapping("/edit")
     public String editProfile(@ModelAttribute Users user, Principal principal, RedirectAttributes redirectAttributes) {
@@ -110,9 +104,9 @@ public class UsersController {
     }
 
     @GetMapping("/history")
-    public String getUserBills(
-                               @RequestParam(defaultValue = "0") int page,
-                               Model model,Principal principal) {
+    public String getUserBills(@RequestParam(defaultValue = "0") int page,
+                               @RequestParam(required = false) String phone,
+                               Model model, Principal principal) {
         String username = principal.getName();
         Users user = userService.findByUsername(username);
         int userId = user.getUid();
@@ -122,11 +116,17 @@ public class UsersController {
         model.addAttribute("page", "profile");
 
         PageRequest pageable = PageRequest.of(page, 5); // 5 bills per page
-        Page<Bill> bills = billService.getBillsByUserId(userId, pageable);
+        Page<Bill> bills;
+
+        if (phone != null && !phone.isEmpty()) {
+            bills = billService.searchBillsByPhone(phone, pageable);
+            model.addAttribute("searchQuery", phone);
+        } else {
+            bills = billService.getBillsByUserId(userId, pageable);
+        }
+
         model.addAttribute("bills", bills);
         model.addAttribute("currentPage", page);
         return "orderhistory";
     }
-
-
 }

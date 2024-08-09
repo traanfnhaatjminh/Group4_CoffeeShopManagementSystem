@@ -226,12 +226,20 @@
                         <h2 class="text-center"><b>Order History</b></h2>
                     </div>
                     <div class="col-sm-4">
-                        <div class="search-box">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="material-icons">&#xE8B6;</i></span>
-                                <input type="text" class="form-control" placeholder="Search&hellip;">
-                            </div>
+                        <div>
+                            <form th:action="@{/profile/history}" method="get">
+                                <div class="input-group mb-3">
+                                    <input type="text" class="form-control" placeholder="Search by phone..."
+                                           aria-label="Recipient's username" aria-describedby="basic-addon2"
+                                           name="phone" th:value="${searchQuery}">
+                                    <div class="input-group-append" style="display: flex">
+                                        <button class="btn btn-outline-secondary" type="submit">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -267,17 +275,19 @@
             <div class="clearfix">
                 <ul class="pagination">
                     <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                        <a th:href="@{/profile/history(page=${currentPage - 1})}" class="page-link">Previous</a>
+                        <a th:href="@{/profile/history(page=${currentPage - 1}, phone=${searchQuery})}"
+                           class="page-link">Previous</a>
                     </li>
 
-                    <!-- Loop through pages -->
                     <li class="page-item" th:each="i : ${#numbers.sequence(0, bills.totalPages - 1)}"
                         th:classappend="${i == currentPage} ? 'active'">
-                        <a th:href="@{/profile/history(page=${i})}" class="page-link" th:text="${i + 1}">1</a>
+                        <a th:href="@{/profile/history(page=${i}, phone=${searchQuery})}" class="page-link"
+                           th:text="${i + 1}">1</a>
                     </li>
 
                     <li class="page-item" th:classappend="${!bills.hasNext()} ? 'disabled'">
-                        <a th:href="@{/profile/history(page=${currentPage + 1})}" class="page-link">Next</a>
+                        <a th:href="@{/profile/history(page=${currentPage + 1}, phone=${searchQuery})}"
+                           class="page-link">Next</a>
                     </li>
                 </ul>
             </div>

@@ -78,4 +78,8 @@ public class BillService {
     public Page<Bill> getBillsByUserId(int userId, Pageable pageable) {
         return billRepository.findByUserId(userId, pageable);
     }
+
+    public Page<Bill> searchBillsByPhone(String phone, Pageable pageable) {
+        return billRepository.findByPhoneContaining(phone, pageable);
+    }
 }

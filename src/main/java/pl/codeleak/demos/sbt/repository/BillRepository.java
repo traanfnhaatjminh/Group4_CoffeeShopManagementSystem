@@ -15,5 +15,6 @@ import java.util.Date;
 public interface BillRepository extends JpaRepository<Bill, Integer> {
     Page<Bill> findByCreatedTimeBetween(Date startDate, Date endDate, Pageable pageable);
     Page<Bill> findByUserId(int userId, Pageable pageable);
+    Page<Bill> findByPhoneContaining(String phone, Pageable pageable);
 }
 
