@@ -32,11 +32,6 @@
             background-color: rgb(244, 243, 243);
         }
 
-        .pagination-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
 
         /* Checked state styling */
         input[type="radio"]:checked + label.paid {
@@ -56,6 +51,12 @@
         .table th, .table td {
             text-align: center;
         }
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 
@@ -69,6 +70,7 @@
                 <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/categories">Categories</a>
                 <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
                 <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
+                <a th:if="${user.getRole_id()==5}" href="/management/jobboard">Job Board</a>
                 <a th:if="${user.getRole_id()==5}" href="#">Statistic</a>
                 <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
             </nav>
@@ -158,7 +160,7 @@
                                         <input type="radio" id="paid" name="status" value="1" th:checked="${bill.status == 1}" class="status-radio" />
                                         <label for="paid" class="status-label paid">Paid</label>
 
-                                        <button type="submit" class="btn btn-secondary">Check</button>
+                                        <button type="submit" class="btn btn-primary">Check</button>
                                     </form>
                                 </td>
 
@@ -168,7 +170,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="row">
+
                     <div class="col-12">
                         <div class="pagination-container" th:unless="${bills.isEmpty()}">
                             <nav aria-label="Page navigation">
@@ -188,7 +190,7 @@
                                     </li>
                                 </ul>
                             </nav>
-                        </div>
+
                     </div>
                 </div>
             </div>
