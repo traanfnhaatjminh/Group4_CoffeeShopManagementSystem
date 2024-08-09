@@ -44,7 +44,7 @@ public class UsersController {
         return "profile";
     }
 
-    
+
     @PostMapping("/edit")
     public String editProfile(@ModelAttribute Users user, Principal principal, RedirectAttributes redirectAttributes) {
         String username = principal.getName();
@@ -116,13 +116,21 @@ public class UsersController {
         model.addAttribute("page", "profile");
 
         PageRequest pageable = PageRequest.of(page, 5); // 5 bills per page
-        Page<Bill> bills;
+        Page<Bill> bills = null;
+        String errorMessage = null;
 
         if (phone != null && !phone.isEmpty()) {
             bills = billService.searchBillsByPhone(phone, pageable);
+            if (bills.isEmpty()) {
+                errorMessage = "Số điện thoại không tồn tại!";
+            }
             model.addAttribute("searchQuery", phone);
         } else {
             bills = billService.getBillsByUserId(userId, pageable);
+        }
+
+        if (errorMessage != null) {
+            model.addAttribute("errorMessage", errorMessage);
         }
 
         model.addAttribute("bills", bills);

@@ -236,10 +236,11 @@
                                         <button class="btn btn-outline-secondary" type="submit">Search</button>
                                     </div>
                                 </div>
+                                <div th:if="${errorMessage != null}" class="text-danger">
+                                    <p th:text="${errorMessage}"></p>
+                                </div>
                             </form>
-
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -261,7 +262,7 @@
                     <td th:text="${#dates.format(bill.createdTime, 'dd/MM/yyyy HH:mm')}"></td>
                     <td th:text="${bill.phone}"></td>
                     <td th:text="${bill.address}"></td>
-                    <td th:text="${bill.totalCost}"></td>
+                    <td th:text="${bill.totalCost}+' VND'"></td>
                     <td th:text="${bill.status == 0 ? 'Chưa thanh toán' : 'Đã thanh toán'}"
                         th:style="${bill.status == 0 ? 'color: red;' : 'color: green;'}">
                     </td>
