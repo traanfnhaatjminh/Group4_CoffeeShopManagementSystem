@@ -20,7 +20,7 @@ public class Cart {
     private int quantity;
     @Column(name = "total_cost")
     private float totalCost;
-    @Column(name = "[user_id]")
+    @Column(name = "user_id")
     private int uid;
 
     public Cart() {

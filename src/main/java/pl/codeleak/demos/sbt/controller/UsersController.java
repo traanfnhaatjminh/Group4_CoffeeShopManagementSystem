@@ -44,6 +44,13 @@ public class UsersController {
         return "profile";
     }
 
+
+
+
+//Erorr1 CHoose img
+
+
+    
     @PostMapping("/edit")
     public String editProfile(@ModelAttribute Users user, Principal principal, RedirectAttributes redirectAttributes) {
         String username = principal.getName();

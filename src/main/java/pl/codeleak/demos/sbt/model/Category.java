@@ -14,7 +14,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int cid;
-    @Column(name = "[group]")
+    @Column(name = "group_name")
     private String groupName;
     @Column(name = "category_name")
     private String categoryName;
@@ -22,6 +22,12 @@ public class Category {
     private String describe;
 
     public Category() {
+    }
+
+    public Category(String groupName, String categoryName, String describe) {
+        this.groupName = groupName;
+        this.categoryName = categoryName;
+        this.describe = describe;
     }
 
     public Category(int cid, String groupName, String categoryName, String describe) {

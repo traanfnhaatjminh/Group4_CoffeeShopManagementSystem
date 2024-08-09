@@ -19,6 +19,14 @@ public class CartItemService {
     @Autowired
     private ProductService productService;
 
+    public void setCartRepository(CartRepository cartRepository) {
+        this.cartRepository = cartRepository;
+    }
+
+    public void setProductService(ProductService productService) {
+        this.productService = productService;
+    }
+
     public List<CartItemWithProduct> getCartItemsByCustomerId(int customerId) {
         Iterable<Cart> cartItems = cartRepository.findByUid(customerId);
         List<CartItemWithProduct> cartItemWithProducts = new ArrayList<>();
