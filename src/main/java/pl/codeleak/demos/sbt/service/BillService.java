@@ -79,7 +79,8 @@ public class BillService {
         return billRepository.findByUserId(userId, pageable);
     }
 
-    public Page<Bill> searchBillsByPhone(String phone, Pageable pageable) {
-        return billRepository.findByPhoneContaining(phone, pageable);
+    public Page<Bill> searchBillsByPhoneAndUserId(String phone, int userId, Pageable pageable) {
+        return billRepository.findByPhoneContainingAndUserId(phone, userId, pageable);
     }
+
 }

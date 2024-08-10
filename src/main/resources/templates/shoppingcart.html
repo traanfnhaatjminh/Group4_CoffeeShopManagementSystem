@@ -112,7 +112,8 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <img class="img-fluid mx-auto d-block image"
-                                                 th:src="'data:image/jpeg;base64,' +${cartItemWithProduct.product.image}" alt="">
+                                                 th:src="'data:image/jpeg;base64,' +${cartItemWithProduct.product.image}"
+                                                 alt="">
                                         </div>
                                         <div class="col-md-8">
                                             <div class="info">
@@ -124,13 +125,19 @@
                                                         </div>
                                                     </div>
 
-                                                    <form th:action="@{/cart/updateQuantity}" method="post">
-                                                        <input type="hidden" name="productId" th:value="${cartItemWithProduct.product.pid}">
-                                                        <input type="hidden" name="cartItemId" th:value="${cartItemWithProduct.cartItem.itemId}">
+                                                    <form th:action="@{/cart/updateQuantity}" method="post"
+                                                          onsubmit="return validateQuantity(this.querySelector('.quantity-input'));">
+                                                        <input type="hidden" name="productId"
+                                                               th:value="${cartItemWithProduct.product.pid}">
+                                                        <input type="hidden" name="cartItemId"
+                                                               th:value="${cartItemWithProduct.cartItem.itemId}">
                                                         <div style="display: flex">
                                                             <div class="col-md-4 quantity">
                                                                 <label for="quantity">Quantity:</label>
-                                                                <input id="quantity" type="number" name="quantity" th:value="${cartItemWithProduct.cartItem.quantity}" class="form-control quantity-input quantity">
+                                                                <input id="quantity" type="number" name="quantity"
+                                                                       th:value="${cartItemWithProduct.cartItem.quantity}"
+                                                                       th:attr="data-max-quantity=${cartItemWithProduct.product.quantity}"
+                                                                       class="form-control quantity-input quantity">
                                                             </div>
                                                         </div>
                                                     </form>
@@ -215,6 +222,23 @@
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script>
+    function validateQuantity(inputElement) {
+        const quantity = parseInt(inputElement.value);
+        const maxQuantity = parseInt(inputElement.getAttribute('data-max-quantity'));
+
+        if (quantity <= 0) {
+            alert('Vui lòng nhập số lượng > 0!');
+            inputElement.value = 1; // Reset the value to 1
+            return false;
+        } else if (quantity > maxQuantity) {
+            alert('Số lượng vượt quá sản phẩm có trong kho, vui lòng nhập lại!');
+            inputElement.value = 1; // Reset the value to max quantity
+            return false;
+        }
+        return true;
+    }
+</script>
 
 </body>
 

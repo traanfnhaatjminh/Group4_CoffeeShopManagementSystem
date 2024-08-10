@@ -68,7 +68,7 @@
             <div class="block-heading">
                 <h2>Payment</h2>
             </div>
-            <form th:action="@{/cart/checkout}" method="post">
+            <form th:action="@{/cart/checkout}" method="post" onsubmit="return validatePhoneNumber(this.querySelector('#card-holder'));">
 
                 <div class="products">
                     <h3 class="title">Checkout</h3>
@@ -199,7 +199,20 @@
             }
         });
     });
+
+    function validatePhoneNumber(inputElement) {
+        const phoneNumber = inputElement.value;
+        const phonePattern = /^(0[3|5|7|8|9])+([0-9]{8})$/;
+
+        if (!phonePattern.test(phoneNumber)) {
+            alert('Sai định dạng số điện thoại tại Việt Nam, vui lòng nhập lại!');
+            inputElement.focus();
+            return false;
+        }
+        return true;
+    }
 </script>
+
 </body>
 
 </html>

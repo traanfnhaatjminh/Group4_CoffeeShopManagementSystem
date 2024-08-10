@@ -11,7 +11,9 @@ import org.springframework.security.core.Authentication;
 
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.Bill;
+import pl.codeleak.demos.sbt.model.BillDetail;
 import pl.codeleak.demos.sbt.model.Users;
+import pl.codeleak.demos.sbt.service.BillDetailService;
 import pl.codeleak.demos.sbt.service.BillService;
 import pl.codeleak.demos.sbt.service.CartItemService;
 import pl.codeleak.demos.sbt.service.UserService;
@@ -31,6 +33,9 @@ public class UsersController {
 
     @Autowired
     private BillService billService;
+
+    @Autowired
+    private BillDetailService billDetailService;
 
     @GetMapping
     public String viewProfile(Model model, Principal principal) {
@@ -120,7 +125,7 @@ public class UsersController {
         String errorMessage = null;
 
         if (phone != null && !phone.isEmpty()) {
-            bills = billService.searchBillsByPhone(phone, pageable);
+            bills = billService.searchBillsByPhoneAndUserId(phone, userId, pageable);
             if (bills.isEmpty()) {
                 errorMessage = "Số điện thoại không tồn tại!";
             }
@@ -137,4 +142,11 @@ public class UsersController {
         model.addAttribute("currentPage", page);
         return "orderhistory";
     }
+
+    @GetMapping("/bill/details/{billId}")
+    @ResponseBody
+    public List<BillDetail> getBillDetails(@PathVariable int billId) {
+        return billDetailService.findByBillId(billId);
+    }
+
 }

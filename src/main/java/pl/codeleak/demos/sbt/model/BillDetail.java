@@ -18,9 +18,11 @@ public class BillDetail {
     private int quantity;
     @Column(name = "price")
     private float price;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pid", insertable = false, updatable = false)
     private Product product;
+
     public BillDetail() {
     }
 

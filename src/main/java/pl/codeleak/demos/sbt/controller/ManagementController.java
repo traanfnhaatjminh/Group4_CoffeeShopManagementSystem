@@ -232,7 +232,7 @@ public class ManagementController {
         model.addAttribute("bill", bill);
         model.addAttribute("billDetails", billDetails);
         model.addAttribute("totalCost", totalCost);
-        return "fragments/billDetail :: billDetailModalContent";
+        return "billDetail :: billDetailModalContent";
     }
 
     @PostMapping("/management/updateBillStatus")

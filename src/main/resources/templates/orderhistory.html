@@ -267,8 +267,10 @@
                         th:style="${bill.status == 0 ? 'color: red;' : 'color: green;'}">
                     </td>
                     <td>
-                        <a href="#" class="view" title="View" data-toggle="tooltip"><i
-                                class="material-icons">&#xE417;</i></a>
+                        <a href="javascript:void(0);" class="view" title="View" data-toggle="modal"
+                           data-target="#billDetailModal" th:attr="data-bill-id=${bill.getBillId()}">
+                            <i class="material-icons">&#xE417;</i>
+                        </a>
                     </td>
                 </tr>
                 </tbody>
@@ -291,6 +293,23 @@
                            class="page-link">Next</a>
                     </li>
                 </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="billDetailModal" tabindex="-1" role="dialog" aria-labelledby="billDetailModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog custom-width" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="billDetailModalLabel">Bill Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Content will be loaded here via AJAX -->
             </div>
         </div>
     </div>
@@ -347,6 +366,27 @@
         }).blur(function () {
             inputGroup.animate({
                 width: boxWidth
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        $('#billDetailModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget); // Button that triggered the modal
+            var billId = button.data('bill-id'); // Extract info from data-* attributes
+
+            var modal = $(this);
+            // Use AJAX to fetch bill details
+            $.ajax({
+                url: '/management/billdetail/' + billId,
+                method: 'GET',
+                success: function (response) {
+                    document.querySelector('#billDetailModal .modal-body').innerHTML = response;
+                }
+                ,
+                error: function () {
+                    modal.find('.modal-body').html('<p>Error loading bill details.</p>');
+                }
             });
         });
     });
