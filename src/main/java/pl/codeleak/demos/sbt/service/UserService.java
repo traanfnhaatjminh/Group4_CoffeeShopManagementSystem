@@ -66,6 +66,10 @@ public class UserService {
         user.setPass(passwordEncoder.encode(user.getPass()));
         return userRepository.save(user);
     }
+    public Users save1(Users user) {
+       // user.setPass(passwordEncoder.encode(user.getPass()));
+        return userRepository.save(user);
+    }
 
     public boolean checkPassword(Users user, String rawPassword) {
         return passwordEncoder.matches(rawPassword, user.getPass());
