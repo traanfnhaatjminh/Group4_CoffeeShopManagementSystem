@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,6 +18,8 @@ import pl.codeleak.demos.sbt.service.CategoryService;
 import pl.codeleak.demos.sbt.service.ProductService;
 import pl.codeleak.demos.sbt.service.UserService;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.ValidationException;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
@@ -102,24 +105,7 @@ public class ProductController {
         }
     }
 
-//    @PostMapping("/products/update")
-//    public String saveUpdatedProduct(@ModelAttribute("product") Product product) {
-//        Optional<Product> existingProduct = productService.getProductById(product.getPid());
-//        if (existingProduct.isPresent()) {
-//            Product updatedProduct = existingProduct.get();
-//            updatedProduct.setPname(product.getPname());
-//            updatedProduct.setDescription(product.getDescription());
-//            updatedProduct.setUnit(product.getUnit());
-//            updatedProduct.setQuantity(product.getQuantity());
-//            updatedProduct.setPrice(product.getPrice());
-//            updatedProduct.setImage(product.getImage());
-//            updatedProduct.setCategoryId(product.getCategoryId());
-//            productService.updateProduct(updatedProduct);
-//            return "redirect:/products";
-//        } else {
-//            return "redirect:/products";
-//        }
-//    }
+
 
 
     @PostMapping("/products/update")
@@ -161,24 +147,92 @@ public class ProductController {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    @PostMapping("/products/add")
+//    public String saveNewProduct(//@ModelAttribute("product") Product product,
+//                                 @RequestParam("file") MultipartFile file,
+//                                 @RequestParam("pname") String name,
+//                                 @RequestParam("description") String description,
+//                                 @RequestParam("unit") String unit,
+//                                 @RequestParam("quantity") int quantity,
+//                                 @RequestParam("price") float price,
+//                                 @RequestParam("categoryId") int categoryId,
+//                                 BindingResult bindingResult,
+//                                 RedirectAttributes redirectAttributes
+//    ) {
+//
+////        //   productService.saveProduct(product);
+////        productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
+////        redirectAttributes.addFlashAttribute("message", "Product added successfully");
+//
+//        try {
+//            productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
+//            redirectAttributes.addFlashAttribute("message", "Product added successfully");
+//        } catch (ValidationException e) {
+//            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+//            return "redirect:/products/add";
+//        }
+//
+//        return "redirect:/products";
+//    }
+
     @PostMapping("/products/add")
-    public String saveNewProduct(//@ModelAttribute("product") Product product,
+    public String saveNewProduct(@ModelAttribute("product") Product product,
+                                 BindingResult bindingResult,
                                  @RequestParam("file") MultipartFile file,
-                                 @RequestParam("pname") String name,
-                                 @RequestParam("description") String description,
-                                 @RequestParam("unit") String unit,
-                                 @RequestParam("quantity") int quantity,
-                                 @RequestParam("price") float price,
-                                 @RequestParam("categoryId") int categoryId,
-                                 RedirectAttributes redirectAttributes
-    ) {
+                                 Model model,
+                                 HttpSession session) {
 
-        //   productService.saveProduct(product);
-        productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
-        redirectAttributes.addFlashAttribute("message", "Product added successfully");
+        String imagePath = null;
+        try {
+            if (!file.isEmpty()) {
+                imagePath = saveTemporaryFile(file);
+                session.setAttribute("imagePath", imagePath);
+            }
 
-        return "redirect:/products";
+            productService.saveProductToDB(file, product.getPname(), product.getDescription(), product.getUnit(), product.getQuantity(), product.getPrice(), product.getCategoryId());
+            session.removeAttribute("imagePath");
+            model.addAttribute("message", "Product added successfully");
+            return "redirect:/products";
+        } catch (ValidationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("product", product);
+            model.addAttribute("categories", categoryService.getAllCategories());
+
+            if (imagePath != null) {
+                model.addAttribute("imagePreview", imagePath);
+            }
+
+            return "addproduct";
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+    private String saveTemporaryFile(MultipartFile file) throws IOException {
+        // Lưu file tạm thời và trả về đường dẫn
+        String tempDir = System.getProperty("java.io.tmpdir");
+        String fileName = file.getOriginalFilename();
+        File tempFile = new File(tempDir, fileName);
+        file.transferTo(tempFile);
+        return tempFile.getAbsolutePath();
+    }
+
+
 
 
     @GetMapping("/menu")
@@ -248,11 +302,7 @@ public class ProductController {
         return "addproduct";
     }
 
-//    @PostMapping("/products/add")
-//    public String saveNewProduct(@ModelAttribute("product") Product product) {
-//        productService.saveProduct(product);
-//        return "redirect:/products";
-//    }
+
 
 
 }

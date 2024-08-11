@@ -1,115 +1,82 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en">-->
-<!--<head>-->
-<!--    <meta charset="UTF-8">-->
-<!--    <title>Add Product</title>-->
-<!--    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">-->
-<!--</head>-->
-<!--<body>-->
-<!--<div class="container">-->
-<!--    <h1 class="mt-5 mb-4">Add Product</h1>-->
-<!--    <form th:action="@{/products/add}" th:object="${product}" method="post" class="needs-validation" novalidate>-->
-<!--        <div class="form-group">-->
-<!--            <label for="pname">Name</label>-->
-<!--            <input type="text" class="form-control" id="pname" th:field="*{pname}" required>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="description">Description</label>-->
-<!--            <textarea class="form-control" id="description" th:field="*{description}" rows="3" required></textarea>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="unit">Unit</label>-->
-<!--            <input type="text" class="form-control" id="unit" th:field="*{unit}" required>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="quantity">Quantity</label>-->
-<!--            <input type="number" class="form-control" id="quantity" th:field="*{quantity}" required>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="price">Price</label>-->
-<!--            <input type="number" class="form-control" id="price" th:field="*{price}" required>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="image">Image URL</label>-->
-<!--            <input type="text" class="form-control" id="image" th:field="*{image}" required>-->
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <label for="categoryId">Category Name</label>-->
-<!--            <select class="form-control" id="categoryId" th:field="*{categoryId}" required>-->
-<!--                <option th:each="category : ${categories}"-->
-<!--                        th:value="${category.getCid()}"-->
-<!--                        th:text="${category.getCategoryName()}"></option>-->
-<!--            </select>-->
-<!--        </div>-->
-<!--        <button type="submit" class="btn btn-primary">Add</button>-->
-<!--    </form>-->
-<!--</div>-->
-<!--<script>-->
-<!--    (function() {-->
-<!--        'use strict';-->
-<!--        window.addEventListener('load', function() {-->
-<!--            var forms = document.getElementsByClassName('needs-validation');-->
-<!--            var validation = Array.prototype.filter.call(forms, function(form) {-->
-<!--                form.addEventListener('submit', function(event) {-->
-<!--                    if (form.checkValidity() === false) {-->
-<!--                        event.preventDefault();-->
-<!--                        event.stopPropagation();-->
-<!--                    }-->
-<!--                    form.classList.add('was-validated');-->
-<!--                }, false);-->
-<!--            });-->
-<!--        }, false);-->
-<!--    })();-->
-<!--</script>-->
-<!--</body>-->
-<!--</html>-->
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Add Product</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1055;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
 
-
-    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
-        <p th:text="${errorMessage}"></p>
+    <!-- Thông báo lỗi dạng Toast -->
+    <div th:if="${errorMessage}" class="toast-container">
+        <div class="toast show align-items-center text-white bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <p th:text="${errorMessage}"></p>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
     </div>
-    <div th:if="${successMessage}" class="alert alert-success" role="alert">
-        <p th:text="${successMessage}"></p>
+
+    <!-- Hiển thị thông báo thành công dưới dạng Toast -->
+    <div th:if="${message}" class="toast-container">
+        <div class="toast show align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <p th:text="${message}"></p>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
     </div>
-
-
 
     <h1 class="mt-5 mb-4">Add Product</h1>
     <form th:action="@{/products/add}" th:object="${product}" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div class="form-group">
             <label for="pname">Name</label>
             <input type="text" class="form-control" id="pname" th:field="*{pname}" required>
+            <!-- Hiển thị lỗi cho tên sản phẩm -->
+
         </div>
         <div class="form-group">
             <label for="description">Description</label>
             <textarea class="form-control" id="description" th:field="*{description}" rows="3" required></textarea>
+            <!-- Hiển thị lỗi cho mô tả sản phẩm -->
+
         </div>
         <div class="form-group">
             <label for="unit">Unit</label>
             <input type="text" class="form-control" id="unit" th:field="*{unit}" required>
+            <!-- Hiển thị lỗi cho đơn vị sản phẩm -->
+
         </div>
         <div class="form-group">
             <label for="quantity">Quantity</label>
             <input type="number" class="form-control" id="quantity" th:field="*{quantity}" required>
+            <!-- Hiển thị lỗi cho số lượng sản phẩm -->
+
         </div>
         <div class="form-group">
             <label for="price">Price</label>
             <input type="number" class="form-control" id="price" th:field="*{price}" required>
+            <!-- Hiển thị lỗi cho giá sản phẩm -->
+
         </div>
         <div class="form-group">
             <label for="file">Image</label>
-            <input type="file" class="form-control" id="file" name="file" required>
+            <input type="file" class="form-control" id="file" name="file">
+            <!-- Hiển thị ảnh đã tải lên nếu có -->
+
         </div>
         <div class="form-group">
             <label for="categoryId">Category Name</label>
@@ -118,26 +85,25 @@
                         th:value="${category.getCid()}"
                         th:text="${category.getCategoryName()}"></option>
             </select>
+            <!-- Hiển thị lỗi cho danh mục -->
+
         </div>
         <button type="submit" class="btn btn-primary">Add</button>
     </form>
 </div>
+
+<!-- Bootstrap's JavaScript (including toast handling) -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
 <script>
-    (function() {
-        'use strict';
-        window.addEventListener('load', function() {
-            var forms = document.getElementsByClassName('needs-validation');
-            var validation = Array.prototype.filter.call(forms, function(form) {
-                form.addEventListener('submit', function(event) {
-                    if (form.checkValidity() === false) {
-                        event.preventDefault();
-                        event.stopPropagation();
-                    }
-                    form.classList.add('was-validated');
-                }, false);
-            });
-        }, false);
-    })();
+    // Script để tự động ẩn Toast sau một khoảng thời gian
+    document.addEventListener('DOMContentLoaded', function () {
+        const toastElList = [].slice.call(document.querySelectorAll('.toast'));
+        const toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl, { delay: 5000 });
+        });
+        toastList.forEach(toast => toast.show());
+    });
 </script>
 </body>
 </html>

@@ -5,6 +5,10 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Setter
 @Getter
@@ -21,11 +25,14 @@ public class Product {
     @Column(name = "description")
     private String description;
 
+
     @Column(name = "unit")
     private String unit;
 
+
     @Column(name = "quantity")
     private int quantity;
+
 
     @Column(name = "price")
     private float price;
