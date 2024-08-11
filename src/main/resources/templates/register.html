@@ -3,6 +3,282 @@
 
 
 
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Register</title>-->
+<!--    <style>-->
+<!--        @import url('https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap');-->
+
+<!--        * {-->
+<!--            margin: 0;-->
+<!--            padding: 0;-->
+<!--            box-sizing: border-box;-->
+<!--            font-family: 'Poppins', sans-serif;-->
+<!--        }-->
+
+<!--        body {-->
+<!--            min-height: 100vh;-->
+<!--            display: flex;-->
+<!--            align-items: center;-->
+<!--            justify-content: center;-->
+<!--            background: #f4e6408a;-->
+<!--        }-->
+
+<!--        .wrapper {-->
+<!--            position: relative;-->
+<!--            max-width: 430px;-->
+<!--            width: 100%;-->
+<!--            background: #fff;-->
+<!--            padding: 34px;-->
+<!--            border-radius: 6px;-->
+<!--            box-shadow: 0 5px 10px rgba(0,0,0,0.2);-->
+<!--        }-->
+
+<!--        .wrapper h2 {-->
+<!--            font-size: 22px;-->
+<!--            font-weight: 600;-->
+<!--            color: #333;-->
+<!--            margin-bottom: 20px;-->
+<!--            position: relative;-->
+<!--        }-->
+
+<!--        .wrapper h2::before {-->
+<!--            content: '';-->
+<!--            position: absolute;-->
+<!--            left: 0;-->
+<!--            bottom: 0;-->
+<!--            height: 3px;-->
+<!--            width: 28px;-->
+<!--            border-radius: 12px;-->
+<!--            background: #4070f4;-->
+<!--        }-->
+
+<!--        .input-box {-->
+<!--            height: 52px;-->
+<!--            margin: 18px 0;-->
+<!--        }-->
+
+<!--        .input-box input {-->
+<!--            height: 100%;-->
+<!--            width: 100%;-->
+<!--            outline: none;-->
+<!--            padding: 0 15px;-->
+<!--            font-size: 17px;-->
+<!--            font-weight: 400;-->
+<!--            color: #333;-->
+<!--            border: 1.5px solid #C7BEBE;-->
+<!--            border-bottom-width: 2.5px;-->
+<!--            border-radius: 6px;-->
+<!--            transition: all 0.3s ease;-->
+<!--        }-->
+
+<!--        .input-box input:focus,-->
+<!--        .input-box input:valid {-->
+<!--            border-color: #4070f4;-->
+<!--        }-->
+
+<!--        .input-box.button input {-->
+<!--            color: #fff;-->
+<!--            letter-spacing: 1px;-->
+<!--            border: none;-->
+<!--            background: #4070f4;-->
+<!--            cursor: pointer;-->
+<!--        }-->
+
+<!--        .input-box.button input:hover {-->
+<!--            background: #0e4bf1;-->
+<!--        }-->
+
+<!--        .error-message {-->
+<!--            color: red;-->
+<!--            font-size: 14px;-->
+<!--            margin-top: 10px;-->
+<!--        }-->
+
+<!--        .login-link {-->
+<!--            margin-top: 20px;-->
+<!--            text-align: center;-->
+<!--            color: #333;-->
+<!--        }-->
+
+<!--        .login-link a {-->
+<!--            color: #4070f4;-->
+<!--            text-decoration: none;-->
+<!--        }-->
+
+<!--        .login-link a:hover {-->
+<!--            text-decoration: underline;-->
+<!--        }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--&lt;!&ndash;<div class="wrapper">&ndash;&gt;-->
+<!--&lt;!&ndash;    <h2>Register</h2>&ndash;&gt;-->
+<!--&lt;!&ndash;    <form th:action="@{/register}" method="post" class="register-form" enctype="multipart/form-data" id="registerForm">&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="text" name="fullname" placeholder="Full Name" required />&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="date" name="dob" placeholder="Date of Birth" required />&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="email" name="email" placeholder="Email" required />&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="text" name="phone" placeholder="Phone" required />&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="text" name="address" placeholder="Address" required />&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="text" name="username" placeholder="Username" required />&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="password" name="pass" id="pass" placeholder="Password" required />&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required />&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="input-box button">&ndash;&gt;-->
+<!--&lt;!&ndash;            <input type="submit" value="Register">&ndash;&gt;-->
+<!--&lt;!&ndash;        </div>&ndash;&gt;-->
+<!--&lt;!&ndash;        <div class="error-message" id="error-message" th:text="${error}"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;    </form>&ndash;&gt;-->
+<!--&lt;!&ndash;    <div class="login-link">&ndash;&gt;-->
+<!--&lt;!&ndash;        <p>Đã có tài khoản? <a th:href="@{/login}">Login</a></p>&ndash;&gt;-->
+<!--&lt;!&ndash;    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--<div class="wrapper">-->
+<!--    <h2>Register</h2>-->
+<!--    <form th:action="@{/register}" method="post" class="register-form" enctype="multipart/form-data" id="registerForm">-->
+<!--        <div class="input-box">-->
+<!--            <input type="text" name="fullname" placeholder="Full Name" th:value="${user.fullname}" required />-->
+<!--            <span class="error-message" th:text="${fullnameError}"></span>-->
+<!--        </div>-->
+<!--        <div class="input-box">-->
+<!--            <input type="date" name="dob" placeholder="Date of Birth" th:value="${user.dob}" required />-->
+<!--        </div>-->
+<!--        <div class="input-box">-->
+<!--            <input type="email" name="email" placeholder="Email" th:value="${user.email}" required />-->
+<!--            <span class="error-message" th:text="${emailError}"></span>-->
+<!--        </div>-->
+<!--        <div class="input-box">-->
+<!--            <input type="text" name="phone" placeholder="Phone" th:value="${user.phone}" required />-->
+<!--            <span class="error-message" th:text="${phoneError}"></span>-->
+<!--        </div>-->
+<!--        <div class="input-box">-->
+<!--            <input type="text" name="address" placeholder="Address" th:value="${user.address}" required />-->
+<!--        </div>-->
+<!--        <div class="input-box">-->
+<!--            <input type="text" name="username" placeholder="Username" th:value="${user.username}" required />-->
+<!--            <span class="error-message" th:text="${usernameError}"></span>-->
+<!--        </div>-->
+<!--        <div class="input-box">-->
+<!--            <input type="password" name="pass" id="pass" placeholder="Password" required />-->
+
+<!--        </div>-->
+<!--        <div class="input-box">-->
+<!--            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required />-->
+<!--            <span class="error-message" id="confirm-password-error"></span>-->
+<!--        </div>-->
+<!--        <div class="input-box button">-->
+<!--            <input type="submit" value="Register">-->
+<!--        </div>-->
+<!--        <div class="error-message" th:text="${generalError}"></div>-->
+<!--    </form>-->
+<!--    <div class="login-link">-->
+<!--        <p>Đã có tài khoản? <a th:href="@{/login}">Login</a></p>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+<!--<script>-->
+<!--    // document.getElementById('registerForm').addEventListener('submit', function(event) {-->
+<!--    //     var password = document.getElementById('pass').value;-->
+<!--    //     var confirmPassword = document.getElementById('confirm_password').value;-->
+<!--    //     var errorMessage = document.getElementById('error-message');-->
+<!--    //-->
+<!--    //     if (password !== confirmPassword) {-->
+<!--    //         event.preventDefault();-->
+<!--    //         errorMessage.textContent = 'Passwords do not match';-->
+<!--    //     }-->
+<!--    // });-->
+
+
+<!--    document.getElementById('registerForm').addEventListener('submit', function(event) {-->
+<!--        // Clear previous error messages-->
+<!--        var emailError = document.getElementById('email-error');-->
+<!--        var phoneError = document.getElementById('phone-error');-->
+<!--        var usernameError = document.getElementById('username-error');-->
+<!--        var confirmPasswordError = document.getElementById('confirm-password-error');-->
+
+<!--        emailError.textContent = '';-->
+<!--        phoneError.textContent = '';-->
+<!--        usernameError.textContent = '';-->
+<!--        confirmPasswordError.textContent = '';-->
+
+<!--        var email = document.getElementsByName('email')[0].value;-->
+<!--        var phone = document.getElementsByName('phone')[0].value;-->
+<!--        var username = document.getElementsByName('username')[0].value;-->
+<!--        var password = document.getElementById('pass').value;-->
+<!--        var confirmPassword = document.getElementById('confirm_password').value;-->
+
+<!--        var hasErrors = false;-->
+
+<!--        // Check if passwords match-->
+<!--        if (password !== confirmPassword) {-->
+<!--            event.preventDefault();-->
+<!--            confirmPasswordError.textContent = 'Confirm Password không khớp với Password';-->
+<!--            hasErrors = true;-->
+<!--        }-->
+
+<!--        // Example validation for email-->
+<!--        if (!validateEmail(email)) {-->
+<!--            event.preventDefault();-->
+<!--            emailError.textContent = 'Email không hợp lệ';-->
+<!--            hasErrors = true;-->
+<!--        }-->
+
+<!--        // Example validation for phone-->
+<!--        if (!validatePhone(phone)) {-->
+<!--            event.preventDefault();-->
+<!--            phoneError.textContent = 'Số điện thoại không hợp lệ';-->
+<!--            hasErrors = true;-->
+<!--        }-->
+
+<!--        // Example validation for username-->
+<!--        if (username.length < 3) {-->
+<!--            event.preventDefault();-->
+<!--            usernameError.textContent = 'Username phải có ít nhất 3 ký tự';-->
+<!--            hasErrors = true;-->
+<!--        }-->
+
+<!--        // Add more validation logic as needed-->
+<!--    });-->
+
+<!--    function validateEmail(email) {-->
+<!--        var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;-->
+<!--        return re.test(String(email).toLowerCase());-->
+<!--    }-->
+
+<!--    function validatePhone(phone) {-->
+<!--        var re = /^\d{10}$/;  // Giả sử số điện thoại là 10 chữ số-->
+<!--        return re.test(String(phone));-->
+<!--    }-->
+
+
+
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->
+
+
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -119,53 +395,105 @@
     <h2>Register</h2>
     <form th:action="@{/register}" method="post" class="register-form" enctype="multipart/form-data" id="registerForm">
         <div class="input-box">
-            <input type="text" name="fullname" placeholder="Full Name" required />
+            <input type="text" name="fullname" placeholder="Full Name" th:value="${user.fullname}" required />
+            <span class="error-message" id="fullname-error" th:text="${fullnameError}"></span>
         </div>
         <div class="input-box">
-            <input type="date" name="dob" placeholder="Date of Birth" required />
+            <input type="date" name="dob" placeholder="Date of Birth" th:value="${user.dob}" required />
         </div>
         <div class="input-box">
-            <input type="email" name="email" placeholder="Email" required />
+            <input type="email" name="email" placeholder="Email" th:value="${user.email}" required />
+            <span class="error-message" id="email-error" th:text="${emailError}"></span>
         </div>
         <div class="input-box">
-            <input type="text" name="phone" placeholder="Phone" required />
+            <input type="text" name="phone" placeholder="Phone" th:value="${user.phone}" required />
+            <span class="error-message" id="phone-error" th:text="${phoneError}"></span>
         </div>
         <div class="input-box">
-            <input type="text" name="address" placeholder="Address" required />
+            <input type="text" name="address" placeholder="Address" th:value="${user.address}" required />
         </div>
         <div class="input-box">
-            <input type="text" name="username" placeholder="Username" required />
+            <input type="text" name="username" placeholder="Username" th:value="${user.username}" required />
+            <span class="error-message" id="username-error" th:text="${usernameError}"></span>
         </div>
         <div class="input-box">
             <input type="password" name="pass" id="pass" placeholder="Password" required />
         </div>
         <div class="input-box">
             <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required />
+            <span class="error-message" id="confirm-password-error"></span>
         </div>
         <div class="input-box button">
             <input type="submit" value="Register">
         </div>
-        <div class="error-message" id="error-message" th:text="${error}"></div>
+        <div class="error-message" th:text="${generalError}"></div>
     </form>
     <div class="login-link">
         <p>Đã có tài khoản? <a th:href="@{/login}">Login</a></p>
     </div>
 </div>
+
 <script>
     document.getElementById('registerForm').addEventListener('submit', function(event) {
+        // Clear previous error messages
+        var emailError = document.getElementById('email-error');
+        var phoneError = document.getElementById('phone-error');
+        var usernameError = document.getElementById('username-error');
+        var confirmPasswordError = document.getElementById('confirm-password-error');
+
+        emailError.textContent = '';
+        phoneError.textContent = '';
+        usernameError.textContent = '';
+        confirmPasswordError.textContent = '';
+
+        var email = document.getElementsByName('email')[0].value;
+        var phone = document.getElementsByName('phone')[0].value;
+        var username = document.getElementsByName('username')[0].value;
         var password = document.getElementById('pass').value;
         var confirmPassword = document.getElementById('confirm_password').value;
-        var errorMessage = document.getElementById('error-message');
 
+        var hasErrors = false;
+
+        // Check if passwords match
         if (password !== confirmPassword) {
             event.preventDefault();
-            errorMessage.textContent = 'Passwords do not match';
+            confirmPasswordError.textContent = 'Confirm Password không khớp với Password';
+            hasErrors = true;
         }
+
+        // Example validation for email
+        if (!validateEmail(email)) {
+            event.preventDefault();
+            emailError.textContent = 'Email không hợp lệ';
+            hasErrors = true;
+        }
+
+        // Example validation for phone
+        if (!validatePhone(phone)) {
+            event.preventDefault();
+            phoneError.textContent = 'Số điện thoại là số có 10 chữ số';
+            hasErrors = true;
+        }
+
+        // Example validation for username
+        if (username.length < 3) {
+            event.preventDefault();
+            usernameError.textContent = 'Username phải có ít nhất 3 ký tự';
+            hasErrors = true;
+        }
+
+        // Add more validation logic as needed
     });
+
+    function validateEmail(email) {
+        var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(String(email).toLowerCase());
+    }
+
+    function validatePhone(phone) {
+        var re = /^\d{10}$/;  // Giả sử số điện thoại là 10 chữ số
+        return re.test(String(phone));
+    }
 </script>
 </body>
 </html>
-
-
-
-
