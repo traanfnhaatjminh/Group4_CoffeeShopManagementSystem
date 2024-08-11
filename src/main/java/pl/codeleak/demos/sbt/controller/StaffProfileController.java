@@ -35,7 +35,7 @@ public class StaffProfileController {
         existingUser.setEmail(user.getEmail());
         existingUser.setPhone(user.getPhone());
 
-        userService.save(existingUser);
+        userService.save1(existingUser);
 
         redirectAttributes.addFlashAttribute("message", "Edit Successfully!");
         return "redirect:/staffProfile";

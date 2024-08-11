@@ -12,6 +12,7 @@
     <link href="/css/font-awesome.min.css" rel="stylesheet">
     <link href="/css/templatemo-style.css" rel="stylesheet">
     <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <style>
         .tm-product {
@@ -78,6 +79,18 @@
 
         .search-form button:hover {
             background-color: #555;
+        }
+        .no-products-message {
+            font-size: 18px;
+            color: #666;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .no-products-message i {
+            font-size: 24px;
+            color: #333;
+            margin-right: 10px;
         }
     </style>
 </head>
@@ -167,8 +180,23 @@
             <div class="col-lg-12">
                 <form class="search-form" method="get" action="/menu">
                     <input type="text" name="search" placeholder="Search products..." th:value="${searchQuery}">
+                    <input type="hidden" name="categoryId" th:value="${selectedCategoryId}">
                     <button type="submit">Search</button>
                 </form>
+                <form class="page-size-form" method="get" action="/menu">
+                    <label for="pageSize">Products per page:</label>
+                    <select name="pageSize" id="pageSize" onchange="this.form.submit()">
+                        <option value="2" th:text="'2'" th:selected="${pageSize == 2}">2</option>
+                        <option value="4" th:text="'4'" th:selected="${pageSize == 4}">4</option>
+                        <option value="5" th:text="'5'" th:selected="${pageSize == 5}">5</option>
+                        <option value="8" th:text="'8'" th:selected="${pageSize == 8}">8</option>
+                        <!-- Add more options as needed -->
+                    </select>
+                    <input type="hidden" name="search" th:value="${searchQuery}">
+                    <input type="hidden" name="categoryId" th:value="${selectedCategoryId}">
+                </form>
+
+
                 <div class="row">
                     <div class="col-lg-3 col-md-3">
                         <div class="tm-position-relative margin-bottom-30">
@@ -187,10 +215,14 @@
                             <img src="/img/vertical-menu-bg.png" alt="Menu bg" class="tm-side-menu-bg">
                         </div>
                     </div>
+
                     <div class="col-lg-9 col-md-9">
                         <div class="tm-menu-product-content">
+                            <!-- Display the message if no products are found -->
+                            <div th:if="${#lists.isEmpty(products)}" class="no-products-message">
+                                <i class="fas fa-coffee"></i> No product found
+                            </div>
                             <div class="tm-product" th:each="product : ${products}">
-
                                 <img th:src="'data:image/jpeg;base64,' + ${product.image}" alt="Product">
                                 <div class="tm-product-text">
                                     <h3 class="tm-product-title"><a
@@ -213,17 +245,15 @@
 
                             </div>
                         </div>
-                        <div class="pagination">
-                            <a th:if="${currentPage > 0}"
-                               th:href="@{/menu(page=${currentPage - 1}, categoryId=${selectedCategoryId}, search=${searchQuery})}">&laquo;
-                                Previous</a>
-                            <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
-                                <a th:href="@{/menu(page=${i}, categoryId=${selectedCategoryId}, search=${searchQuery})}"
-                                   th:text="${i + 1}" th:classappend="${i == currentPage ? 'active' : ''}">1</a>
-                            </span>
-                            <a th:if="${currentPage < totalPages - 1}"
-                               th:href="@{/menu(page=${currentPage + 1}, categoryId=${selectedCategoryId}, search=${searchQuery})}">Next
-                                &raquo;</a>
+                        <div th:if="${not #lists.isEmpty(products)}">
+                            <div class="pagination">
+                                <a th:if="${currentPage > 0}" th:href="@{/menu(page=${currentPage - 1}, pageSize=${pageSize}, categoryId=${selectedCategoryId}, search=${searchQuery})}">&laquo; Previous</a>
+                                <span th:each="i : ${#numbers.sequence(0, totalPages - 1)}">
+            <a th:href="@{/menu(page=${i}, pageSize=${pageSize}, categoryId=${selectedCategoryId}, search=${searchQuery})}"
+               th:text="${i + 1}" th:classappend="${i == currentPage ? 'active' : ''}">1</a>
+        </span>
+                                <a th:if="${currentPage < totalPages - 1}" th:href="@{/menu(page=${currentPage + 1}, pageSize=${pageSize}, categoryId=${selectedCategoryId}, search=${searchQuery})}">Next &raquo;</a>
+                            </div>
                         </div>
                     </div>
                 </div>

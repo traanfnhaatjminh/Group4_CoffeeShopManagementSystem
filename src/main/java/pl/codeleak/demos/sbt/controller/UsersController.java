@@ -49,7 +49,6 @@ public class UsersController {
         return "profile";
     }
 
-
     @PostMapping("/edit")
     public String editProfile(@ModelAttribute Users user, Principal principal, RedirectAttributes redirectAttributes) {
         String username = principal.getName();
@@ -62,7 +61,7 @@ public class UsersController {
         existingUser.setEmail(user.getEmail());
         existingUser.setPhone(user.getPhone());
 
-        userService.save(existingUser);
+        userService.save1(existingUser);
 
         redirectAttributes.addFlashAttribute("message", "Edit Successfully!");
         return "redirect:/profile";

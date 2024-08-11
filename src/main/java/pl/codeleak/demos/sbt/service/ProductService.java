@@ -56,6 +56,7 @@
 
 package pl.codeleak.demos.sbt.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -68,6 +69,7 @@ import pl.codeleak.demos.sbt.model.Product;
 import pl.codeleak.demos.sbt.repository.CategoryRepository;
 import pl.codeleak.demos.sbt.repository.ProductRepository;
 
+import javax.validation.ValidationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
@@ -85,6 +87,7 @@ public class ProductService {
     public void deleteProductById(int id) {
         productRepository.deleteById(id);
     }
+
     public void saveProduct(Product product) {
         productRepository.save(product);
     }
@@ -149,8 +152,18 @@ public class ProductService {
     public Page<Product> getProductsManagement(int page, int size) {
         return productRepository.findAll(PageRequest.of(page, size));
     }
-    public Page<Product> searchProducts(String query, Pageable pageable) {
-        Page<Product> productPage = productRepository.findByPnameContainingIgnoreCase(query, pageable);
+
+    public Page<Product> searchProducts(String query, Integer categoryId, Pageable pageable) {
+        Page<Product> productPage;
+
+        if (categoryId != null) {
+            // Search by both name and category
+            productPage = productRepository.findByPnameContainingIgnoreCaseAndCategoryId(query, categoryId, pageable);
+        } else {
+            // Search only by name
+            productPage = productRepository.findByPnameContainingIgnoreCase(query, pageable);
+        }
+
         productPage.forEach(this::setCategoryName);
         return productPage;
     }
@@ -170,21 +183,44 @@ public class ProductService {
     public Page<Product> getProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
+
     public Page<Product> getProductsByCategory(int categoryId, Pageable pageable) {
         return productRepository.findByCategoryId(categoryId, pageable);
     }
+
     public Page<Product> searchProducts2(String keyword, Pageable pageable) {
         return productRepository.findByPnameContaining(keyword, pageable);
     }
-    public void  saveProductToDB(MultipartFile file,String name,String description,String unit, int quantity
-            ,float price, int categoryId)
-    {
+
+    public void updateProductWithImage(MultipartFile file, Product product) throws IOException {
+        if (file != null && !file.isEmpty()) {
+            String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+            if (fileName.contains("..")) {
+                throw new ValidationException("Not a valid file");
+            }
+            product.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
+        }
+
+        validateProductInput(product.getPname(), product.getUnit(), product.getQuantity(), product.getPrice(), product.getCategoryId());
+
+        productRepository.save(product);
+    }
+
+    public void saveProductToDB(MultipartFile file, String name, String description, String unit, int quantity
+            , float price, int categoryId) {
+
+        validateProductInput(name, unit, quantity, price, categoryId);
         Product p = new Product();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        if(fileName.contains(".."))
-        {
+        String contentType = file.getContentType();
+        if (fileName.contains("..")) {
             System.out.println("not a a valid file");
         }
+        // Kiểm tra xem loại file có phải là ảnh hay không
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new ValidationException("File không phải là ảnh");
+        }
+
         try {
             p.setImage(Base64.getEncoder().encodeToString(file.getBytes()));
         } catch (IOException e) {
@@ -199,10 +235,31 @@ public class ProductService {
         p.setPrice(price);
         p.setCategoryId(categoryId);
 
+
         productRepository.save(p);
     }
-    public List<Product> getAllProduct()
-    {
+
+    public List<Product> getAllProduct() {
         return productRepository.findAll();
     }
+
+
+    private void validateProductInput(String name, String unit, int quantity, float price, int categoryId) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new ValidationException("Tên sản phẩm không được để trống");
+        }
+        if (unit == null || unit.trim().isEmpty()) {
+            throw new ValidationException("Đơn vị không được để trống");
+        }
+        if (quantity < 0) {
+            throw new ValidationException("Số lượng phải là số nguyên không âm");
+        }
+        if (price < 0) {
+            throw new ValidationException("Giá phải là số không âm");
+        }
+        if (categoryId <= 0) {
+            throw new ValidationException("Danh mục không được để trống");
+        }
+    }
+
 }

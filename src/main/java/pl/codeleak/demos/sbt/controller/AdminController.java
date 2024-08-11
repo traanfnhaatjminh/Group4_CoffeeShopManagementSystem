@@ -149,7 +149,7 @@ public class AdminController {
         if (existingUser != null) {
             existingUser.setStatus(user.getStatus());
             existingUser.setRole_id(user.getRole_id());
-            userService.save(existingUser);
+            userService.save1(existingUser);
             redirectAttributes.addFlashAttribute("message", "User status and role updated successfully!");
         } else {
             redirectAttributes.addFlashAttribute("error", "User not found!");

@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -17,6 +18,8 @@ import pl.codeleak.demos.sbt.service.CategoryService;
 import pl.codeleak.demos.sbt.service.ProductService;
 import pl.codeleak.demos.sbt.service.UserService;
 
+import javax.servlet.http.HttpSession;
+import javax.validation.ValidationException;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
@@ -71,7 +74,6 @@ public class ProductController {
         model.addAttribute("selectedCategoryId", categoryId);
         return "homepage";
     }
-
     @GetMapping("/homepage")
     public String homepage(Model model, Principal principal) {
         if (principal != null) {
@@ -102,24 +104,7 @@ public class ProductController {
         }
     }
 
-//    @PostMapping("/products/update")
-//    public String saveUpdatedProduct(@ModelAttribute("product") Product product) {
-//        Optional<Product> existingProduct = productService.getProductById(product.getPid());
-//        if (existingProduct.isPresent()) {
-//            Product updatedProduct = existingProduct.get();
-//            updatedProduct.setPname(product.getPname());
-//            updatedProduct.setDescription(product.getDescription());
-//            updatedProduct.setUnit(product.getUnit());
-//            updatedProduct.setQuantity(product.getQuantity());
-//            updatedProduct.setPrice(product.getPrice());
-//            updatedProduct.setImage(product.getImage());
-//            updatedProduct.setCategoryId(product.getCategoryId());
-//            productService.updateProduct(updatedProduct);
-//            return "redirect:/products";
-//        } else {
-//            return "redirect:/products";
-//        }
-//    }
+
 
 
     @PostMapping("/products/update")
@@ -152,7 +137,7 @@ public class ProductController {
                 }
             }
             productService.updateProduct(updatedProduct);
-            //  productService.saveProductToDB(file, pname, description, unit, quantity, price, categoryId);
+//  productService.saveProductToDB(file, pname, description, unit, quantity, price, categoryId);
             redirectAttributes.addFlashAttribute("message", "Product updated successfully");
         } else {
             redirectAttributes.addFlashAttribute("message", "Product not found");
@@ -161,33 +146,103 @@ public class ProductController {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//    @PostMapping("/products/add")
+//    public String saveNewProduct(//@ModelAttribute("product") Product product,
+//                                 @RequestParam("file") MultipartFile file,
+//                                 @RequestParam("pname") String name,
+//                                 @RequestParam("description") String description,
+//                                 @RequestParam("unit") String unit,
+//                                 @RequestParam("quantity") int quantity,
+//                                 @RequestParam("price") float price,
+//                                 @RequestParam("categoryId") int categoryId,
+//                                 BindingResult bindingResult,
+//                                 RedirectAttributes redirectAttributes
+//    ) {
+//
+////        //   productService.saveProduct(product);
+////        productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
+////        redirectAttributes.addFlashAttribute("message", "Product added successfully");
+//
+//        try {
+//            productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
+//            redirectAttributes.addFlashAttribute("message", "Product added successfully");
+//        } catch (ValidationException e) {
+//            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
+//            return "redirect:/products/add";
+//        }
+//
+//        return "redirect:/products";
+//    }
+
     @PostMapping("/products/add")
-    public String saveNewProduct(//@ModelAttribute("product") Product product,
+    public String saveNewProduct(@ModelAttribute("product") Product product,
+                                 BindingResult bindingResult,
                                  @RequestParam("file") MultipartFile file,
-                                 @RequestParam("pname") String name,
-                                 @RequestParam("description") String description,
-                                 @RequestParam("unit") String unit,
-                                 @RequestParam("quantity") int quantity,
-                                 @RequestParam("price") float price,
-                                 @RequestParam("categoryId") int categoryId,
-                                 RedirectAttributes redirectAttributes
-    ) {
+                                 Model model,
+                                 HttpSession session) {
 
-        //   productService.saveProduct(product);
-        productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
-        redirectAttributes.addFlashAttribute("message", "Product added successfully");
+        String imagePath = null;
+        try {
+            if (!file.isEmpty()) {
+                // imagePath = saveTemporaryFile(file);
+                // session.setAttribute("imagePath", imagePath);
+            }
 
-        return "redirect:/products";
+            productService.saveProductToDB(file, product.getPname(), product.getDescription(), product.getUnit(), product.getQuantity(), product.getPrice(), product.getCategoryId());
+            session.removeAttribute("imagePath");
+            model.addAttribute("message", "Product added successfully");
+            return "redirect:/products";
+        } catch (ValidationException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("product", product);
+            model.addAttribute("categories", categoryService.getAllCategories());
+
+//            if (imagePath != null) {
+//                model.addAttribute("imagePreview", imagePath);
+//            }
+
+            return "addproduct";
+        }// catch (IOException e) {
+        // throw new RuntimeException(e);
+        //}
     }
+
+    private String saveTemporaryFile(MultipartFile file) throws IOException {
+        // Lưu file tạm thời và trả về đường dẫn
+        String tempDir = System.getProperty("java.io.tmpdir");
+        String fileName = file.getOriginalFilename();
+        File tempFile = new File(tempDir, fileName);
+        file.transferTo(tempFile);
+        return tempFile.getAbsolutePath();
+    }
+
+
 
 
     @GetMapping("/menu")
     public String showMenu(Model model,
                            @RequestParam(defaultValue = "0") int page,
+                           @RequestParam(defaultValue = "5") int pageSize,
                            @RequestParam(required = false) Integer categoryId,
                            @RequestParam(required = false) String search,
                            Principal principal) {
 
+        // Handle principal and cart items if logged in
         if (principal != null) {
             String username = principal.getName();
             Users user = userService.findByUsername(username);
@@ -196,21 +251,31 @@ public class ProductController {
             model.addAttribute("cartItems", cartItems);
             model.addAttribute("user", user);
         }
+
         Page<Product> productPage;
+        boolean noProductsFound = false;
         if (search != null && !search.trim().isEmpty()) {
-            productPage = productService.searchProducts(search, PageRequest.of(page, 5));
+            productPage = productService.searchProducts(search, categoryId, PageRequest.of(page, pageSize));
+            noProductsFound = productPage.isEmpty();
+
         } else if (categoryId != null) {
-            productPage = productService.getProductByCategories(page, 5, categoryId);
+            productPage = productService.getProductByCategories(page, pageSize, categoryId);
+            noProductsFound = productPage.isEmpty();
+
         } else {
-            productPage = productService.getProducts(page, 5);
+            productPage = productService.getProducts(page, pageSize);
         }
+
+        // Add attributes to the model
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", productPage.getTotalPages());
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("selectedCategoryId", categoryId);
         model.addAttribute("searchQuery", search);
+        model.addAttribute("noProductsFound", noProductsFound);
         model.addAttribute("currentPage1", "menu");
+        model.addAttribute("pageSize", pageSize);  // Add the page size to the model
 
         return "menu";
     }
@@ -247,12 +312,5 @@ public class ProductController {
         model.addAttribute("categories", categoryService.getAllCategories());
         return "addproduct";
     }
-
-//    @PostMapping("/products/add")
-//    public String saveNewProduct(@ModelAttribute("product") Product product) {
-//        productService.saveProduct(product);
-//        return "redirect:/products";
-//    }
-
 
 }

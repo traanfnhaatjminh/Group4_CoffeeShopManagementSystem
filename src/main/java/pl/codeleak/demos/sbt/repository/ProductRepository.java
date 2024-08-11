@@ -12,14 +12,17 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer> {
-       Iterable<Product> findByCategoryId(int cid);
-       Page<Product> findByCategoryId(int categoryId, Pageable pageable);
+    Iterable<Product> findByCategoryId(int cid);
 
-       @Query(value = "SELECT TOP 3 * FROM Product ORDER BY pid DESC;", nativeQuery = true)
-       List<Product> getTop3Products();
+    Page<Product> findByCategoryId(int categoryId, Pageable pageable);
 
-       Page<Product> findByPnameContainingIgnoreCase(String pname, Pageable pageable);
-       Page<Product> findByPnameContaining(String keyword, Pageable pageable);
+    @Query(value = "SELECT TOP 3 * FROM Product ORDER BY pid DESC;", nativeQuery = true)
+    List<Product> getTop3Products();
 
+    Page<Product> findByPnameContainingIgnoreCase(String pname, Pageable pageable);
+
+    Page<Product> findByPnameContaining(String keyword, Pageable pageable);
+
+    Page<Product> findByPnameContainingIgnoreCaseAndCategoryId(String pname, Integer categoryId, Pageable pageable);
 
 }
