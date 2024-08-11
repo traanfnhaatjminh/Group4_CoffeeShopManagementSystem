@@ -199,11 +199,16 @@ public class ProductService {
         validateProductInput(name, unit, quantity, price, categoryId);
         Product p = new Product();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String contentType = file.getContentType();
         if(fileName.contains(".."))
         {
             System.out.println("not a a valid file");
         }
 
+        // Kiểm tra xem loại file có phải là ảnh hay không
+        if (contentType == null || !contentType.startsWith("image/")) {
+            throw new ValidationException("File không phải là ảnh");
+        }
 
 
         try {

@@ -379,6 +379,16 @@
             } else {
                 $('#priceError').hide();
             }
+            // Kiểm tra file là ảnh
+            if (fileInput.files.length > 0) {
+                var file = fileInput.files[0];
+                var fileType = file.type;
+
+                if (!fileType.startsWith('image/')) {
+                    alert('Vui lòng chỉ chọn file ảnh.');
+                    isValid = false;
+                }
+            }
 
             // Nếu có lỗi, không cho submit form
             if (!isValid) {
