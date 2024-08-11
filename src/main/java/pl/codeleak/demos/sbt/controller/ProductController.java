@@ -200,8 +200,8 @@ public class ProductController {
         String imagePath = null;
         try {
             if (!file.isEmpty()) {
-                imagePath = saveTemporaryFile(file);
-                session.setAttribute("imagePath", imagePath);
+              // imagePath = saveTemporaryFile(file);
+               // session.setAttribute("imagePath", imagePath);
             }
 
             productService.saveProductToDB(file, product.getPname(), product.getDescription(), product.getUnit(), product.getQuantity(), product.getPrice(), product.getCategoryId());
@@ -213,14 +213,14 @@ public class ProductController {
             model.addAttribute("product", product);
             model.addAttribute("categories", categoryService.getAllCategories());
 
-            if (imagePath != null) {
-                model.addAttribute("imagePreview", imagePath);
-            }
+//            if (imagePath != null) {
+//                model.addAttribute("imagePreview", imagePath);
+//            }
 
             return "addproduct";
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        }// catch (IOException e) {
+           // throw new RuntimeException(e);
+        //}
     }
 
     private String saveTemporaryFile(MultipartFile file) throws IOException {
