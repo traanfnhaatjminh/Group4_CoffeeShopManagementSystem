@@ -13,7 +13,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.*;
 import pl.codeleak.demos.sbt.service.*;
-
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -24,6 +27,8 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 @Controller
 public class ManagementController {
@@ -50,6 +55,9 @@ public class ManagementController {
 
     @Autowired
     private TableService tableService;
+
+    @Autowired
+    private ExcelExportService excelExportService;
 
     @GetMapping("/management")
     public String management(@RequestParam("page") Optional<Integer> page,
@@ -262,4 +270,23 @@ public class ManagementController {
 
         return "redirect:/management/allbill";
     }
+
+    @GetMapping("/export/bill")
+    @ResponseBody
+    public ResponseEntity<InputStreamResource> exportBillToExcel(@RequestParam("billId") int billId) throws IOException {
+        Bill bill = billService.findById(billId);
+        List<BillDetail> billDetails = billDetailService.findByBillId(billId);
+
+        ByteArrayInputStream in = excelExportService.exportBillToExcel(bill, billDetails);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "attachment; filename=bill_" + billId + ".xlsx");
+
+        return ResponseEntity
+                .ok()
+                .headers(headers)
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .body(new InputStreamResource(in));
+    }
+
 }

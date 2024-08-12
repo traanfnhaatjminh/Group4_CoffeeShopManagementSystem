@@ -41,16 +41,20 @@
         input[type="radio"]:checked + label.not-paid {
             color: red;
         }
+
         input[type="radio"] {
             width: 20px;
             height: 20px;
         }
-        .table-bordered{
+
+        .table-bordered {
             background-color: white;
         }
+
         .table th, .table td {
             text-align: center;
         }
+
         .pagination-container {
             display: flex;
             justify-content: center;
@@ -82,7 +86,7 @@
                 </div>
                 <div class="col-4 my-4">
                     <form action="/management/allbill" method="get" class="d-flex">
-                        <input type="date" name="createdTime" value="${createdTime}" placeholder="Select date" />
+                        <input type="date" name="createdTime" value="${createdTime}" placeholder="Select date"/>
                         <input type="submit" value="Search"/>
                     </form>
                 </div>
@@ -121,20 +125,23 @@
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th scope="col" >Bill No</th>
+                                <th scope="col">Bill No</th>
                                 <th scope="col">Created Time</th>
                                 <th scope="col">Number of guest</th>
                                 <th scope="col">Table</th>
                                 <th scope="col">Total Price</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
+                                <th scope="col">Export Excel</th>
 
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="bill : ${bills}">
                                 <td>
-                                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#billDetailModal" th:attr="data-bill-id=${bill.getBillId()}" th:text="${bill.getBillId()}"></button>
+                                    <button type="button" class="btn btn-link" data-toggle="modal"
+                                            data-target="#billDetailModal" th:attr="data-bill-id=${bill.getBillId()}"
+                                            th:text="${bill.getBillId()}"></button>
                                 </td>
                                 <td th:text="${#dates.format(bill.createdTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
                                 <td th:text="${bill.getNumberOfGuest()}"></td>
@@ -153,17 +160,24 @@
                                         <input type="hidden" name="billId" th:value="${bill.billId}"/>
 
                                         <!-- Radio button for "Not Paid" -->
-                                        <input type="radio" id="notPaid" name="status" value="0" th:checked="${bill.status == 0}" class="status-radio" />
+                                        <input type="radio" id="notPaid" name="status" value="0"
+                                               th:checked="${bill.status == 0}" class="status-radio"/>
                                         <label for="notPaid" class="status-label not-paid">Not Paid</label>
 
                                         <!-- Radio button for "Paid" -->
-                                        <input type="radio" id="paid" name="status" value="1" th:checked="${bill.status == 1}" class="status-radio" />
+                                        <input type="radio" id="paid" name="status" value="1"
+                                               th:checked="${bill.status == 1}" class="status-radio"/>
                                         <label for="paid" class="status-label paid">Paid</label>
 
                                         <button type="submit" class="btn btn-primary">Check</button>
                                     </form>
                                 </td>
-
+                                <td>
+                                    <button type="button" class="btn btn-primary">
+                                        <a th:href="@{/export/bill(billId=${bill.billId})}"
+                                           style="color: white">Export</a>
+                                    </button>
+                                </td>
 
                             </tr>
                             </tbody>
@@ -171,25 +185,32 @@
                     </div>
                 </div>
 
-                    <div class="col-12">
-                        <div class="pagination-container" th:unless="${bills.isEmpty()}">
-                            <nav aria-label="Page navigation">
-                                <ul class="pagination justify-content-center">
-                                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                        <a class="page-link" th:href="@{/management/allbill(page=${currentPage - 1}, size=${size}, createdTime=${createdTime})}" aria-label="Previous">
-                                            <span aria-hidden="true">&laquo;</span>
-                                        </a>
-                                    </li>
-                                    <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage} ? 'active'">
-                                        <a class="page-link" th:href="@{/management/allbill(page=${page}, size=${size}, createdTime=${createdTime})}" th:text="${page + 1}"></a>
-                                    </li>
-                                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                        <a class="page-link" th:href="@{/management/allbill(page=${currentPage + 1}, size=${size}, createdTime=${createdTime})}" aria-label="Next">
-                                            <span aria-hidden="true">&raquo;</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </nav>
+                <div class="col-12">
+                    <div class="pagination-container" th:unless="${bills.isEmpty()}">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:href="@{/management/allbill(page=${currentPage - 1}, size=${size}, createdTime=${createdTime})}"
+                                       aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                                <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPages - 1)}"
+                                    th:classappend="${page == currentPage} ? 'active'">
+                                    <a class="page-link"
+                                       th:href="@{/management/allbill(page=${page}, size=${size}, createdTime=${createdTime})}"
+                                       th:text="${page + 1}"></a>
+                                </li>
+                                <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+                                    <a class="page-link"
+                                       th:href="@{/management/allbill(page=${currentPage + 1}, size=${size}, createdTime=${createdTime})}"
+                                       aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
 
                     </div>
                 </div>
@@ -199,7 +220,8 @@
 </div>
 
 <!-- Bill Detail Modal -->
-<div class="modal fade" id="billDetailModal" tabindex="-1" role="dialog" aria-labelledby="billDetailModalLabel" aria-hidden="true">
+<div class="modal fade" id="billDetailModal" tabindex="-1" role="dialog" aria-labelledby="billDetailModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog custom-width" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -222,8 +244,8 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    $(document).ready(function() {
-        $('#billDetailModal').on('show.bs.modal', function(event) {
+    $(document).ready(function () {
+        $('#billDetailModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget); // Button that triggered the modal
             var billId = button.data('bill-id'); // Extract info from data-* attributes
 
@@ -232,10 +254,10 @@
             $.ajax({
                 url: '/management/billdetail/' + billId,
                 method: 'GET',
-                success: function(response) {
+                success: function (response) {
                     modal.find('.modal-body').html(response); // Insert response HTML into modal body
                 },
-                error: function() {
+                error: function () {
                     modal.find('.modal-body').html('<p>Error loading bill details.</p>');
                 }
             });

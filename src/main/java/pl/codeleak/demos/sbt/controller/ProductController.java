@@ -74,6 +74,7 @@ public class ProductController {
         model.addAttribute("selectedCategoryId", categoryId);
         return "homepage";
     }
+
     @GetMapping("/homepage")
     public String homepage(Model model, Principal principal) {
         if (principal != null) {
@@ -103,9 +104,6 @@ public class ProductController {
             return "redirect:/products";
         }
     }
-
-
-
 
     @PostMapping("/products/update")
     public String saveUpdatedProduct(@RequestParam("pid") int pid,
@@ -146,49 +144,6 @@ public class ProductController {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @PostMapping("/products/add")
-//    public String saveNewProduct(//@ModelAttribute("product") Product product,
-//                                 @RequestParam("file") MultipartFile file,
-//                                 @RequestParam("pname") String name,
-//                                 @RequestParam("description") String description,
-//                                 @RequestParam("unit") String unit,
-//                                 @RequestParam("quantity") int quantity,
-//                                 @RequestParam("price") float price,
-//                                 @RequestParam("categoryId") int categoryId,
-//                                 BindingResult bindingResult,
-//                                 RedirectAttributes redirectAttributes
-//    ) {
-//
-////        //   productService.saveProduct(product);
-////        productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
-////        redirectAttributes.addFlashAttribute("message", "Product added successfully");
-//
-//        try {
-//            productService.saveProductToDB(file, name, description, unit, quantity, price, categoryId);
-//            redirectAttributes.addFlashAttribute("message", "Product added successfully");
-//        } catch (ValidationException e) {
-//            redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
-//            return "redirect:/products/add";
-//        }
-//
-//        return "redirect:/products";
-//    }
-
     @PostMapping("/products/add")
     public String saveNewProduct(@ModelAttribute("product") Product product,
                                  BindingResult bindingResult,
@@ -212,14 +167,8 @@ public class ProductController {
             model.addAttribute("product", product);
             model.addAttribute("categories", categoryService.getAllCategories());
 
-//            if (imagePath != null) {
-//                model.addAttribute("imagePreview", imagePath);
-//            }
-
             return "addproduct";
         }// catch (IOException e) {
-        // throw new RuntimeException(e);
-        //}
     }
 
     private String saveTemporaryFile(MultipartFile file) throws IOException {
@@ -230,9 +179,6 @@ public class ProductController {
         file.transferTo(tempFile);
         return tempFile.getAbsolutePath();
     }
-
-
-
 
     @GetMapping("/menu")
     public String showMenu(Model model,
