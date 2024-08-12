@@ -167,6 +167,9 @@
         <input type="text" name="username" placeholder="username" required><br>
         <input type="password" name="password" placeholder="password" required style="margin-left: 5px;"><br>
         <input type="submit" value="Login">
+        <div class="text-center mt-3 register-link">
+            <a class="text-muted" th:href="@{/forgot-password}">Forgot password?</a>
+        </div>
         <div th:if="${param.error}" class="error-message">
             <p>Invalid username or password</p>
         </div>
