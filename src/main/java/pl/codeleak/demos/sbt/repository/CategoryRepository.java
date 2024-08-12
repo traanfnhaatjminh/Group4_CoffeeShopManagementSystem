@@ -8,4 +8,5 @@ import pl.codeleak.demos.sbt.model.Category;
 @Repository
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
+    Category findCategoriesByCategoryName(String name);
 }

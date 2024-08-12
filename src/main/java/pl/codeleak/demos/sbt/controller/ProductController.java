@@ -259,4 +259,21 @@ public class ProductController {
         return "addproduct";
     }
 
+    @PostMapping("/products/import")
+    public String importProductsFromFile(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
+        if (file.isEmpty()) {
+            redirectAttributes.addFlashAttribute("messageErr", "Please select an Excel file to upload.");
+            return "redirect:/products";
+        }
+
+        try {
+            productService.saveProductsFromExcelFile(file);
+            redirectAttributes.addFlashAttribute("message", "Products imported successfully.");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("messageErr", "Failed to import products: " + e.getMessage());
+        }
+
+        return "redirect:/products";
+    }
+
 }

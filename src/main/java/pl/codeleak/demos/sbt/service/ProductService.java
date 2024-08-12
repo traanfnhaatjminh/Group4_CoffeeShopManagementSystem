@@ -57,6 +57,10 @@
 package pl.codeleak.demos.sbt.service;
 
 
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -72,9 +76,8 @@ import pl.codeleak.demos.sbt.repository.ProductRepository;
 import javax.validation.ValidationException;
 import java.io.File;
 import java.io.IOException;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.io.InputStream;
+import java.util.*;
 
 @Service
 public class ProductService {
@@ -262,4 +265,52 @@ public class ProductService {
         }
     }
 
+    public void saveProductsFromExcelFile(MultipartFile file) {
+        try {
+            InputStream inputStream = file.getInputStream();
+            Workbook workbook = new XSSFWorkbook(inputStream);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            Iterator<Row> rows = sheet.iterator();
+            List<Product> products = new ArrayList<>();
+
+            int rowNumber = 0;
+            while (rows.hasNext()) {
+                Row currentRow = rows.next();
+
+                // Skip header row
+                if (rowNumber == 0) {
+                    rowNumber++;
+                    continue;
+                }
+
+                Product product = new Product();
+
+                product.setPname(currentRow.getCell(0).getStringCellValue());
+                product.setDescription(currentRow.getCell(1).getStringCellValue());
+                product.setUnit(currentRow.getCell(2).getStringCellValue());
+                product.setQuantity((int) currentRow.getCell(3).getNumericCellValue());
+                product.setPrice((float) currentRow.getCell(4).getNumericCellValue());
+
+                // Resolve Category Name to ID
+                String categoryName = currentRow.getCell(5).getStringCellValue();
+                Category category = categoryRepository.findCategoriesByCategoryName(categoryName);
+                if (category != null) {
+                    product.setCategoryId(category.getCid());
+                } else {
+                    throw new RuntimeException("Category not found: " + categoryName);
+                }
+
+                products.add(product);
+            }
+
+            workbook.close();
+
+            productRepository.saveAll(products);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to parse Excel file: " + e.getMessage());
+        }
+    }
 }

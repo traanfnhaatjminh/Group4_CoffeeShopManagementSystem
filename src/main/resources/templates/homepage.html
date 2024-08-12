@@ -91,6 +91,11 @@
                         <a class="btn btn-success" th:href="@{/products/add}">Thêm sản phẩm</a>
                     </div>
 
+                    <div class="col-md-6">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importModal">
+                            Import Products
+                        </button>
+                    </div>
                     <!-- Search Form -->
                     <form class="form-inline mb-3" method="get" action="/products">
                         <input type="text" class="form-control mr-2" name="keyword"
@@ -244,6 +249,27 @@
             <!--    </div>-->
             <!--</div>-->
 
+            <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="importModalLabel">Import Products from Excel</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="@{/products/import}" method="post" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="file">Select Excel file</label>
+                                    <input type="file" name="file" id="files" class="form-control" accept=".xlsx, .xls" required>
+                                </div>
+                                <button type="submit" class="btn btn-success">Import</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Update Product Modal -->
             <div class="modal fade" id="updateProductModal" tabindex="-1"
