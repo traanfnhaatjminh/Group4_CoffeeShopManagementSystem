@@ -143,10 +143,5 @@ public class UserService {
         }
     }
 
-    public Users save1(Users user) {
-
-        return userRepository.save(user);
-    }
-
 
 }
