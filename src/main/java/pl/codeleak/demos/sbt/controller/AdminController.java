@@ -166,9 +166,6 @@ public class AdminController {
 
     @PostMapping("/add")
     public String addUser(@ModelAttribute Users user, RedirectAttributes redirectAttributes) {
-        user.setAvatar("abc");
-        userService.save(user);
-        redirectAttributes.addFlashAttribute("message", "User added successfully!");
-        return "redirect:/admin/users";
+        return "redirect:/register2";
     }
 }

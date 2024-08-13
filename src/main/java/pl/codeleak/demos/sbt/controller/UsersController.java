@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.Bill;
 import pl.codeleak.demos.sbt.model.BillDetail;
@@ -18,7 +19,9 @@ import pl.codeleak.demos.sbt.service.BillService;
 import pl.codeleak.demos.sbt.service.CartItemService;
 import pl.codeleak.demos.sbt.service.UserService;
 
+import java.io.IOException;
 import java.security.Principal;
+import java.util.Base64;
 import java.util.List;
 
 @Controller
@@ -50,20 +53,39 @@ public class UsersController {
     }
 
     @PostMapping("/edit")
-    public String editProfile(@ModelAttribute Users user, Principal principal, RedirectAttributes redirectAttributes) {
+    public String editProfile(@RequestParam("fullname") String fullname,
+                              @RequestParam("dob") String dob,
+                              @RequestParam("address") String address,
+                              @RequestParam("email") String email,
+                              @RequestParam("phone") String phone,
+                              @RequestParam("avatar") MultipartFile avatarFile,
+                              Principal principal,
+                              RedirectAttributes redirectAttributes) {
         String username = principal.getName();
         Users existingUser = userService.findByUsername(username);
 
-        // Update user details
-        existingUser.setFullname(user.getFullname());
-        existingUser.setDob(user.getDob());
-        existingUser.setAddress(user.getAddress());
-        existingUser.setEmail(user.getEmail());
-        existingUser.setPhone(user.getPhone());
+        // Cập nhật thông tin người dùng
+        existingUser.setFullname(fullname);
+        existingUser.setDob(dob);
+        existingUser.setAddress(address);
+        existingUser.setEmail(email);
+        existingUser.setPhone(phone);
+
+        // Xử lý file ảnh avatar nếu có upload
+        if (!avatarFile.isEmpty()) {
+            try {
+                // Sử dụng Base64 để lưu ảnh
+                String avatarBase64 = Base64.getEncoder().encodeToString(avatarFile.getBytes());
+                existingUser.setAvatar(avatarBase64);
+            } catch (IOException e) {
+                e.printStackTrace();
+                redirectAttributes.addFlashAttribute("message", "Failed to upload avatar image");
+                return "redirect:/profile";
+            }
+        }
 
         userService.save1(existingUser);
-
-        redirectAttributes.addFlashAttribute("message", "Edit Successfully!");
+        redirectAttributes.addFlashAttribute("message", "Profile updated successfully!");
         return "redirect:/profile";
     }
 

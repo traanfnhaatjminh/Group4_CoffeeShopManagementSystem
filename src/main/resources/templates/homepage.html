@@ -328,11 +328,18 @@
             $('#updateProductModal').modal('show');
         });
 
-        // Validate trước khi submit form
         $('#updateProductForm').submit(function (event) {
+            var pname = $('#pname').val().trim();
             var quantity = $('#quantity').val();
             var price = $('#price').val();
+            var fileInput = $('#file')[0];
             var isValid = true;
+
+            // Kiểm tra tên sản phẩm không được để trống
+            if (pname === "") {
+                alert('Tên sản phẩm không được để trống');
+                isValid = false;
+            }
 
             // Kiểm tra quantity là số nguyên không âm
             if (quantity < 0 || !Number.isInteger(Number(quantity))) {
@@ -349,6 +356,7 @@
             } else {
                 $('#priceError').hide();
             }
+
             // Kiểm tra file là ảnh
             if (fileInput.files.length > 0) {
                 var file = fileInput.files[0];
@@ -366,7 +374,6 @@
             }
         });
     });
-
 
 </script>
 </body>
