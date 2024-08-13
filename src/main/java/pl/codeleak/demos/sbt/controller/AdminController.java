@@ -73,7 +73,6 @@
 //}
 
 
-
 package pl.codeleak.demos.sbt.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,9 +82,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.Users;
+import pl.codeleak.demos.sbt.service.BillService;
 import pl.codeleak.demos.sbt.service.UserService;
 
 import java.security.Principal;
+import java.time.LocalDate;
+import java.util.Calendar;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -93,6 +96,9 @@ public class AdminController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BillService billService;
 
     @GetMapping
     public String listUsers(@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
@@ -122,6 +128,7 @@ public class AdminController {
         model.addAttribute("role", role);  // Thêm role vào model
         return "user_list";
     }
+
     @GetMapping("/filter")
     public String filterUsersByRole(@RequestParam(name = "role", required = false) Integer role,
                                     @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
@@ -167,5 +174,35 @@ public class AdminController {
     @PostMapping("/add")
     public String addUser(@ModelAttribute Users user, RedirectAttributes redirectAttributes) {
         return "redirect:/register2";
+    }
+
+    @GetMapping("/statistic")
+    public String statistic(Model model, Principal principal) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
+        // Get current month
+        Calendar calendar = Calendar.getInstance();
+        int currentMonth = calendar.get(Calendar.MONTH) + 1;
+
+        // Fetch data
+        Map<Integer, Double> revenueData = billService.getMonthlyRevenue();
+        Map<Integer, Long> onlineOrdersData = billService.getMonthlyOnlineOrders();
+        Map<Integer, Long> offlineOrdersData = billService.getMonthlyOfflineOrders();
+
+        // Get values for the current month or default to zero
+        Double revenue = revenueData.getOrDefault(currentMonth, 0.0);
+        Long onlineOrders = onlineOrdersData.getOrDefault(currentMonth, 0L);
+        Long offlineOrders = offlineOrdersData.getOrDefault(currentMonth, 0L);
+
+        // Add to model
+        model.addAttribute("revenue", revenue);
+        model.addAttribute("onlineOrders", onlineOrders);
+        model.addAttribute("offlineOrders", offlineOrders);
+
+        return "statistic";
     }
 }

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Feature</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link href="/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+            rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="/css/sb-admin-2.min.css" rel="stylesheet">
+
+    <style>
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            background-color: rgb(198, 198, 198);
+            width: 100px;
+        }
+
+        .nav a {
+            margin: 10px 0;
+            background-color: gray;
+            border-radius: 15px;
+            text-align: center;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .nav a:hover {
+            color: blue;
+        }
+
+        .product-list {
+            background-color: rgb(244, 243, 243);
+        }
+    </style>
+</head>
+
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-1 sidebar">
+            <nav class="nav flex-column">
+                <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management">Home</a>
+                <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/products">Warehouse</a>
+                <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/categories">Categories</a>
+                <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
+                <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
+                <a th:if="${user.getRole_id()==5}" href="/management/jobboard">Job Board</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users/statistic">Statistic</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
+            </nav>
+        </div>
+        <div class="col-md-11 offset-md-1 product-list">
+            <div id="wrapper">
+
+                <!-- Content Wrapper -->
+                <div id="content-wrapper" class="d-flex flex-column">
+
+                    <!-- Main Content -->
+                    <div id="content">
+
+                        <!-- Topbar -->
+                        <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                            <!-- Topbar Navbar -->
+                            <ul class="navbar-nav ml-auto">
+
+                                <div class="topbar-divider d-none d-sm-block"></div>
+
+                                <!-- Nav Item - User Information -->
+                                <li class="nav-item dropdown no-arrow">
+                                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span style="font-weight: bold;text-transform: uppercase;"
+                                              class="mr-2 d-none d-lg-inline text-gray-600 small"
+                                              th:text="${user.getUsername()}"></span>
+                                        <img class="img-profile rounded-circle" src="/img/avatar.jpg" alt="">
+                                    </a>
+                                </li>
+
+                            </ul>
+
+                        </nav>
+                        <!-- End of Topbar -->
+
+                        <!-- Begin Page Content -->
+                        <div class="container-fluid">
+
+                            <!-- Page Heading -->
+                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                <h1 class="h3 mb-0 text-gray-800">STATISTIC</h1>
+                            </div>
+
+                            <!-- Content Row -->
+                            <div class="row">
+
+                                <!-- Earnings (Monthly) Card Example -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-primary shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Profit
+                                                    </div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Earnings (Monthly) Card Example -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-success shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                        Revenue
+                                                    </div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                                         th:text="${revenue}+' VND'"></div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Total number of orders (Online) Card Example -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-info shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                        Total number of orders (Online)
+                                                    </div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                                         th:text="${onlineOrders}"></div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Total number of orders (Offline) Card Example -->
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-warning shadow h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                        Total number of orders (Offline)
+                                                    </div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800"
+                                                         th:text="${offlineOrders}"></div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Content Row -->
+
+                            <div class="row">
+
+                                <!-- Area Chart -->
+                                <div class="col-xl-8 col-lg-7">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div
+                                                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Revenue by month</h6>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="chart-area">
+                                                <canvas id="myAreaChart"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Pie Chart -->
+                                <div class="col-xl-4 col-lg-5">
+                                    <div class="card shadow mb-4">
+                                        <!-- Card Header - Dropdown -->
+                                        <div
+                                                class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                            <h6 class="m-0 font-weight-bold text-primary">Trend of ordering</h6>
+                                        </div>
+                                        <!-- Card Body -->
+                                        <div class="card-body">
+                                            <div class="chart-pie pt-4 pb-2">
+                                                <canvas id="myPieChart"></canvas>
+                                            </div>
+                                            <div class="mt-4 text-center small">
+                                                <span class="mr-2">
+                                                    <i class="fas fa-circle text-primary"></i> Online
+                                                </span>
+                                                <span class="mr-2">
+                                                    <i class="fas fa-circle text-success"></i> Offline
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Content Row -->
+                            <!-- Footer -->
+                            <footer class="sticky-footer bg-white">
+                                <div class="container my-auto">
+                                    <div class="copyright text-center my-auto">
+                                        <span>Copyright &copy;Coffee Shop 2024</span>
+                                    </div>
+                                </div>
+                            </footer>
+                            <!-- End of Footer -->
+
+                        </div>
+                        <!-- End of Content Wrapper -->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+    Chart.defaults.global.defaultFontColor = '#858796';
+
+    // Thymeleaf sẽ thay thế các biểu thức này bằng giá trị thực tế
+    var onlineOrders = /*[[${onlineOrders}]]*/ 0;
+    var offlineOrders = /*[[${offlineOrders}]]*/ 0;
+
+    // Kiểm tra giá trị trên console
+    console.log("Online Orders: ", onlineOrders);
+    console.log("Offline Orders: ", offlineOrders);
+
+    // Cài đặt biểu đồ hình tròn
+    var ctx = document.getElementById('myPieChart').getContext('2d');
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ['Online', 'Offline'],
+            datasets: [{
+                data: [onlineOrders, offlineOrders],
+                backgroundColor: ['#4e73df', '#1cc88a'],
+                hoverBackgroundColor: ['#2e59d9', '#17a673'],
+                hoverBorderColor: "rgba(234, 236, 244, 1)",
+            }],
+        },
+        options: {
+            maintainAspectRatio: false,
+            tooltips: {
+                backgroundColor: "rgb(255,255,255)",
+                bodyFontColor: "#858796",
+                borderColor: '#dddfeb',
+                borderWidth: 1,
+                xPadding: 15,
+                yPadding: 15,
+                displayColors: false,
+                caretPadding: 10,
+            },
+            legend: {
+                display: false
+            },
+            cutoutPercentage: 0,
+        },
+    });
+</script>
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<a class="scroll-to-top rounded" href="#page-top">
+    <i class="fas fa-angle-up"></i>
+</a>
+
+<!-- Bootstrap core JavaScript-->
+<script src="/vendor/jquery/jquery.min.js"></script>
+<script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+<!-- Custom scripts for all pages-->
+<script src="/js/sb-admin-2.min.js"></script>
+
+<!-- Page level plugins -->
+<script src="/vendor/chart.js/Chart.min.js"></script>
+
+<!-- Page level custom scripts -->
+<script src="/js/demo/chart-area-demo.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.6.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>

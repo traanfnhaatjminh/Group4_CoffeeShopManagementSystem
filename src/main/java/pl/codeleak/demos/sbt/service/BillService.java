@@ -10,10 +10,7 @@ import pl.codeleak.demos.sbt.model.BillDetail;
 import pl.codeleak.demos.sbt.repository.BillDetailRepository;
 import pl.codeleak.demos.sbt.repository.BillRepository;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class BillService {
@@ -83,4 +80,30 @@ public class BillService {
         return billRepository.findByPhoneContainingAndUserId(phone, userId, pageable);
     }
 
+    public Map<Integer, Double> getMonthlyRevenue() {
+        List<Object[]> result = billRepository.findMonthlyRevenue();
+        Map<Integer, Double> revenueMap = new HashMap<>();
+        for (Object[] row : result) {
+            revenueMap.put(((Number) row[0]).intValue(), ((Number) row[1]).doubleValue());
+        }
+        return revenueMap;
+    }
+
+    public Map<Integer, Long> getMonthlyOnlineOrders() {
+        List<Object[]> result = billRepository.findMonthlyOnlineOrders();
+        Map<Integer, Long> ordersMap = new HashMap<>();
+        for (Object[] row : result) {
+            ordersMap.put(((Number) row[0]).intValue(), (Long) row[1]);
+        }
+        return ordersMap;
+    }
+
+    public Map<Integer, Long> getMonthlyOfflineOrders() {
+        List<Object[]> result = billRepository.findMonthlyOfflineOrders();
+        Map<Integer, Long> ordersMap = new HashMap<>();
+        for (Object[] row : result) {
+            ordersMap.put(((Number) row[0]).intValue(), (Long) row[1]);
+        }
+        return ordersMap;
+    }
 }

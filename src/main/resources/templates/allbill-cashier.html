@@ -75,7 +75,7 @@
                 <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
                 <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
                 <a th:if="${user.getRole_id()==5}" href="/management/jobboard">Job Board</a>
-                <a th:if="${user.getRole_id()==5}" href="#">Statistic</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users/statistic">Statistic</a>
                 <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
             </nav>
         </div>
