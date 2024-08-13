@@ -66,8 +66,9 @@ public class UserService {
         user.setPass(passwordEncoder.encode(user.getPass()));
         return userRepository.save(user);
     }
+
     public Users save1(Users user) {
-       // user.setPass(passwordEncoder.encode(user.getPass()));
+        // user.setPass(passwordEncoder.encode(user.getPass()));
         return userRepository.save(user);
     }
 
@@ -91,6 +92,7 @@ public class UserService {
     public boolean isUsernameTaken(String username) {
         return userRepository.findByUsername(username) != null;
     }
+
     public String getCurrentUsername() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
@@ -103,6 +105,7 @@ public class UserService {
     public List<Users> findAll() {
         return userRepository.findAll();
     }
+
     public void deleteById(int uid) {
         userRepository.deleteById(uid);
     }
@@ -122,6 +125,7 @@ public class UserService {
         }
         return userRepository.save(user);
     }
+
     public Page<Users> findPaginated(int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         return userRepository.findAll(pageable);
@@ -133,7 +137,6 @@ public class UserService {
     }
 
 
-
     public Page<Users> search(String keyword, Integer role, int pageNo, int pageSize) {
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize);
         if (role != null) {
@@ -143,5 +146,25 @@ public class UserService {
         }
     }
 
+    public void saveUser2(Users user) {
+        if (isEmailTaken(user.getEmail())) {
+            throw new IllegalArgumentException("Email đã được sử dụng");
+        }
+        if (isPhoneTaken(user.getPhone())) {
+            throw new IllegalArgumentException("Số điện thoại đã được sử dụng");
+        }
+        if (isUsernameTaken(user.getUsername())) {
+            throw new IllegalArgumentException("Username đã được sử dụng");
+        }
 
+
+        if (user.getUsername() == null || user.getPass() == null || user.getEmail() == null) {
+            throw new IllegalArgumentException("Username, password, and email cannot be null");
+        }
+
+        user.setPass(passwordEncoder.encode(user.getPass()));
+
+        userRepository.insertUser(user.getFullname(), user.getDob(), user.getEmail(), user.getPhone(),
+                user.getAddress(), user.getAvatar(), user.getUsername(), user.getPass(), user.getRole_id(), user.getStatus());
+    }
 }

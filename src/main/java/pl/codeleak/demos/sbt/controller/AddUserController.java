@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import pl.codeleak.demos.sbt.model.Users;
 import pl.codeleak.demos.sbt.service.UserService;
 
@@ -23,11 +24,11 @@ public class AddUserController {
     }
 
     @PostMapping
-    public String registerUser(Users user, Model model) {
+    public String registerUser(Users user, Model model, @RequestParam("role_id") int roleId, @RequestParam("status") int status) {
 
-        user.setRole_id(1);
+        user.setRole_id(roleId);
+        user.setStatus(status);
         user.setAvatar("abc");
-        user.setStatus(1);
 
         boolean hasErrors = false;
 
@@ -57,7 +58,7 @@ public class AddUserController {
         }
 
         try {
-            userService.saveUser(user);
+            userService.saveUser2(user);
         } catch (Exception e) {
             model.addAttribute("generalError", "Failed to register user: " + e.getMessage());
             model.addAttribute("user", user);

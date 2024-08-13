@@ -271,7 +271,7 @@ public class ManagementController {
         return "redirect:/management/allbill";
     }
 
-    @GetMapping("/export/bill")
+    @GetMapping("/management/allbill/export/bill")
     @ResponseBody
     public ResponseEntity<InputStreamResource> exportBillToExcel(@RequestParam("billId") int billId) throws IOException {
         Bill bill = billService.findById(billId);

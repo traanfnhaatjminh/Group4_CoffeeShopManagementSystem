@@ -40,7 +40,7 @@
                         <li><a href="#">Contact</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/register">Register</a></li>
                         <li th:if="${#authorization.expression('isAnonymous()')}"><a href="/login">Login</a></li>
-                        <li th:if="${user != null}"><a style="color: yellow" href="#"><span th:text="${user.getUsername()}"></span></a></li>
+                        <li th:if="${user != null}"><a style="color: yellow"><span th:text="${user.getUsername()}"></span></a></li>
                         <li th:classappend="${currentPage == 'profile'} ? 'active'" th:if="${user != null}"><a href="/profile">Profile</a></li>
                         <li th:if="${user != null}">
                             <a class="nav-icon position-relative text-decoration-none" href="/cart">

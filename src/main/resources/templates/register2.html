@@ -1,8 +1,3 @@
-
-
-
-
-
 <!--<!DOCTYPE html>-->
 <!--<html xmlns:th="http://www.thymeleaf.org">-->
 <!--<head>-->
@@ -271,12 +266,9 @@
 <!--    }-->
 
 
-
 <!--</script>-->
 <!--</body>-->
 <!--</html>-->
-
-
 
 
 <!DOCTYPE html>
@@ -310,7 +302,7 @@
             background: #fff;
             padding: 34px;
             border-radius: 6px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
         }
 
         .wrapper h2 {
@@ -395,33 +387,52 @@
     <h2>Add User</h2>
     <form th:action="@{/register2}" method="post" class="register-form" enctype="multipart/form-data" id="registerForm">
         <div class="input-box">
-            <input type="text" name="fullname" placeholder="Full Name" th:value="${user.fullname}" required />
+            <input type="text" name="fullname" placeholder="Full Name" th:value="${user.fullname}" required/>
             <span class="error-message" id="fullname-error" th:text="${fullnameError}"></span>
         </div>
         <div class="input-box">
-            <input type="date" name="dob" placeholder="Date of Birth" th:value="${user.dob}" required />
+            <input type="date" name="dob" placeholder="Date of Birth" th:value="${user.dob}" required/>
         </div>
         <div class="input-box">
-            <input type="email" name="email" placeholder="Email" th:value="${user.email}" required />
+            <input type="email" name="email" placeholder="Email" th:value="${user.email}" required/>
             <span class="error-message" id="email-error" th:text="${emailError}"></span>
         </div>
         <div class="input-box">
-            <input type="text" name="phone" placeholder="Phone" th:value="${user.phone}" required />
+            <input type="text" name="phone" placeholder="Phone" th:value="${user.phone}" required/>
             <span class="error-message" id="phone-error" th:text="${phoneError}"></span>
         </div>
         <div class="input-box">
-            <input type="text" name="address" placeholder="Address" th:value="${user.address}" required />
+            <input type="text" name="address" placeholder="Address" th:value="${user.address}" required/>
         </div>
         <div class="input-box">
-            <input type="text" name="username" placeholder="Username" th:value="${user.username}" required />
+            <input type="text" name="username" placeholder="Username" th:value="${user.username}" required/>
             <span class="error-message" id="username-error" th:text="${usernameError}"></span>
         </div>
         <div class="input-box">
-            <input type="password" name="pass" id="pass" placeholder="Password" required />
+            <input type="password" name="pass" id="pass" placeholder="Password" required/>
         </div>
         <div class="input-box">
-            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password" required />
+            <input type="password" name="confirm_password" id="confirm_password" placeholder="Confirm Password"
+                   required/>
             <span class="error-message" id="confirm-password-error"></span>
+        </div>
+        <div class="input-box">
+            <label for="role">Role:</label>
+            <select name="role_id" id="role" required>
+                <option value="1">Customer</option>
+                <option value="2">Warehouse Staff</option>
+                <option value="3">Waiter</option>
+                <option value="4">Cashier</option>
+                <option value="5">Shop Owner (Admin)</option>
+            </select>
+        </div>
+
+        <div class="input-box">
+            <label for="status">Status:</label>
+            <select name="status" id="status" required>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+            </select>
         </div>
         <div class="input-box button">
             <input type="submit" value="Add User">
@@ -429,12 +440,12 @@
         <div class="error-message" th:text="${generalError}"></div>
     </form>
     <div class="login-link">
-        <p>Đã có tài khoản? <a th:href="@{/login}">Login</a></p>
+        <p>Back to user list? <a th:href="@{/admin/users}">User List</a></p>
     </div>
 </div>
 
 <script>
-    document.getElementById('registerForm').addEventListener('submit', function(event) {
+    document.getElementById('registerForm').addEventListener('submit', function (event) {
         // Clear previous error messages
         var emailError = document.getElementById('email-error');
         var phoneError = document.getElementById('phone-error');
