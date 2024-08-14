@@ -482,7 +482,7 @@
         // Example validation for phone
         if (!validatePhone(phone)) {
             event.preventDefault();
-            phoneError.textContent = 'Số điện thoại là số có 10 chữ số';
+            phoneError.textContent = 'Số điện thoại là số có 10 chữ số và bắt đầu bằng số 0';
             hasErrors = true;
         }
 
@@ -502,7 +502,7 @@
     }
 
     function validatePhone(phone) {
-        var re = /^\d{10}$/;  // Giả sử số điện thoại là 10 chữ số
+        var re = /^0\d{9}$/;  // Giả sử số điện thoại là 10 chữ số
         return re.test(String(phone));
     }
 </script>

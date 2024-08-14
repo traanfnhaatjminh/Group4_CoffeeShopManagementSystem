@@ -36,9 +36,10 @@
             background-color: rgb(244, 243, 243);
         }
 
-        .table-bordered{
+        .table-bordered {
             background-color: white;
         }
+
         .table th, .table td {
             text-align: center;
         }
@@ -56,7 +57,7 @@
                 <a th:if="${user.role.roleId==3 || user.role.roleId==5}" href="/management/table">Table List</a>
                 <a th:if="${user.role.roleId==4 || user.role.roleId==5}" href="/management/allbill">All Bill</a>
                 <a th:if="${user.role.roleId==5}" href="/management/jobboard">Job Board</a>
-                <a th:if="${user.role.roleId==5}" href="/admin/users/statistic">Statistic</a>
+                <a th:if="${user.role.roleId==5}" href="#">Statistic</a>
                 <a th:if="${user.role.roleId==5}" href="/admin/users">Setting</a>
             </nav>
         </div>
@@ -68,7 +69,7 @@
                 <div class="col-4 my-4">
                     <form action="#" method="get">
                         <input type="text" name="search" placeholder="Search by name" th:value="${search}"/>
-                        <input type="submit" value="Search" />
+                        <input type="submit" value="Search"/>
                     </form>
                 </div>
 
@@ -91,20 +92,22 @@
             <div class="row">
                 <div class="col-12">
                     <div th:if="${jobboards.isEmpty()}">
-                        <p class="text-center">No searching info</p>
+                        <p class="text-center">Không tìm thấy nhân viên nào</p>
                     </div>
                     <div th:unless="${jobboards.isEmpty()}">
                         <table class="table table-bordered">
                             <thead>
                             <tr>
-                                <th scope="col" >STT</th>
+                                <th scope="col">STT</th>
                                 <th scope="col">Staff Name</th>
                                 <th scope="col">Shift</th>
                                 <th scope="col">Working Time</th>
                                 <th scope="col">Presents</th>
                                 <th scope="col">Absents</th>
                                 <th scope="col">Role</th>
-                                <th scope="col">Action</th>
+                                <div th:if="${user.role.roleId == 5}">
+                                    <th scope="col">Action</th>
+                                </div>
                             </tr>
                             </thead>
                             <tbody>
@@ -115,31 +118,43 @@
                                 <td th:text="${jobboard.getShift() == 1 ? '8h-16h' : '15h-23h'}"></td>
                                 <td>
                                     <div style="display: flex; justify-content: center; align-items: center;">
-                                        <span style="color: green; margin-right: 10px;" th:text="${jobboard.getPresents()}"></span>
-                                        <form action="#" th:action="@{/management/jobboard/updatePresents}" method="post" style="margin: 0;">
-                                            <input type="hidden" name="id" th:value="${jobboard.getId()}"/>
-                                            <button type="submit" class="btn btn-success"><i class="bi bi-check-circle"></i></button>
-                                        </form>
+                                        <span style="color: green; margin-right: 10px;"
+                                              th:text="${jobboard.getPresents()}"></span>
+                                        <div th:if="${user.role.roleId == 5}">
+                                            <form action="#" th:action="@{/management/jobboard/updatePresents}"
+                                                  method="post" style="margin: 0;">
+                                                <input type="hidden" name="id" th:value="${jobboard.getId()}"/>
+                                                <button type="submit" class="btn btn-success"><i
+                                                        class="bi bi-check-circle"></i></button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </td>
                                 <td>
                                     <div style="display: flex; justify-content: center; align-items: center;">
-                                        <span style="color: red; margin-right: 10px;" th:text="${jobboard.getAbsents()}"></span>
-                                        <form action="#" th:action="@{/management/jobboard/updateAbsents}" method="post" style="margin: 0;">
-                                            <input type="hidden" name="id" th:value="${jobboard.getId()}"/>
-                                            <button type="submit" class="btn btn-danger"><i class="bi bi-x-circle"></i></button>
-                                        </form>
+                                        <span style="color: red; margin-right: 10px;"
+                                              th:text="${jobboard.getAbsents()}"></span>
+                                        <div th:if="${user.role.roleId == 5}">
+                                            <form action="#" th:action="@{/management/jobboard/updateAbsents}"
+                                                  method="post" style="margin: 0;">
+                                                <input type="hidden" name="id" th:value="${jobboard.getId()}"/>
+                                                <button type="submit" class="btn btn-danger"><i
+                                                        class="bi bi-x-circle"></i></button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </td>
-                                </td>
                                 <td th:text="${jobboard.user.role.roleName}"></td>
-                                <td>
-                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editShiftModal"
-                                            th:data-jobboard-id="${jobboard.getId()}"
-                                            th:data-current-shift="${jobboard.getShift()}">
-                                        Edit Shift
-                                    </button>
-                                </td>
+                                <div th:if="${user.role.roleId == 5}">
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                                data-target="#editShiftModal"
+                                                th:data-jobboard-id="${jobboard.getId()}"
+                                                th:data-current-shift="${jobboard.getShift()}">
+                                            Edit Shift
+                                        </button>
+                                    </td>
+                                </div>
                             </tr>
                             </tbody>
                         </table>
@@ -152,15 +167,22 @@
                         <nav aria-label="Page navigation">
                             <ul class="pagination justify-content-center">
                                 <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                                    <a class="page-link" th:href="@{/management/jobboard(page=${currentPage - 1}, size=${size}, search=${search})}" aria-label="Previous">
+                                    <a class="page-link"
+                                       th:href="@{/management/jobboard(page=${currentPage - 1}, size=${size}, search=${search})}"
+                                       aria-label="Previous">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
-                                <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${page == currentPage} ? 'active'">
-                                    <a class="page-link" th:href="@{/management/jobboard(page=${page}, size=${size}, search=${search})}" th:text="${page + 1}"></a>
+                                <li class="page-item" th:each="page : ${#numbers.sequence(0, totalPages - 1)}"
+                                    th:classappend="${page == currentPage} ? 'active'">
+                                    <a class="page-link"
+                                       th:href="@{/management/jobboard(page=${page}, size=${size}, search=${search})}"
+                                       th:text="${page + 1}"></a>
                                 </li>
                                 <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                                    <a class="page-link" th:href="@{/management.jobboard(page=${currentPage + 1}, size=${size},  search=${search})}" aria-label="Next">
+                                    <a class="page-link"
+                                       th:href="@{/management.jobboard(page=${currentPage + 1}, size=${size},  search=${search})}"
+                                       aria-label="Next">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>
@@ -174,7 +196,8 @@
 </div>
 
 <!-- Edit Shift Modal -->
-<div class="modal fade" id="editShiftModal" tabindex="-1" role="dialog" aria-labelledby="editShiftModalLabel" aria-hidden="true">
+<div class="modal fade" id="editShiftModal" tabindex="-1" role="dialog" aria-labelledby="editShiftModalLabel"
+     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

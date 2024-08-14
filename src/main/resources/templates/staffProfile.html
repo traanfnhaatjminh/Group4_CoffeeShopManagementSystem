@@ -192,7 +192,7 @@
                 <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
                 <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
                 <a th:if="${user.getRole_id()==5}" href="/management/jobboard">Job Board</a>
-                <a th:if="${user.getRole_id()==5}" href="/admin/users/statistic">Statistic</a>
+                <a th:if="${user.getRole_id()==5}" href="#">Statistic</a>
                 <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
             </nav>
         </div>
@@ -220,12 +220,12 @@
                         </div>
                         <!-- User profile -->
                         <div class="panel panel-default">
-<!--                            <div class="panel-heading">-->
-<!--                                <h4 class="panel-title">User Profile</h4>-->
-<!--                            </div>-->
+                            <!--                            <div class="panel-heading">-->
+                            <!--                                <h4 class="panel-title">User Profile</h4>-->
+                            <!--                            </div>-->
                             <div class="panel-body">
                                 <div class="profile__avatar">
-                                    <img th:src="@{/img/staffavatardefault.png}" alt="avatar">
+                                    <img  th:src="'data:image/jpeg;base64,' + ${user.avatar}"  alt="avatar">
                                 </div>
                                 <div class="profile__header">
                                     <h4 th:text="${user.fullname}">Full Name</h4>
@@ -272,7 +272,7 @@
                         <div class="form-group">
                             <div class="col-sm-12">
                                 <button type="button" class="btn btn-custom" data-toggle="modal" data-target="#editProfileModal">Edit Profile</button>
-                                 <a href="/staffProfile/staffChangePassword" class="btn btn-default">Change Password</a>
+                                <a href="/staffProfile/staffChangePassword" class="btn btn-default">Change Password</a>
                             </div>
                         </div>
                     </div>
@@ -295,7 +295,7 @@
             <div class="modal-body">
                 <!-- Form for editing profile -->
                 <form th:action="@{/staffProfile/edit}" method="post" enctype="multipart/form-data">
-                    <!-- Form fields for editing profile -->
+                    <input type="hidden" name="uid" th:value="${user.uid}" />
                     <div class="form-group">
                         <label for="fullname">Full Name</label>
                         <input type="text" id="fullname" name="fullname" class="form-control" th:value="${user.fullname}" required>
@@ -309,12 +309,19 @@
                         <input type="date" id="dob" name="dob" class="form-control" th:value="${user.dob}" required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" required>
+                        <label for="phone">Phone Number</label>
+                        <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" required
+                               pattern="0[0-9]{9}" title="Số điện thoại bắt đầu bằng số 0 và có 10 số"/>
+                        <span th:if="${phoneError}" class="text-danger" th:text="${phoneError}"></span>
                     </div>
                     <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" required>
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" required />
+                        <span th:if="${emailError}" class="text-danger" th:text="${emailError}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="avatar">Profile Image</label>
+                        <input type="file" id="avatar" name="avatar" class="form-control" accept="image/*"/>
                     </div>
                     <div class="form-group">
                         <button type="submit" class="btn btn-custom">Save changes</button>
@@ -329,6 +336,34 @@
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $('#editProfileModal form').submit(function(event) {
+        var fileInput = $('#avatar')[0];
+        var isValid = true;
+
+        if (fileInput.files.length > 0) {
+            var file = fileInput.files[0];
+            var fileType = file.type;
+
+            if (!fileType.startsWith('image/')) {
+                alert('Please select a valid image file.');
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
+            event.preventDefault();
+        }
+    });
+
+    $(document).ready(function() {
+        // Check if there are error messages and open the modal if needed
+        var error = new URLSearchParams(window.location.search).get('error');
+        if (error) {
+            $('#editProfileModal').modal('show');
+        }
+    });
+</script>
 </body>
 
 </html>

@@ -279,11 +279,14 @@
                     </div>
                     <div class="form-group">
                         <label for="phone">Phone Number</label>
-                        <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" required />
+                        <input type="text" id="phone" name="phone" class="form-control" th:value="${user.phone}" required
+                               pattern="0[0-9]{9}" title="Số điện thoại bắt đầu bằng số 0 và có 10 số"/>
+                        <span th:if="${phoneError}" class="text-danger" th:text="${phoneError}"></span>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
                         <input type="email" id="email" name="email" class="form-control" th:value="${user.email}" required />
+                        <span th:if="${emailError}" class="text-danger" th:text="${emailError}"></span>
                     </div>
                     <div class="form-group">
                         <label for="avatar">Profile Image</label>
@@ -354,6 +357,13 @@
         }
     });
 
+    $(document).ready(function() {
+        // Check if there are error messages and open the modal if needed
+        var error = new URLSearchParams(window.location.search).get('error');
+        if (error) {
+            $('#editProfileModal').modal('show');
+        }
+    });
 </script>
 </body>
 </html>

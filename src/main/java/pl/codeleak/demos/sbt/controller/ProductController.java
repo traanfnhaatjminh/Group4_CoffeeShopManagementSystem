@@ -48,6 +48,7 @@ public class ProductController {
     @GetMapping("/products")
     public String products(Model model,
                            @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
+                           @RequestParam(name = "pageSize", defaultValue = "15") int pageSize,
                            @RequestParam(required = false) Integer categoryId,
                            @RequestParam(required = false) String keyword,
                            Principal principal) {
@@ -59,16 +60,17 @@ public class ProductController {
 
         Page<Product> productPage;
         if (keyword != null && !keyword.trim().isEmpty()) {
-            productPage = productService.searchProducts2(keyword, PageRequest.of(pageNo - 1, 10));
+            productPage = productService.searchProducts2(keyword, PageRequest.of(pageNo - 1, pageSize));
         } else if (categoryId != null) {
-            productPage = productService.getProductsByCategory(categoryId, PageRequest.of(pageNo - 1, 10));
+            productPage = productService.getProductsByCategory(categoryId, PageRequest.of(pageNo - 1, pageSize));
         } else {
-            productPage = productService.getProducts(PageRequest.of(pageNo - 1, 10));
+            productPage = productService.getProducts(PageRequest.of(pageNo - 1, pageSize));
         }
 
         model.addAttribute("products", productPage.getContent());
         model.addAttribute("totalPage", productPage.getTotalPages());  // Đảm bảo rằng bạn đã thêm thuộc tính này
         model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", pageSize);
         model.addAttribute("categories", categoryService.getAllCategories());
         model.addAttribute("keyword", keyword);
         model.addAttribute("selectedCategoryId", categoryId);
@@ -247,10 +249,17 @@ public class ProductController {
     }
 
     @GetMapping("/products/delete/{pid}")
-    public String deleteProduct(@PathVariable int pid) {
-        productService.deleteProductById(pid);
+    public String deleteProduct(@PathVariable int pid, RedirectAttributes redirectAttributes) {
+        try {
+            productService.deleteProductById(pid);
+            redirectAttributes.addFlashAttribute("message", "Sản phẩm đã được xóa thành công.");
+        } catch (Exception e) {
+            // Giả sử lỗi xảy ra là do sản phẩm còn được sử dụng trong hóa đơn
+            redirectAttributes.addFlashAttribute("messageErr", "Sản phẩm còn được sử dụng trong bill.");
+        }
         return "redirect:/products";
     }
+
 
     @GetMapping("/products/add")
     public String addProductForm(Model model) {

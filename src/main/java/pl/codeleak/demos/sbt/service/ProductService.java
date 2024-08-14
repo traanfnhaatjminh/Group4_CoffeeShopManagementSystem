@@ -176,11 +176,15 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    //    public void deleteProductsByCategoryId(int categoryId) {
+//        Iterable<Product> products = productRepository.findByCategoryId(categoryId);
+//        for (Product product : products) {
+//            productRepository.delete(product);
+//        }
+//    }
     public void deleteProductsByCategoryId(int categoryId) {
         Iterable<Product> products = productRepository.findByCategoryId(categoryId);
-        for (Product product : products) {
-            productRepository.delete(product);
-        }
+        productRepository.deleteAll(products);
     }
 
     public Page<Product> getProducts(Pageable pageable) {
@@ -289,8 +293,22 @@ public class ProductService {
                 product.setPname(currentRow.getCell(0).getStringCellValue());
                 product.setDescription(currentRow.getCell(1).getStringCellValue());
                 product.setUnit(currentRow.getCell(2).getStringCellValue());
-                product.setQuantity((int) currentRow.getCell(3).getNumericCellValue());
-                product.setPrice((float) currentRow.getCell(4).getNumericCellValue());
+
+
+
+                // Kiểm tra quantity là số dương
+                double quantityValue = currentRow.getCell(3).getNumericCellValue();
+                if (quantityValue <= 0 || (int) quantityValue != quantityValue) {
+                    throw new ValidationException("Quantity ở dòng " + (rowNumber + 1) + " phải là số nguyên dương.");
+                }
+                product.setQuantity((int) quantityValue);
+
+                // Kiểm tra price là số dương
+                double priceValue = currentRow.getCell(4).getNumericCellValue();
+                if (priceValue <= 0) {
+                    throw new ValidationException("Price ở dòng " + (rowNumber + 1) + " phải là số dương.");
+                }
+                product.setPrice((float) priceValue);
 
                 // Resolve Category Name to ID
                 String categoryName = currentRow.getCell(5).getStringCellValue();

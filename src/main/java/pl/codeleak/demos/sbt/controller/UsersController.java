@@ -63,30 +63,39 @@ public class UsersController {
                               RedirectAttributes redirectAttributes) {
         String username = principal.getName();
         Users existingUser = userService.findByUsername(username);
-
-        // Cập nhật thông tin người dùng
-        existingUser.setFullname(fullname);
-        existingUser.setDob(dob);
-        existingUser.setAddress(address);
-        existingUser.setEmail(email);
-        existingUser.setPhone(phone);
-
-        // Xử lý file ảnh avatar nếu có upload
-        if (!avatarFile.isEmpty()) {
-            try {
-                // Sử dụng Base64 để lưu ảnh
-                String avatarBase64 = Base64.getEncoder().encodeToString(avatarFile.getBytes());
-                existingUser.setAvatar(avatarBase64);
-            } catch (IOException e) {
-                e.printStackTrace();
-                redirectAttributes.addFlashAttribute("message", "Failed to upload avatar image");
-                return "redirect:/profile";
-            }
+        boolean hasErrors = false;
+        // Validation
+        if (!email.equals(existingUser.getEmail()) && userService.isEmailTaken(email)) {
+            redirectAttributes.addFlashAttribute("emailError", "Email đã được sử dụng");
+            hasErrors = true;
         }
+        if (!phone.equals(existingUser.getPhone()) && userService.isPhoneTaken(phone)) {
+            redirectAttributes.addFlashAttribute("phoneError", "Số điện thoại đã được sử dụng");
+            hasErrors = true;
+        }
+        // Update if no errors
+        if (!hasErrors) {
+            existingUser.setFullname(fullname);
+            existingUser.setDob(dob);
+            existingUser.setAddress(address);
+            existingUser.setEmail(email);
+            existingUser.setPhone(phone);
+            if (!avatarFile.isEmpty()) {
+                try {
+                    String avatarBase64 = Base64.getEncoder().encodeToString(avatarFile.getBytes());
+                    existingUser.setAvatar(avatarBase64);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    redirectAttributes.addFlashAttribute("message", "Upload avatar thất bại");
+                    return "redirect:/profile";
+                }
+            }
+            userService.save1(existingUser);
+            redirectAttributes.addFlashAttribute("message", "Cập nhật profile thành công!");
+            return "redirect:/profile";
+        }
+        return "redirect:/profile?error=true";
 
-        userService.save1(existingUser);
-        redirectAttributes.addFlashAttribute("message", "Profile updated successfully!");
-        return "redirect:/profile";
     }
 
     @GetMapping("/changePassword")

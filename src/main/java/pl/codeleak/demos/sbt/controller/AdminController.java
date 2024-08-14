@@ -88,7 +88,10 @@ import pl.codeleak.demos.sbt.service.UserService;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/admin/users")
@@ -187,6 +190,9 @@ public class AdminController {
         // Get current month
         Calendar calendar = Calendar.getInstance();
         int currentMonth = calendar.get(Calendar.MONTH) + 1;
+        List<Integer> months = IntStream.rangeClosed(1, currentMonth)
+                .boxed()
+                .collect(Collectors.toList());
 
         // Fetch data
         Map<Integer, Double> revenueData = billService.getMonthlyRevenue();
@@ -199,9 +205,47 @@ public class AdminController {
         Long offlineOrders = offlineOrdersData.getOrDefault(currentMonth, 0L);
 
         // Add to model
+        model.addAttribute("months", months);
         model.addAttribute("revenue", revenue);
         model.addAttribute("onlineOrders", onlineOrders);
         model.addAttribute("offlineOrders", offlineOrders);
+        model.addAttribute("selectedMonth", currentMonth);
+
+        return "statistic";
+    }
+
+    @GetMapping("/statistic/getRevenue")
+    public String getRevenue(Model model, Principal principal
+    , @RequestParam(name = "month") int month) {
+        if (principal != null) {
+            String username = principal.getName();
+            Users user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+
+        // Get current month
+        Calendar calendar = Calendar.getInstance();
+        int currentMonth = calendar.get(Calendar.MONTH) + 1;
+        List<Integer> months = IntStream.rangeClosed(1, currentMonth)
+                .boxed()
+                .collect(Collectors.toList());
+
+        // Fetch data
+        Map<Integer, Double> revenueData = billService.getMonthlyRevenue();
+        Map<Integer, Long> onlineOrdersData = billService.getMonthlyOnlineOrders();
+        Map<Integer, Long> offlineOrdersData = billService.getMonthlyOfflineOrders();
+
+        // Get values for the current month or default to zero
+        Double revenue = revenueData.getOrDefault(month, 0.0);
+        Long onlineOrders = onlineOrdersData.getOrDefault(month, 0L);
+        Long offlineOrders = offlineOrdersData.getOrDefault(month, 0L);
+
+        // Add to model
+        model.addAttribute("months", months);
+        model.addAttribute("revenue", revenue);
+        model.addAttribute("onlineOrders", onlineOrders);
+        model.addAttribute("offlineOrders", offlineOrders);
+        model.addAttribute("selectedMonth", month);
 
         return "statistic";
     }

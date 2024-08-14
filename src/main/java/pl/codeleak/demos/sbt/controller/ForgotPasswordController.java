@@ -39,7 +39,7 @@ public class ForgotPasswordController {
         Users user = userRepository.findByEmail(email);
 
         if (user == null) {
-            redirectAttributes.addAttribute("error", "Your email address not exists!");
+            redirectAttributes.addFlashAttribute("messageErr", "Your email address does not exist!");
             return "redirect:/forgot-password";
         }
 
