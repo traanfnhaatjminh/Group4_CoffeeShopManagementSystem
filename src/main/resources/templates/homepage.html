@@ -122,6 +122,8 @@
                     </div>
                     <!-- Search Form -->
                     <form class="form-inline mb-3" method="get" action="/products">
+                        <input type="hidden" name="pageNo" th:value="${currentPage}" />
+                        <input type="hidden" name="pageSize" th:value="${pageSize}" />
                         <input type="text" class="form-control mr-2" name="keyword"
                                placeholder="Tìm kiếm sản phẩm..." th:value="${keyword}">
                         <button type="submit" class="btn btn-primary">Tìm kiếm</button>
@@ -261,6 +263,9 @@
                                 <div class="form-group">
                                     <label for="pname">Tên sản phẩm</label>
                                     <input type="text" id="pname" name="pname" class="form-control"/>
+                                    <div th:if="${errorMessage != null}" class="alert alert-danger">
+                                        <p th:text="${errorMessage}"></p>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="description">Mô tả</label>
@@ -332,6 +337,7 @@
     // });
 
     $(document).ready(function () {
+
         // Hiển thị thông báo thành công trong 3 giây
         setTimeout(function () {
             $('#success-message').fadeOut('slow');

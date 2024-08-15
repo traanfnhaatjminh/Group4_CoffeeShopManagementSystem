@@ -268,6 +268,14 @@ public class ProductService {
             throw new ValidationException("Danh mục không được để trống");
         }
     }
+    public boolean isProductNameExists(String pname) {
+        return productRepository.existsByPname(pname);
+    }
+    public boolean isProductNameExistsForOther(int pid, String pname) {
+        return productRepository.existsByPnameAndPidNot(pname, pid);
+    }
+
+
 
     public void saveProductsFromExcelFile(MultipartFile file) {
         try {

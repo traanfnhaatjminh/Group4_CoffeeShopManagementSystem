@@ -116,7 +116,27 @@ public class ProductController {
                                      @RequestParam("price") float price,
                                      @RequestParam("categoryId") int categoryId,
                                      @RequestParam("file") MultipartFile file,
-                                     RedirectAttributes redirectAttributes) {
+                                     RedirectAttributes redirectAttributes
+                                     ) {
+
+        // Kiểm tra nếu tên sản phẩm đã tồn tại cho sản phẩm khác
+        if (productService.isProductNameExistsForOther(pid, pname)) {
+//            redirectAttributes.addFlashAttribute("errorMessage", "Tên sản phẩm đã tồn tại");
+//
+//            // Lưu lại thông tin sản phẩm đã nhập để hiển thị lại trong modal
+//            Product product = new Product();
+//            product.setPid(pid);
+//            product.setPname(pname);
+//            product.setDescription(description);
+//            product.setUnit(unit);
+//            product.setQuantity(quantity);
+//            product.setPrice(price);
+//            product.setCategoryId(categoryId);
+
+            //redirectAttributes.addFlashAttribute("product", product);
+            return "redirect:/products";
+        }
+
         Optional<Product> existingProduct = productService.getProductById(pid);
         if (existingProduct.isPresent()) {
             Product updatedProduct = existingProduct.get();
@@ -152,6 +172,14 @@ public class ProductController {
                                  @RequestParam("file") MultipartFile file,
                                  Model model,
                                  HttpSession session) {
+
+        // Kiểm tra nếu tên sản phẩm đã tồn tại
+        if (productService.isProductNameExists(product.getPname())) {
+            bindingResult.rejectValue("pname", "error.product", "Tên sản phẩm đã tồn tại");
+            model.addAttribute("errorMessage", "Tên sản phẩm đã tồn tại");
+            model.addAttribute("categories", categoryService.getAllCategories());
+            return "addproduct";
+        }
 
         String imagePath = null;
         try {

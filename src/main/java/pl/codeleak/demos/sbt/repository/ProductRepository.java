@@ -24,5 +24,9 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
     Page<Product> findByPnameContaining(String keyword, Pageable pageable);
 
     Page<Product> findByPnameContainingIgnoreCaseAndCategoryId(String pname, Integer categoryId, Pageable pageable);
+    boolean existsByPname(String pname);
+
+    boolean existsByPnameAndPidNot(String pname, int pid);
+
 
 }
