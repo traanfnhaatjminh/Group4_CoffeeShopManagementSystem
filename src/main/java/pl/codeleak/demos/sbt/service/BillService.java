@@ -106,4 +106,8 @@ public class BillService {
         }
         return ordersMap;
     }
+
+    public long getTotalNumberOfProducts() {
+        return billDetailRepository.findTotalNumberOfProducts();
+    }
 }

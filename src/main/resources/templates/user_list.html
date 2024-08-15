@@ -237,13 +237,30 @@
                     </div>
 
                     <!-- Search Form -->
+                    <!-- Form chọn số người dùng trên mỗi trang -->
                     <form class="form-inline mb-3" method="get" action="/admin/users">
+                        <input type="hidden" name="keyword" th:value="${keyword}" />
+                        <input type="hidden" name="role" th:value="${role}" />
+                        <input type="hidden" name="pageNo" th:value="${currentPage}" />
+                        <label for="pageSize">Số người dùng trên mỗi trang:</label>
+                        <select id="pageSize" name="pageSize" class="form-control" onchange="this.form.submit()">
+                            <option th:value="5" th:selected="${pageSize == 5}">5</option>
+                            <option th:value="10" th:selected="${pageSize == 10}">10</option>
+                            <option th:value="15" th:selected="${pageSize == 15}">15</option>
+                            <option th:value="20" th:selected="${pageSize == 20}">20</option>
+                        </select>
+                    </form>
+
+                    <!-- Search Form -->
+                    <form class="form-inline mb-3" method="get" action="/admin/users">
+                        <input type="hidden" name="pageSize" th:value="${pageSize}" /> <!-- Giữ lại pageSize -->
                         <input type="text" class="form-control mr-2" name="keyword" placeholder="Search users..." th:value="${keyword}">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form>
 
                     <!-- Filter Form -->
                     <form class="form-inline mb-3" method="get" th:action="@{/admin/users/filter}">
+                        <input type="hidden" name="pageSize" th:value="${pageSize}" /> <!-- Giữ lại pageSize -->
                         <select name="role" class="form-control mr-2">
                             <option value="">All Roles</option>
                             <option value="1" th:selected="${role == 1}">Customer</option>
@@ -297,29 +314,29 @@
                     </table>
 
                     <!-- Pagination controls -->
+                    <!-- Pagination controls -->
                     <nav aria-label="Page navigation">
                         <ul class="pagination pagination-sm no-margin pull-right">
                             <!-- Previous Button -->
                             <li th:if="${currentPage > 1}">
-                                <a th:href="@{${keyword != null and keyword != '' ? '?keyword=' + keyword + '&' : '?'} +'pageNo=' + ${currentPage - 1}}"
+                                <a th:href="@{${keyword != null and keyword != '' ? '?keyword=' + keyword + '&' : '?'} +'pageNo=' + ${currentPage - 1} + '&pageSize=' + ${pageSize}}"
                                    th:text="'Previous'"></a>
                             </li>
 
                             <!-- Page Numbers -->
                             <li th:each="i : ${#numbers.sequence(1, totalPage)}"
                                 th:classappend="${currentPage == i ? 'active' : ''}">
-                                <a th:href="@{${keyword != null and keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'pageNo=' + ${i}}"
+                                <a th:href="@{${keyword != null and keyword != '' ? '?keyword=' + keyword + '&' : '?'} + 'pageNo=' + ${i} + '&pageSize=' + ${pageSize}}"
                                    th:text="${i}"></a>
                             </li>
 
                             <!-- Next Button -->
                             <li th:if="${currentPage < totalPage}">
-                                <a th:href="@{${keyword != null and keyword != '' ? '?keyword=' + keyword + '&' : '?'} +'pageNo=' + ${currentPage + 1}}"
+                                <a th:href="@{${keyword != null and keyword != '' ? '?keyword=' + keyword + '&' : '?'} +'pageNo=' + ${currentPage + 1} + '&pageSize=' + ${pageSize}}"
                                    th:text="'Next'"></a>
                             </li>
                         </ul>
                     </nav>
-
                     <!-- Add User Modal -->
                     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
