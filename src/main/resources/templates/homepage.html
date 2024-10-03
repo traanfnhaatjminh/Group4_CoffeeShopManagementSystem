@@ -74,8 +74,8 @@
                 <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/categories">Categories</a>
                 <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
                 <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
-                <a th:if="${user.getRole_id()==5}" href="/management/jobboard">Job Board</a>
-                <a th:if="${user.getRole_id()==5}" href="#">Statistic</a>
+                <a href="/management/jobboard">Job Board</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users/statistic">Statistic</a>
                 <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
             </nav>
         </div>
@@ -83,7 +83,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <h1 class="my-4">Danh sách sản phẩm</h1>
-
 
                     <div class="row">
                         <div class="col-md-6">
@@ -101,8 +100,6 @@
                         </div>
                     </div>
 
-
-
                     <!-- Thêm thông báo ở đây -->
                     <div id="error-message" th:if="${messageErr}" class="alert alert-danger" role="alert">
                         <span th:text="${messageErr}"></span>
@@ -111,12 +108,13 @@
                     <div id="success-message" th:if="${message}" class="alert alert-success" role="alert">
                         <span th:text="${message}"></span>
                     </div>
-                    <div class="mb-3">
+
+                    <div class="mb-3" style="margin: 4px 0">
                         <a class="btn btn-success" th:href="@{/products/add}">Thêm sản phẩm</a>
                     </div>
 
-                    <div>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#importModal">
+                    <div style="margin: 4px 0">
+                        <button  type="button" class="btn btn-primary" data-toggle="modal" data-target="#importModal">
                             Import Products
                         </button>
                     </div>

@@ -126,8 +126,8 @@ public class CartController {
 
             List<CartItemService.CartItemWithProduct> cartItems = cartItemService.getCartItemsByCustomerId(user.getUid());
             float totalPrice = cartItemService.calculateTotalPrice(user.getUid());
-            int status = paymentMethod.equals("cash") ? 0 : 1;
-            Bill bill = new Bill(phone, address, new Date(), 0, totalPrice, 0, user.getUid(), status, 0);
+            //int status = paymentMethod.equals("cash") ? 0 : 1;
+            Bill bill = new Bill(phone, address, new Date(), 0, totalPrice, 0, user.getUid(), 0, 0);
             billService.save(bill);
 
             for (int i = 0; i < cartItems.size(); i++) {

@@ -29,6 +29,10 @@ public class BillService {
         return billRepository.findAll();
     }
 
+    public Iterable<Bill> getAllBills() {
+        return billRepository.findAll();
+    }
+
     public Page<Bill> getAllBills(Pageable pageable) {
         return billRepository.findAll(pageable);
     }

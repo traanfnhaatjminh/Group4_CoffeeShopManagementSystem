@@ -20,4 +20,8 @@ public class BillDetailService {
     public List<BillDetail> findByBillId(int billId) {
         return billDetailRepository.findByIdBillId(billId); // Custom query method
     }
+
+    public List<BillDetail> getAllBillDetails() {
+        return billDetailRepository.findAll(); // Custom query method
+    }
 }

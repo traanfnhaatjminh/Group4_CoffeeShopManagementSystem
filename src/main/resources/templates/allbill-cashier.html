@@ -74,7 +74,7 @@
                 <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/categories">Categories</a>
                 <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
                 <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
-                <a th:if="${user.getRole_id()==5}" href="/management/jobboard">Job Board</a>
+                <a href="/management/jobboard">Job Board</a>
                 <a th:if="${user.getRole_id()==5}" href="/admin/users/statistic">Statistic</a>
                 <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
             </nav>
@@ -84,13 +84,12 @@
                 <div class="col-2">
                     <h1 class="my-4">Bills</h1>
                 </div>
-                <div class="col-4 my-4">
+                <div class="col-2 my-4">
                     <form action="/management/allbill" method="get" class="d-flex">
                         <input type="date" name="createdTime" value="${createdTime}" placeholder="Select date"/>
                         <input type="submit" value="Search"/>
                     </form>
                 </div>
-
                 <div class="col-2 my-4">
                     <h5 style="color: #0e4bf1;text-transform: uppercase" th:text="${user.getUsername()}"></h5>
                 </div>
@@ -99,6 +98,13 @@
                 </div>
                 <div class="col-2 my-4">
                     <a href="#">LOGOUT</a>
+                </div>
+                <div class="col-2 my-4">
+                    <button type="button" class="btn btn-primary">
+                        <a
+                                th:href="@{/management/allbill/export/bill}"
+                                style="color: white">Export All Bill</a>
+                    </button>
                 </div>
             </div>
             <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
@@ -132,7 +138,7 @@
                                 <th scope="col">Total Price</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Action</th>
-                                <th scope="col">Export Excel</th>
+                                <!--                                <th scope="col">Export Excel</th>-->
 
                             </tr>
                             </thead>
@@ -172,13 +178,12 @@
                                         <button type="submit" class="btn btn-primary">Check</button>
                                     </form>
                                 </td>
-                                <td>
-                                    <button type="button" class="btn btn-primary">
-                                        <a th:href="@{/management/allbill/export/bill(billId=${bill.billId})}"
-                                           style="color: white">Export</a>
-                                    </button>
-                                </td>
-
+                                <!--                                <td>-->
+                                <!--                                    <button type="button" class="btn btn-primary">-->
+                                <!--                                        <a th:href="@{/management/allbill/export/bill(billId=${bill.billId})}"-->
+                                <!--                                           style="color: white">Export</a>-->
+                                <!--                                    </button>-->
+                                <!--                                </td>-->
                             </tr>
                             </tbody>
                         </table>

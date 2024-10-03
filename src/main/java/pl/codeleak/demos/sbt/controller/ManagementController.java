@@ -273,14 +273,14 @@ public class ManagementController {
 
     @GetMapping("/management/allbill/export/bill")
     @ResponseBody
-    public ResponseEntity<InputStreamResource> exportBillToExcel(@RequestParam("billId") int billId) throws IOException {
-        Bill bill = billService.findById(billId);
-        List<BillDetail> billDetails = billDetailService.findByBillId(billId);
+    public ResponseEntity<InputStreamResource> exportBillToExcel() throws IOException {
+        Iterable<Bill> bill = billService.getAllBills();
+        List<BillDetail> billDetails = billDetailService.getAllBillDetails();
 
         ByteArrayInputStream in = excelExportService.exportBillToExcel(bill, billDetails);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Disposition", "attachment; filename=bill_" + billId + ".xlsx");
+        headers.add("Content-Disposition", "attachment; filename=allbill.xlsx");
 
         return ResponseEntity
                 .ok()

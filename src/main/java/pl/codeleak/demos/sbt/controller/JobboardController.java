@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.codeleak.demos.sbt.model.Jobboard;
+import pl.codeleak.demos.sbt.model.Users;
 import pl.codeleak.demos.sbt.model.UsersJob;
 import pl.codeleak.demos.sbt.service.JobboardService;
+import pl.codeleak.demos.sbt.service.UserService;
 import pl.codeleak.demos.sbt.service.UsersJobService;
 
 import java.security.Principal;
@@ -24,7 +26,7 @@ public class JobboardController {
     private JobboardService jobboardService;
 
     @Autowired
-    private UsersJobService usersJobService;
+    private UserService userService;
 
     @GetMapping("/management/jobboard")
     public String viewJobboard(
@@ -36,7 +38,7 @@ public class JobboardController {
         // Fetch user information if logged in
         if (principal != null) {
             String username = principal.getName();
-            UsersJob user = usersJobService.findByUsername(username);
+            Users user = userService.findByUsername(username);
             model.addAttribute("user", user);
         }
 

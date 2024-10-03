@@ -252,14 +252,14 @@
                     </form>
 
                     <!-- Search Form -->
-                    <form class="form-inline mb-3" method="get" action="/admin/users">
+                    <form class="form-inline mb-3" method="get" action="/admin/users" style="margin: 4px 0">
                         <input type="hidden" name="pageSize" th:value="${pageSize}" /> <!-- Giữ lại pageSize -->
                         <input type="text" class="form-control mr-2" name="keyword" placeholder="Search users..." th:value="${keyword}">
                         <button type="submit" class="btn btn-primary">Search</button>
                     </form>
 
                     <!-- Filter Form -->
-                    <form class="form-inline mb-3" method="get" th:action="@{/admin/users/filter}">
+                    <form style="margin-bottom: 4px" class="form-inline mb-3" method="get" th:action="@{/admin/users/filter}">
                         <input type="hidden" name="pageSize" th:value="${pageSize}" /> <!-- Giữ lại pageSize -->
                         <select name="role" class="form-control mr-2">
                             <option value="">All Roles</option>

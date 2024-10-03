@@ -51,14 +51,14 @@
     <div class="row">
         <div class="col-md-1 sidebar">
             <nav class="nav flex-column">
-                <a th:if="${user.role.roleId==4 || user.role.roleId==5}" href="/management">Home</a>
-                <a th:if="${user.role.roleId==2 || user.role.roleId==5}" href="/products">Warehouse</a>
-                <a th:if="${user.role.roleId==2 || user.role.roleId==5}" href="/categories">Categories</a>
-                <a th:if="${user.role.roleId==3 || user.role.roleId==5}" href="/management/table">Table List</a>
-                <a th:if="${user.role.roleId==4 || user.role.roleId==5}" href="/management/allbill">All Bill</a>
-                <a th:if="${user.role.roleId==5}" href="/management/jobboard">Job Board</a>
-                <a th:if="${user.role.roleId==5}" href="#">Statistic</a>
-                <a th:if="${user.role.roleId==5}" href="/admin/users">Setting</a>
+                <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management">Home</a>
+                <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/products">Warehouse</a>
+                <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/categories">Categories</a>
+                <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
+                <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
+                <a href="/management/jobboard">Job Board</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users/statistic">Statistic</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
             </nav>
         </div>
         <div class="col-md-12 offset-md-1 bill-list">
@@ -66,6 +66,7 @@
                 <div class="col-2">
                     <h1 class="my-4">Job Board</h1>
                 </div>
+
                 <div class="col-4 my-4">
                     <form action="#" method="get">
                         <input type="text" name="search" placeholder="Search by name" th:value="${search}"/>
@@ -105,7 +106,7 @@
                                 <th scope="col">Presents</th>
                                 <th scope="col">Absents</th>
                                 <th scope="col">Role</th>
-                                <div th:if="${user.role.roleId == 5}">
+                                <div th:if="${user.getRole_id() == 5}">
                                     <th scope="col">Action</th>
                                 </div>
                             </tr>
@@ -120,7 +121,7 @@
                                     <div style="display: flex; justify-content: center; align-items: center;">
                                         <span style="color: green; margin-right: 10px;"
                                               th:text="${jobboard.getPresents()}"></span>
-                                        <div th:if="${user.role.roleId == 5}">
+                                        <div th:if="${user.getRole_id() == 5}">
                                             <form action="#" th:action="@{/management/jobboard/updatePresents}"
                                                   method="post" style="margin: 0;">
                                                 <input type="hidden" name="id" th:value="${jobboard.getId()}"/>
@@ -134,7 +135,7 @@
                                     <div style="display: flex; justify-content: center; align-items: center;">
                                         <span style="color: red; margin-right: 10px;"
                                               th:text="${jobboard.getAbsents()}"></span>
-                                        <div th:if="${user.role.roleId == 5}">
+                                        <div th:if="${user.getRole_id() == 5}">
                                             <form action="#" th:action="@{/management/jobboard/updateAbsents}"
                                                   method="post" style="margin: 0;">
                                                 <input type="hidden" name="id" th:value="${jobboard.getId()}"/>
@@ -145,7 +146,7 @@
                                     </div>
                                 </td>
                                 <td th:text="${jobboard.user.role.roleName}"></td>
-                                <div th:if="${user.role.roleId == 5}">
+                                <div th:if="${user.getRole_id() == 5}">
                                     <td>
                                         <button type="button" class="btn btn-primary" data-toggle="modal"
                                                 data-target="#editShiftModal"

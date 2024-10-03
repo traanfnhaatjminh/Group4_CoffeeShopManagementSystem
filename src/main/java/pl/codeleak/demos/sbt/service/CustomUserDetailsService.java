@@ -1,6 +1,7 @@
 package pl.codeleak.demos.sbt.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
         if (users.getStatus() != 1) {
-            throw new UsernameNotFoundException("User account is not active");
+            throw new DisabledException("User account is not active");
         }
         return org.springframework.security.core.userdetails.User.builder()
                 .username(users.getUsername())

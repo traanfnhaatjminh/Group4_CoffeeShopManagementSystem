@@ -145,8 +145,8 @@
                 <a th:if="${user.getRole_id()==2 || user.getRole_id()==5}" href="/categories">Categories</a>
                 <a th:if="${user.getRole_id()==3 || user.getRole_id()==5}" href="/management/table">Table List</a>
                 <a th:if="${user.getRole_id()==4 || user.getRole_id()==5}" href="/management/allbill">All Bill</a>
-                <a th:if="${user.getRole_id()==5}" href="/management/jobboard">Job Board</a>
-                <a th:if="${user.getRole_id()==5}" href="#">Statistic</a>
+                <a href="/management/jobboard">Job Board</a>
+                <a th:if="${user.getRole_id()==5}" href="/admin/users/statistic">Statistic</a>
                 <a th:if="${user.getRole_id()==5}" href="/admin/users">Setting</a>
             </nav>
         </div>
@@ -169,8 +169,8 @@
                             <button class="btn btn-success" id="addCategoryButton">Thêm danh mục</button>
                         </div>
 
-                        <div class="col-md-7">
-                            <form class="form-inline mb-3" method="get" action="/categories">
+                        <div class="col-md-7" style="margin-top: 10px">
+                            <form class="form-inline mb-3" method="get" action="/categories" style="display: flex">
                                 <input type="text" class="form-control mr-2" name="keyword" placeholder="Search categories..."
                                        th:value="${keyword}">
                                 <button type="submit" class="btn btn-primary">Search</button>

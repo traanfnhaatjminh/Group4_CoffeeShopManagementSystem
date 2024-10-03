@@ -105,7 +105,7 @@ public class AdminController {
     public String listUsers(@RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
                             @RequestParam(name = "keyword", required = false) String keyword,
                             @RequestParam(name = "role", required = false) Integer role,
-                            @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
+                            @RequestParam(name = "pageSize", defaultValue = "15") int pageSize,
                             Model model, Principal principal) {
         if (principal != null) {
             String username = principal.getName();
@@ -135,7 +135,7 @@ public class AdminController {
     @GetMapping("/filter")
     public String filterUsersByRole(@RequestParam(name = "role", required = false) Integer role,
                                     @RequestParam(name = "pageNo", defaultValue = "1") int pageNo,
-                                    @RequestParam(name = "pageSize", defaultValue = "5") int pageSize,
+                                    @RequestParam(name = "pageSize", defaultValue = "15") int pageSize,
                                     Model model) {
         //  int pageSize = 5;
 
